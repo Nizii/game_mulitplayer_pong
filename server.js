@@ -27,6 +27,7 @@ app.get("/client.js", (req, res) => {
 
 server.listen(process.env.PORT||3000, () => {
   console.log('listening on *:3000');
+  console.log('Link: http://localhost:3000')
 });
 
 //Connect and Disconnetct User from Server
@@ -57,3 +58,14 @@ io.on('connection', (socket) => {
   });
 });
 
+// Aktualisiert beim Mitspieler den Score falls der Ball ins eigene Tor geflogen ist
+io.on('connection', (socket) => {
+  socket.on('score', (newScore) => {
+    //console.log(newScore);
+    io.emit('score', newScore);
+  });
+  socket.on('scoreid', (scoreId) => {
+    //console.log(scoreId);
+    io.emit('scoreid', scoreId);
+  });
+});
