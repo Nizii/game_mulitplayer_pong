@@ -25,7 +25,7 @@ app.get("/client.js", (req, res) => {
   res.sendFile(__dirname + "/client.js");
 });
 
-server.listen(3000, () => {
+server.listen(process.env.PORT||3000, () => {
   console.log('listening on *:3000');
 });
 
@@ -44,14 +44,6 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
     io.emit('user', "is offline");
   });
-});
-
-// Broadcast
-io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); 
-// This will emit the event to all connected sockets
-
-io.on('connection', (socket) => {
-  socket.broadcast.emit('hi');
 });
 
 // Empfängt ID und Mauskoordinaten
