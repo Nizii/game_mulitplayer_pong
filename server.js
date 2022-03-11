@@ -21,8 +21,8 @@ app.get("/libraries/p5.sound.min.js", (req, res) => {
 app.get("/style.css", (req, res) => {
   res.sendFile(__dirname + "/style.css");
 });
-app.get("/sketch.js", (req, res) => {
-  res.sendFile(__dirname + "/sketch.js");
+app.get("/client.js", (req, res) => {
+  res.sendFile(__dirname + "/client.js");
 });
 
 server.listen(3000, () => {
