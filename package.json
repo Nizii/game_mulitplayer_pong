@@ -1,0 +1,17 @@
+{
+  "name": "multiscreenapp",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo\"Error",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "p5": "^1.4.1",
+    "socket.io": "^4.4.1"
+  }
+}
