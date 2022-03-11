@@ -1,7 +1,6 @@
 
 
-var socket; //= io();
-socket = io.connect('http://localhost:3000');
+var socket = io();
 
 // Random Ball Placement
 var xBall = Math.floor(Math.random() * 300) + 50;
