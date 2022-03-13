@@ -59,9 +59,6 @@ io.on('connection', (socket) => {
 
 // Ordnet zu in welchem Screen gerade der Ball ist
 io.on('connection', (socket) => {
-  socket.on('trigger', (trigger) => {
-    io.emit('trigger', trigger);
-  });
   socket.on('triggerid', (triggerid) => {
     io.emit('triggerid', triggerid);
   });
