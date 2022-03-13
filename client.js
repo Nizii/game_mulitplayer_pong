@@ -3,6 +3,8 @@
 var socket = io();
 var id;
 var newScore;
+var isplaying = false;
+var ball;
 
 // Random Ball Placement
 var xBall = Math.floor(Math.random() * 300) + 50;
@@ -19,7 +21,16 @@ function setup() {
 	cursor(ARROW);
 	rectMode(CENTER);
 	noStroke();
+
+	button = createButton("Start");
+	button.mouseClicked(startGame);
+	button.size(50,25);
+	button.position(10,450);
+	button.style("font-family", "Bodoni");
+	button.style("font-size", "12px");
 }
+
+
 
 //Background
 
@@ -33,12 +44,15 @@ function draw() {
 	rect(mouseX, 375, 80, 15);
 	
 	//Functions
-	move();
-	display();
+	
+	if (isplaying){
+		display();
+		move();
+	}
 	bounce();
 	//resetBall();
 	paddle();
-	
+
 	//Score
 	fill('#d9c3f7');
 	textSize(24);
@@ -50,16 +64,20 @@ function move() {
 	yBall += ySpeed;
 }
 
+function startGame(){
+	isplaying = true;
+}
+
 
 function bounce() {
-	if (xBall < 10 ||
-		xBall > 400 - 10) {
+	if (xBall < 10 || xBall > 400 - 10) {
 			xSpeed *= -1;
 		}
 		if (yBall < 10 ) {
-			socket.emit("trigger", 0);
-			console.log("trigger");
-			ySpeed *= -1;
+			socket.emit("trigger", false);
+			socket.emit("triggerid", id);
+			e.remove();
+			//ySpeed *= -1;
 		}
 		
 		if (yBall > 400 - 10) {
@@ -69,6 +87,14 @@ function bounce() {
 			socket.emit('scoreid', id);
 		}
 	}
+
+	socket.on("triggerid", function(triggerid){
+		if (triggerid != id) {
+			isplaying = true;
+		} else {
+			isplaying = false;
+		}
+	})
 	
 	socket.on('scoreid', function(scoreId) {
 		if (scoreId != id) {
@@ -90,21 +116,23 @@ function bounce() {
 	
 	function display() {
 		fill('#d9c3f7');
-		ellipse(xBall, yBall, 20, 20);
+		e = ellipse(xBall, yBall, 20, 20);
 	}
 	
 	// Bounce off Paddle
 	function paddle() {
-		if ((xBall > mouseX - 40 && xBall < mouseX + 40) 
-		&& (yBall + 10 >= 375)) {
-			ySpeed *= -1;
+		if (isplaying == true) {
+			console.log(mouseX);
+
+			if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 375)) {
+				ySpeed *= -1;
+			}
 		}
 	}
 	
 	function getID(){
 		socket.once('user', function(msg) {
 			id = msg;
-			
 			let h5 = createElement('h5', msg);
 			h5.style('color', '#00a1d3');
 			h5.position(10, 400);

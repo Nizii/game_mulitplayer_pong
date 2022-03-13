@@ -9,7 +9,6 @@ var index = 0;
 
 // Verzeichnis
 app.get("/", (req, res) => {
-  console.log(__dirname);
   res.sendFile(__dirname + "/index.html");
 });
 app.get("/libraries/p5.min.js", (req, res) => {
@@ -27,7 +26,7 @@ app.get("/client.js", (req, res) => {
 
 server.listen(process.env.PORT||3000, () => {
   console.log('listening on *:3000');
-  console.log('Link: http://localhost:3000')
+  console.log('Link: http://localhost:3000');
 });
 
 //Connect and Disconnetct User from Server
@@ -36,8 +35,9 @@ io.on('connection', (socket) => {
   var id = socket.id;
   userArray[index] = id;
   index++;
+  console.log("Anzahl Spieler " + index);
   io.emit('user', socket.id);
-  for(let i = 0; i < userArray.length;i++){
+  for(let i = 0; i < userArray.length;i++) {
     console.log(userArray[i]);
   };
  
@@ -47,25 +47,22 @@ io.on('connection', (socket) => {
   });
 });
 
-// Empfängt ID und Mauskoordinaten
-io.on('connection', (socket) => {
-  socket.on('id', (id) => {
-    //console.log(id);
-  });
-  socket.on('coordinates', (coordinates) => {
-    //io.emit('chat message', msg);
-    console.log(coordinates);
-  });
-});
-
 // Aktualisiert beim Mitspieler den Score falls der Ball ins eigene Tor geflogen ist
 io.on('connection', (socket) => {
   socket.on('score', (newScore) => {
-    //console.log(newScore);
     io.emit('score', newScore);
   });
   socket.on('scoreid', (scoreId) => {
-    //console.log(scoreId);
     io.emit('scoreid', scoreId);
+  });
+});
+
+// Ordnet zu in welchem Screen gerade der Ball ist
+io.on('connection', (socket) => {
+  socket.on('trigger', (trigger) => {
+    io.emit('trigger', trigger);
+  });
+  socket.on('triggerid', (triggerid) => {
+    io.emit('triggerid', triggerid);
   });
 });
