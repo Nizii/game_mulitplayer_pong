@@ -6,7 +6,6 @@ var id;
 var isplaying = false;
 // Der Ball
 var ball;
-<<<<<<< HEAD
 // Ball wird beim ersten Zug Random auf X platziert
 var xBall = Math.floor(Math.random() * 300) + 50;
 // Starthöhe 
@@ -15,27 +14,13 @@ var yBall = 50;
 var xSpeed = (5, 4);
 var ySpeed = (-4, 5);
 // Die Scorevarriabeln
-=======
-
-// Random Ball Placement
-var canvasWidth = 900;
-var xBallRndStart = Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4;
-var xBall = xBallRndStart;
-var yBall = 50;
-var xSpeed = 0;
-var ySpeed = 3;
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 var myScore = 0;
 var enemyScore = 0;
 
 // Hier wird der Setup gemacht
 function setup() {
-<<<<<<< HEAD
 	createCanvas(900, 700);
 	// ID wird verteilt
-=======
-	createCanvas(canvasWidth, 700);
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 	getID();
 	cursor('ew-resize');
 	rectMode(CENTER);
@@ -50,49 +35,24 @@ function setup() {
 	button.style("font-size", "12px");
 }
 
-<<<<<<< HEAD
-=======
-// Alternative Start
-function keyPressed() {
-	if (keyCode === 32) {
-	  startGame();
-	}
-  }
-
-  
 // Background
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 function draw() {
 	background(0, 60);
-<<<<<<< HEAD
 
 	// Das Paddle
 	fill("#00FF00");
 	rect(mouseX, 600, 80, 15);
 	
 	// Wird nur ausgeführt wenn der Ball im Screen ist
-=======
-	
-	// Paddle
-	fill("#fff");
-	rect(mouseX, 600, 80, 15);
-	
-	// Functionslo
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
+
 	if (isplaying){
 		display();
 		move();
 		bounce();
 		paddle();
 	}
-<<<<<<< HEAD
 
 	// Score Text
-=======
-	
-
-	//Score
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 	fill('#d9c3f7');
 	textSize(24);
 	text("me " + myScore + '-' + enemyScore + " opponent", 700, 25);
@@ -109,7 +69,7 @@ function startGame(){
 	isplaying = true;
 }
 
-<<<<<<< HEAD
+
 // Ist für Bouncerei des Balls zuständig
 function bounce() {
 
@@ -119,17 +79,6 @@ function bounce() {
 		}
 
 	// Triggert Ballseitenwechsel verschickt die ID und die X Pos des Balls
-=======
-// Seitenabpraller
-function bounce() {
-
-	// Links/Rechts
-	if (xBall < 10 || xBall > canvasWidth - 10) {
-			xSpeed *= -1;
-		}
-
-	// Top
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 	if (yBall < 10 ) {
 		// uncomment below to make multiplayer
 		socket.emit("triggerid", id);
@@ -137,13 +86,8 @@ function bounce() {
 		ySpeed *= -1;
 	}
 		
-<<<<<<< HEAD
 	// Triggert Punkt
 	if (yBall > 600 + 20) {
-=======
-	// Bottom
-	if (yBall > 700 - 10) {
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 		ySpeed *= -1;
 		socket.emit('score', enemyScore);
 		socket.emit('scoreid', id);
@@ -180,11 +124,7 @@ function bounce() {
 		}
 	});
 	
-<<<<<<< HEAD
 	// Erzeugt den Ball
-=======
-	
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 	function display() {
 		fill('#00FF00');
 		e = ellipse(xBall, yBall, 20, 20);
@@ -192,22 +132,8 @@ function bounce() {
 	
 	// Hier wird der Bounce zwischen dem Ball und dem Paddle verwaltet
 	function paddle() {
-<<<<<<< HEAD
 		if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 600)) {
 			ySpeed *= -1;
-=======
-		if (isplaying == true) {	
-			if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 600)) {
-				ySpeed = ySpeed + 0.5;
-				ySpeed *= -1;
-
-				// Dynamic bounce direction
-				var d = mouseX - xBall;
-				xSpeed += d * -0.1;
-				console.log(ySpeed);
-			}
-			
->>>>>>> 1d0517dc917e2d1894c9a7a0d6e5d4d0fe3537c6
 		}
 	}
 	
