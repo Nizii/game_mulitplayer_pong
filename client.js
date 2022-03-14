@@ -7,18 +7,20 @@ var isplaying = false;
 var ball;
 
 // Random Ball Placement
-var xBall = Math.floor(Math.random() * 300) + 50;
+var canvasWidth = 900;
+var xBallRndStart = Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4;
+var xBall = xBallRndStart;
 var yBall = 50;
-var xSpeed = (5, 4);
-var ySpeed = (-4, 5);
+var xSpeed = 0;
+var ySpeed = 3;
 var myScore = 0;
 var scoreEnemy = 0;
 
 // Canvas
 function setup() {
-	createCanvas(900, 700);
+	createCanvas(canvasWidth, 700);
 	getID();
-	cursor(ARROW);
+	cursor('ew-resize');
 	rectMode(CENTER);
 	noStroke();
 
@@ -30,21 +32,25 @@ function setup() {
 	button.style("font-size", "12px");
 }
 
+// Alternative Start
+function keyPressed() {
+	if (keyCode === 32) {
+	  startGame();
+	}
+  }
 
-
-//Background
-
+  
+// Background
 function draw() {
 	
 	// Background
 	background(0, 60);
 	
 	// Paddle
-	fill("#00FF00");
+	fill("#fff");
 	rect(mouseX, 600, 80, 15);
 	
-	//Functionslo
-	
+	// Functionslo
 	if (isplaying){
 		console.log(isplaying);
 		display();
@@ -53,8 +59,8 @@ function draw() {
 		paddle();
 	}
 	
-	//resetBall();
-		//Score
+
+	//Score
 	fill('#d9c3f7');
 	textSize(24);
 	text(myScore + '-' + scoreEnemy, 10, 25);
@@ -70,22 +76,34 @@ function startGame(){
 	isplaying = true;
 }
 
+// Seitenabpraller
 function bounce() {
-	// Seitenabpraller
-	if (xBall < 10 || xBall > 900 - 10) {
+
+	// Links/Rechts
+	if (xBall < 10 || xBall > canvasWidth - 10) {
 			xSpeed *= -1;
 		}
 
+	// Top
 	if (yBall < 10 ) {
+		// uncomment below to make multiplayer
 		socket.emit("triggerid", id);
 		ySpeed *= -1;
 	}
 		
-	if (yBall > 600 - 10) {
+	// Bottom
+	if (yBall > 700 - 10) {
 		ySpeed *= -1;
 		scoreEnemy++;
 		socket.emit('score', scoreEnemy);
 		socket.emit('scoreid', id);
+
+		// Automatic ball reset
+/* 		yBall = 50;
+		xBallRndStart = xBallRndStart = Math.floor(Math.random() * window.innerWidth/2) + window.innerWidth/4;
+		xBall = xBallRndStart;
+		xSpeed = 0;
+		ySpeed = 3; */
 	}
 }
 
@@ -107,15 +125,6 @@ function bounce() {
 	});
 	
 	
-	// Reset Ball
-	//function resetBall() {
-	//  if (yBall >= 400 ||
-	//    yBall > 400 - 10) {
-	//    ySpeed = 4;
-	// }
-	
-	//}
-	
 	function display() {
 		fill('#00FF00');
 		e = ellipse(xBall, yBall, 20, 20);
@@ -123,10 +132,15 @@ function bounce() {
 	
 	// Bounce off Paddle
 	function paddle() {
-		if (isplaying == true) {
-			
-			if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 650)) {
+		if (isplaying == true) {	
+			if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 600)) {
+				ySpeed = ySpeed + 0.5;
 				ySpeed *= -1;
+
+				// Dynamic bounce direction
+				var d = mouseX - xBall;
+				xSpeed += d * -0.1;
+				console.log(ySpeed);
 			}
 			
 		}

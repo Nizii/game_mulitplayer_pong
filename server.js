@@ -50,6 +50,7 @@ io.on('connection', (socket) => {
 // Aktualisiert beim Mitspieler den Score falls der Ball ins eigene Tor geflogen ist
 io.on('connection', (socket) => {
   socket.on('score', (newScore) => {
+    //console.log(newScore);
     io.emit('score', newScore);
   });
   socket.on('scoreid', (scoreId) => {
