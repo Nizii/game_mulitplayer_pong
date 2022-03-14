@@ -25,7 +25,6 @@ app.get("/client.js", (req, res) => {
 });
 
 server.listen(process.env.PORT||3000, () => {
-  console.log('listening on *:3000');
   console.log('Link: http://localhost:3000');
 });
 
