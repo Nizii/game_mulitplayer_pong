@@ -1,27 +1,32 @@
-
-
+// Unsere liebe Socket
 var socket = io();
+// Aktuelle ID des Spielers
 var id;
-var newScore;
+// State zeigt ob der Spieler gerade den Ball hat
 var isplaying = false;
+// Der Ball
 var ball;
-
-// Random Ball Placement
+// Ball wird beim ersten Zug Random auf X platziert
 var xBall = Math.floor(Math.random() * 300) + 50;
+// Starthöhe 
 var yBall = 50;
+// Geschwindikeit des Balls X und Y 
 var xSpeed = (5, 4);
 var ySpeed = (-4, 5);
+// Die Scorevarriabeln
 var myScore = 0;
-var scoreEnemy = 0;
+var enemyScore = 0;
 
-// Canvas
+// Hier wird der Setup gemacht
 function setup() {
 	createCanvas(900, 700);
+	// ID wird verteilt
 	getID();
 	cursor(ARROW);
 	rectMode(CENTER);
 	noStroke();
 
+	// Hier wird der Startbutton aufgesetzt
 	button = createButton("Start");
 	button.mouseClicked(startGame);
 	button.size(50,25);
@@ -30,108 +35,98 @@ function setup() {
 	button.style("font-size", "12px");
 }
 
-
-
-//Background
-
 function draw() {
-	
-	// Background
 	background(0, 60);
-	
-	// Paddle
+
+	// Das Paddle
 	fill("#00FF00");
 	rect(mouseX, 600, 80, 15);
 	
-	//Functionslo
-	
+	// Wird nur ausgeführt wenn der Ball im Screen ist
 	if (isplaying){
-		console.log(isplaying);
 		display();
 		move();
 		bounce();
 		paddle();
 	}
-	
-	//resetBall();
-		//Score
+
+	// Score Text
 	fill('#d9c3f7');
 	textSize(24);
-	text(myScore + '-' + scoreEnemy, 10, 25);
+	text("me " + myScore + '-' + enemyScore + " opponent", 700, 25);
 }
 
-// Ball Functions
+// Bewegt Ball
 function move() {
 	xBall += xSpeed;
 	yBall += ySpeed;
 }
 
+// Startet das Spiel
 function startGame(){
 	isplaying = true;
 }
 
+// Ist für Bouncerei des Balls zuständig
 function bounce() {
+
 	// Seitenabpraller
 	if (xBall < 10 || xBall > 900 - 10) {
 			xSpeed *= -1;
 		}
 
+	// Triggert Ballseitenwechsel verschickt die ID und die X Pos des Balls
 	if (yBall < 10 ) {
 		socket.emit("triggerid", id);
+		socket.emit("getX", xBall);
 		ySpeed *= -1;
 	}
 		
-	if (yBall > 600 - 10) {
+	// Triggert Punkt
+	if (yBall > 600 + 20) {
 		ySpeed *= -1;
-		scoreEnemy++;
-		socket.emit('score', scoreEnemy);
+		socket.emit('score', enemyScore);
 		socket.emit('scoreid', id);
 	}
 }
 
+	// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 	socket.on("triggerid", function(triggerid){
-		console.log(id +" " + triggerid);
 		if (triggerid != id) {
 			isplaying = true;
+			// Holt sich neue X Position des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
+			socket.on("getX", function(newX){
+				xBall = newX;
+			})
 		} else {
 			isplaying = false;
 		}
 	});
 	
+	// Hier wird die Score über die Socket gehandelt
 	socket.on('scoreid', function(scoreId) {
+		// Wer bekommt den Punkt?
 		if (scoreId != id) {
-			myScore = newScore;
-			// alternative:
-			// myScore++;
+			myScore++;
+		} else {
+			enemyScore++;
 		}
 	});
 	
-	
-	// Reset Ball
-	//function resetBall() {
-	//  if (yBall >= 400 ||
-	//    yBall > 400 - 10) {
-	//    ySpeed = 4;
-	// }
-	
-	//}
-	
+	// Erzeugt den Ball
 	function display() {
 		fill('#00FF00');
 		e = ellipse(xBall, yBall, 20, 20);
 	}
 	
-	// Bounce off Paddle
+	// Hier wird der Bounce zwischen dem Ball und dem Paddle verwaltet
 	function paddle() {
-		if (isplaying == true) {
-			
-			if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 650)) {
-				ySpeed *= -1;
-			}
-			
+		if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 600)) {
+			ySpeed *= -1;
 		}
 	}
 	
+	// ID wird einmalig zugeteilt und auf Screen ausgegeben
 	function getID(){
 		socket.once('user', function(msg) {
 			id = msg;

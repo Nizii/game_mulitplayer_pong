@@ -62,4 +62,7 @@ io.on('connection', (socket) => {
   socket.on('triggerid', (triggerid) => {
     io.emit('triggerid', triggerid);
   });
+  socket.on('getX', (newX) => {
+    io.emit('getX', newX);
+  });
 });
