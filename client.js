@@ -143,7 +143,7 @@ function bounce() {
 			id = msg;
 			let h5 = createElement('h5', msg);
 			h5.style('color', '#00a1d3');
-			h5.position(10, 580);
+			h5.position(10, 550);
 		});
 	}
 	
