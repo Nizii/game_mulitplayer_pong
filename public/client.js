@@ -170,10 +170,12 @@ function bounce() {
 	if (window.DeviceMotionEvent == undefined) {
 		//No accelerometer is present. Use buttons.
 		alert("no accelerometer");
-	  } else {
-		window.addEventListener("devicemotion", (event) => {
+	  	} else {
+			window.addEventListener("devicemotion", (event) => {
 			//motion.x = -event.acceleration.x;
 		  	//motion.y = event.acceleration.y;
 			alert(-event.acceleration.x);
 		});
-	  }
+	}
+	
+	
