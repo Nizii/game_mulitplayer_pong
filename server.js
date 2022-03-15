@@ -7,26 +7,8 @@ const io = new Server(server);
 const userArray = [100];
 var index = 0;
 
-
 app.use(express.static('public'));
-// Verzeichnis
-/*
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
-app.get("/libraries/p5.min.js", (req, res) => {
-  res.sendFile(__dirname + "/libraries/p5.min.js");
-});
-app.get("/libraries/p5.sound.min.js", (req, res) => {
-  res.sendFile(__dirname + "/libraries/p5.sound.min.js");
-});
-app.get("/style.css", (req, res) => {
-  res.sendFile(__dirname + "/style.css");
-});
-app.get("/client.js", (req, res) => {
-  res.sendFile(__dirname + "/client.js");
-});
-*/
+
 server.listen(process.env.PORT||3000, () => {
   console.log('listening on *:3000');
   console.log('Link: http://localhost:3000');
@@ -83,12 +65,4 @@ io.on('connection', (socket) => {
   });
 });
 
-
-io.on('connection', (socket) => {
-  socket.on('output', (output) => {
-    io.emit("output", output);
-    console.log(output);
-  });
-
-});
 
