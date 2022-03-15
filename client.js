@@ -55,7 +55,7 @@ function draw() {
 	// Score Text
 	fill('#d9c3f7');
 	textSize(24);
-	text("me " + myScore + '-' + enemyScore + " opponent", 450, 25);
+	text("me " + myScore + '-' + enemyScore + " opponent", 410, 25);
 }
 
 // Bewegt Ball
@@ -143,7 +143,7 @@ function bounce() {
 			id = msg;
 			let h5 = createElement('h5', msg);
 			h5.style('color', '#00a1d3');
-			h5.position(10, 550);
+			h5.position(10, 600);
 		});
 	}
 	
