@@ -131,6 +131,13 @@ function bounce() {
 		console.info(ev.alpha, ev.beta, ev.gamma);
 		socket.emit("output", ev.alpha);
 	});
+
+	socket.on("output", function(msg){
+		id = msg;
+		let h5 = createElement('h5', msg);
+		h5.style('color', '#00a1d3');
+		h5.position(10, 650);
+	})
 	
 	// Hier wird die Score über die Socket gehandelt
 	socket.on('scoreid', function(scoreId) {

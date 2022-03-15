@@ -83,6 +83,7 @@ io.on('connection', (socket) => {
 
 io.on('connection', (socket) => {
   socket.on('output', (output) => {
+    io.emit("output", output);
     console.log(output);
   });
 
