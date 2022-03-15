@@ -19,7 +19,7 @@ var enemyScore = 0;
 
 // Hier wird der Setup gemacht
 function setup() {
-	createCanvas(900, 700);
+	createCanvas(600, 700);
 	// ID wird verteilt
 	getID();
 	cursor('ew-resize');
@@ -55,7 +55,7 @@ function draw() {
 	// Score Text
 	fill('#d9c3f7');
 	textSize(24);
-	text("me " + myScore + '-' + enemyScore + " opponent", 700, 25);
+	text("me " + myScore + '-' + enemyScore + " opponent", 450, 25);
 }
 
 // Bewegt Ball
@@ -74,7 +74,7 @@ function startGame(){
 function bounce() {
 
 	// Seitenabpraller
-	if (xBall < 10 || xBall > 900 - 10) {
+	if (xBall < 10 || xBall > 600 - 10) {
 			xSpeed *= -1;
 		}
 
@@ -143,7 +143,7 @@ function bounce() {
 			id = msg;
 			let h5 = createElement('h5', msg);
 			h5.style('color', '#00a1d3');
-			h5.position(10, 650);
+			h5.position(10, 600);
 		});
 	}
 	
