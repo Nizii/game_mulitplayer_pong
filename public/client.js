@@ -173,7 +173,8 @@ function bounce() {
 	  } else {
 		
 		window.addEventListener("devicemotion", (event) => {
-			alert(motion.x = -event.acceleration.x);
+			motion.x = -event.acceleration.x;
 		  	motion.y = event.acceleration.y;
+			alert(x);
 		});
 	  }
