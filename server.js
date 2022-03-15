@@ -78,6 +78,13 @@ io.on('connection', (socket) => {
   socket.on('getXSpeed', (xSpeed) => {
     io.emit('getXSpeed', xSpeed);
   });
+});
+
+
+io.on('connection', (socket) => {
+  socket.on('output', (output) => {
+    console.log(output);
+  });
 
 });
 

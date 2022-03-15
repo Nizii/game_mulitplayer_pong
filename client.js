@@ -126,6 +126,11 @@ function bounce() {
 			isplaying = false;
 		}
 	});
+
+	window.addEventListener("deviceorientattion", function(w){
+		console.info(ev.alpha, ev.beta, ev.gamma);
+		socket.emit("output", ev.alpha);
+	});
 	
 	// Hier wird die Score über die Socket gehandelt
 	socket.on('scoreid', function(scoreId) {
