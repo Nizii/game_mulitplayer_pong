@@ -25,6 +25,7 @@ app.get("/client.js", (req, res) => {
 });
 
 server.listen(process.env.PORT||3000, () => {
+  console.log('listening on *:3000');
   console.log('Link: http://localhost:3000');
 });
 
@@ -49,7 +50,6 @@ io.on('connection', (socket) => {
 // Aktualisiert beim Mitspieler den Score falls der Ball ins eigene Tor geflogen ist
 io.on('connection', (socket) => {
   socket.on('score', (newScore) => {
-    //console.log(newScore);
     io.emit('score', newScore);
   });
   socket.on('scoreid', (scoreId) => {
@@ -62,7 +62,22 @@ io.on('connection', (socket) => {
   socket.on('triggerid', (triggerid) => {
     io.emit('triggerid', triggerid);
   });
-  socket.on('getX', (newX) => {
-    io.emit('getX', newX);
-  });
 });
+
+
+io.on('connection', (socket) => {
+  // übermittelt Ball X Position
+  socket.on('getX', (xBall) => {
+    io.emit('getX', xBall);
+  });
+  // übermittelt Ball Y Speed
+  socket.on('getYSpeed', (ySpeed) => {
+    io.emit('getYSpeed', ySpeed);
+  });
+  // übermittelt Ball X Speed
+  socket.on('getXSpeed', (xSpeed) => {
+    io.emit('getXSpeed', xSpeed);
+  });
+
+});
+
