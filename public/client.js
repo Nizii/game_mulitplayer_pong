@@ -165,4 +165,15 @@ function bounce() {
 			h5.position(10, 650);
 		});
 	}
-	
+
+
+	if (window.DeviceMotionEvent == undefined) {
+		//No accelerometer is present. Use buttons.
+		alert("no accelerometer");
+	  } else {
+		alert("accelerometer found");
+		window.addEventListener("devicemotion", (event) => {
+		  motion.x = -event.acceleration.x;
+		  motion.y = event.acceleration.y;
+		});
+	  }
