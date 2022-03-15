@@ -175,6 +175,6 @@ function bounce() {
 		window.addEventListener("devicemotion", (event) => {
 			motion.x = -event.acceleration.x;
 		  	motion.y = event.acceleration.y;
-			alert(x);
+			alert(motion.x);
 		});
 	  }
