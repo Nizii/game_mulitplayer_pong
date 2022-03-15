@@ -30,7 +30,7 @@ function setup() {
 	button = createButton("Start");
 	button.mouseClicked(startGame);
 	button.size(50,25);
-	button.position(10,625);
+	button.position(10,650);
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
 }
