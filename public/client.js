@@ -49,7 +49,7 @@ function draw() {
 	rect(mouseX, 610, 30, 2);
 
 	// Prüft ob es ein Mobileinput gibt
-	checkMobileInput();
+	//checkMobileInput();
 
 	// Wird nur ausgeführt wenn der Ball im Screen ist
 	if (isplaying){
@@ -153,7 +153,7 @@ function bounce() {
 			// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
 			var d = mouseX - xBall;
 			xSpeed += d * -0.1;
-			console.log(ySpeed);
+			//console.log(ySpeed);
 		}
 	}
 	
@@ -168,18 +168,14 @@ function bounce() {
 	}
 
 	function checkMobileInput(){
-		if (window.DeviceMotionEvent == undefined) {
-			//No accelerometer is present. Use buttons.
-			alert("no accelerometer");
-	  	} else {
-			window.addEventListener("devicemotion", (event) => {
-				//motion.x = -event.acceleration.x;
-		  		//motion.y = event.acceleration.y;
-				let p = createElement('p', -event.acceleration.x);
-				p.style('color', '#FFFF00');
-				p.style("font-size", "60pX");
-				p.position(canvasWidth-70, 550);
-			});
+		if (window.DeviceOrientationEvent) {
+			console.log("is Working");
+			window.addEventListener("deviceorientation", function(event) {
+				event.gamma
+				console.log(event.gamma);
+			}, true);
+		} else {
+			console.log("Not Supportet Device");
 		}
 	}
 	
