@@ -110,17 +110,17 @@ function bounce() {
 
 
 	// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
-	socket.on("triggerid", function(triggerid){
+	socket.on("triggerid", function(triggerid) {
 		if (triggerid == id) {
 			isplaying = true;
 			// Holt sich neue X Position und Richtung des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
-			socket.on("getX", function(newX){
+			socket.on("getX", function(newX) {
 				xBall = canvasWidth-newX;
 			});
-			socket.on("getYSpeed", function(newYSpeed){
-				YSpeed = newYSpeed;
+			socket.on("getYSpeed", function(newYSpeed) {
+				ySpeed = newYSpeed;
 			});
-			socket.on("getXSpeed", function(newXSpeed){
+			socket.on("getXSpeed", function(newXSpeed) {
 				xSpeed = newXSpeed;
 			});
 		} else {
@@ -159,7 +159,7 @@ function bounce() {
 	}
 	
 	// ID wird einmalig zugeteilt und auf Screen ausgegeben
-	function getID(){
+	function getID() {
 		socket.once('user', function(msg) {
 			id = msg;
 			let h5 = createElement('h5', msg);
@@ -168,7 +168,7 @@ function bounce() {
 		});
 	}
 
-	function checkMobileInput(){
+	function checkMobileInput() {
 		if (window.DeviceOrientationEvent) {
 			console.log("is Working");
 			window.addEventListener("deviceorientation", function(event) {
