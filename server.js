@@ -20,11 +20,7 @@ io.on('connection', (socket) => {
   var id = socket.id;
   userArray[index] = id;
   index++;
-  console.log("Anzahl Spieler " + index);
   io.emit('user', socket.id);
-  for(let i = 0; i < userArray.length;i++) {
-    console.log(userArray[i]);
-  };
  
   socket.on('disconnect', () => {
     console.log('user disconnected');
