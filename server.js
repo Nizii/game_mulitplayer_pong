@@ -22,7 +22,7 @@ io.on('connection', (socket) => {
   index++;
   io.emit('user', socket.id);
  
-  socket.on('disconnect', () => {
+  socket.on('disconnect', (id) => {
     console.log('user disconnected');
     io.emit('user', "is offline");
   });
@@ -41,10 +41,16 @@ io.on('connection', (socket) => {
 // Ordnet zu in welchem Screen gerade der Ball ist
 io.on('connection', (socket) => {
   socket.on('triggerid', (triggerid) => {
-    io.emit('triggerid', triggerid);
+    io.emit('triggerid', userArray[getRandomInt(userArray.length)]);
+    for(let i = 0; i < userArray.length; i++) {
+      console.log(userArray[i]);
+    }
   });
 });
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 
 io.on('connection', (socket) => {
   // übermittelt Ball X Position

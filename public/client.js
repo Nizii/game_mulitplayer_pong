@@ -41,7 +41,6 @@ function setup() {
 function draw() {
 	// Für Delay-gradient Effekt hier ", 60" einfügen
 	background(0);
-
 	// Das Paddle
 	fill("#fff");
 	rect(mouseX, 600, 80, 2);
@@ -109,9 +108,10 @@ function bounce() {
 	}
 }
 
+
 	// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 	socket.on("triggerid", function(triggerid){
-		if (triggerid != id) {
+		if (triggerid == id) {
 			isplaying = true;
 			// Holt sich neue X Position und Richtung des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
 			socket.on("getX", function(newX){
@@ -137,6 +137,7 @@ function bounce() {
 			enemyScore++;
 		}
 	});
+
 	
 	// Erzeugt den Ball
 	function display() {
