@@ -12,6 +12,7 @@ app.use(express.static('public'));
 
 server.listen(process.env.PORT||3000, () => {
   console.log('listening on *:3000');
+  console.log('Link: http://localhost:3000')
 });
 
 //Connect and Disconnetct User from Server
@@ -69,7 +70,7 @@ function getRandomInt(max) {
 }
 
 io.on('connection', (socket) => {
-  // übermittelt Ball X Position
+/*   // übermittelt Ball X Position
   socket.on('getX', (xBall) => {
     io.emit('getX', xBall);
   });
@@ -80,7 +81,14 @@ io.on('connection', (socket) => {
   // übermittelt Ball X Speed
   socket.on('getXSpeed', (xSpeed) => {
     io.emit('getXSpeed', xSpeed);
+  }); */
+  socket.on('ballData', (x, xSpeed, ySpeed) => {
+    console.log(parseInt(x));
+    console.log(xSpeed);
+    console.log(ySpeed);
+    io.emit('ballData', x, xSpeed, ySpeed);
   });
+
 });
 
 

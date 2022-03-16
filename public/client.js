@@ -4,8 +4,6 @@ var socket = io();
 var id;
 // State zeigt ob der Spieler gerade den Ball hat
 var isplaying = false;
-// Der Ball
-var ball;
 // Die Spielfeldbreite
 var canvasWidth = 900;
 // Ball wird beim ersten Zug Random auf X platziert
@@ -19,6 +17,14 @@ var ySpeed = 3;
 var myScore = 0;
 var enemyScore = 0;
 
+
+// Array mit allen Bällen
+var ballArray = [];
+
+//console.log(ballArray);
+
+
+
 // Hier wird der Setup gemacht
 function setup() {
 	createCanvas(canvasWidth, 700);
@@ -26,6 +32,7 @@ function setup() {
 	getID();
 	cursor('ew-resize');
 	rectMode(CENTER);
+	colorMode(HSB);
 	noStroke();
 
 	// Hier wird der Startbutton aufgesetzt
@@ -35,29 +42,62 @@ function setup() {
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
+	button.disabled = true;
+
+
 }
 
 // Background
 function draw() {
-	// Für Delay-gradient Effekt hier ", 60" einfügen
 	background(0);
+
+	for (let ball of ballArray) {
+
+		ball.show();
+		ball.update();
+		
+		// Seitenabpraller
+		if (ball.x < 10 || ball.x > canvasWidth - 10) {
+			ball.xSpeed *= -1;
+		}
+
+		// Hier wird der Bounce zwischen den Bällen und dem Paddle verwaltet
+		if ((ball.x > mouseX - 45 && ball.x < mouseX + 45) && (ball.y + 10 >= 600)) {
+			ball.ySpeed = ball.ySpeed + 0.5;
+			ball.ySpeed *= -1;
+			console.log(ballArray);
+			
+			// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
+			var d = mouseX - ball.x;
+			ball.xSpeed += d * -0.1;
+		}
+
+		if (ball.y < 10) {
+			socket.emit("ballData", ball.x, ball.xSpeed, ball.ySpeed)
+/* 			socket.emit("triggerid", id);
+			socket.emit("getX", ball.x);
+			//ball.y *= -1;
+			socket.emit("getYSpeed", ySpeed);
+			socket.emit("getXSpeed", -xSpeed); */
+			console.log(ball);
+			ballArray.pop();
+			
+			
+		}
+
+	}
+
+
 	// Das Paddle
 	fill("#fff");
+	//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
 	rect(mouseX, 600, 80, 2);
 	rect(mouseX, 605, 60, 2);
 	rect(mouseX, 610, 30, 2);
-
-	// Prüft ob es ein Mobileinput gibt
-	//checkMobileInput();
-
+	
+	
 	// Wird nur ausgeführt wenn der Ball im Screen ist
-	if (isplaying){
-		display();
-		move();
-		bounce();
-		paddle();
-	}
-
+	
 	// Score Text
 	fill('#fff');
 	textSize(24);
@@ -72,26 +112,26 @@ function move() {
 
 // Startet das Spiel
 function startGame(){
-	isplaying = true;
+	
+	ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
+	button.disabled = true;
 }
 
 
 // Ist für Bouncerei des Balls zuständig
 function bounce() {
 
-	// Seitenabpraller
-	if (xBall < 10 || xBall > canvasWidth - 10) {
-			xSpeed *= -1;
-		}
 
-	// Triggert Ballseitenwechsel verschickt die ID und die X Pos des Balls
+
+	// Triggert Ballseitenwechsel verschickt die ID des Absenders, die X-Pos und die Richtung des Balls
 	if (yBall < 10 ) {
-		// uncomment below to make multiplayer
 		socket.emit("triggerid", id);
 		socket.emit("getX", xBall);
 		ySpeed *= -1;
 		socket.emit("getYSpeed", ySpeed);
 		socket.emit("getXSpeed", -xSpeed);
+		ballArray.push(new Ball(this.xBall, 0 , this.xSpeed , this.ySpeed, this.ballId));
+
 	}
 		
 	// Triggert Punkt
@@ -110,19 +150,23 @@ function bounce() {
 
 
 	// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
-	socket.on("triggerid", function(triggerid) {
+	socket.on("triggerid", function(triggerid){
 		if (triggerid == id) {
 			isplaying = true;
+
+			
 			// Holt sich neue X Position und Richtung des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
-			socket.on("getX", function(newX) {
+			socket.on("getX", function(newX){
 				xBall = canvasWidth-newX;
 			});
-			socket.on("getYSpeed", function(newYSpeed) {
+			socket.on("getYSpeed", function(newYSpeed){
 				ySpeed = newYSpeed;
 			});
-			socket.on("getXSpeed", function(newXSpeed) {
+			socket.on("getXSpeed", function(newXSpeed){
 				xSpeed = newXSpeed;
 			});
+
+			console.log(ballArray);
 		} else {
 			isplaying = false;
 		}
@@ -145,39 +189,39 @@ function bounce() {
 		e = ellipse(xBall, yBall, 20, 20);
 	}
 	
-	// Hier wird der Bounce zwischen dem Ball und dem Paddle verwaltet
-	function paddle() {
-		if ((xBall > mouseX - 40 && xBall < mouseX + 40) && (yBall + 10 >= 600)) {
-			ySpeed = ySpeed + 0.5;
-			ySpeed *= -1;
 
-			// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
-			var d = mouseX - xBall;
-			xSpeed += d * -0.1;
-			//console.log(ySpeed);
-		}
-	}
 	
 	// ID wird einmalig zugeteilt und auf Screen ausgegeben
-	function getID() {
-		socket.once('user', function(msg) {
-			id = msg;
-			let h5 = createElement('h5', msg);
-			h5.style('color', '#00a1d3');
-			h5.position(10, 650);
-		});
-	}
+function getID(){
+	socket.once('user', function(msg) {
+		id = msg;
+		let h5 = createElement('h5', msg);
+		h5.style('color', '#00a1d3');
+		h5.position(10, 650);
+	});
+}
 
-	function checkMobileInput() {
-		if (window.DeviceOrientationEvent) {
-			console.log("is Working");
-			window.addEventListener("deviceorientation", function(event) {
-				event.gamma
-				console.log(event.gamma);
-			}, true);
-		} else {
-			console.log("Not Supportet Device");
-		}
+function checkMobileInput() {
+	if (window.DeviceOrientationEvent) {
+		console.log("is Working");
+		window.addEventListener("deviceorientation", function(event) {
+			event.gamma
+			console.log(event.gamma);
+		}, true);
+	} else {
+		console.log("Not Supportet Device");
 	}
+}
 	
+function generateRandomString() {
+	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	var string_length = 6;
+	var randomstring = '';
+	for (var i=0; i<string_length; i++) {
+		var rnum = Math.floor(Math.random() * chars.length);
+		randomstring += chars.substring(rnum,rnum+1);
+	}
+	return randomstring;
+}
+
 	
