@@ -48,9 +48,10 @@ function draw() {
 	rect(mouseX, 605, 60, 2);
 	rect(mouseX, 610, 30, 2);
 
-	
-	// Wird nur ausgeführt wenn der Ball im Screen ist
+	// Prüft ob es ein Mobileinput gibt
+	checkMobileInput();
 
+	// Wird nur ausgeführt wenn der Ball im Screen ist
 	if (isplaying){
 		display();
 		move();
@@ -166,16 +167,20 @@ function bounce() {
 		});
 	}
 
-
-	if (window.DeviceMotionEvent == undefined) {
-		//No accelerometer is present. Use buttons.
-		alert("no accelerometer");
+	function checkMobileInput(){
+		if (window.DeviceMotionEvent == undefined) {
+			//No accelerometer is present. Use buttons.
+			alert("no accelerometer");
 	  	} else {
 			window.addEventListener("devicemotion", (event) => {
-			//motion.x = -event.acceleration.x;
-		  	//motion.y = event.acceleration.y;
-			alert(-event.acceleration.x);
-		});
+				//motion.x = -event.acceleration.x;
+		  		//motion.y = event.acceleration.y;
+				let p = createElement('p', -event.acceleration.x);
+				p.style('color', '#FFFF00');
+				p.style("font-size", "60pX");
+				p.position(canvasWidth-70, 550);
+			});
+		}
 	}
 	
 	
