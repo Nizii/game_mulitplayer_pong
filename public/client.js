@@ -94,7 +94,7 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
-						socket.emit("ballData", ball.ballId, ball.x, ball.xSpeed, ball.ySpeed);
+						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed);
 						ballArray.splice(x, 1); 
 					}
 				}	
@@ -144,6 +144,7 @@ window.onresize = function() {
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 }
+
 
 socket.on("userArray", function(userArray) {
 	let yAxis = 0;

@@ -65,11 +65,13 @@ function getRandomInt(max) {
 }
 
 io.on('connection', (socket) => {
-  socket.on('ballData', (ballId, x, xSpeed, ySpeed) => {
-    console.log(ballId, x, xSpeed, ySpeed)
+  socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed) => {
     ySpeed *= -1;
-    io.to(userArray[getRandomInt(userArray.length)]).emit('ballData', ballId, x, xSpeed, ySpeed);
-    console.log(ballId, x, xSpeed, ySpeed)
+    let randomUser = userArray[getRandomInt(userArray.length)];
+    while(userId === randomUser && userArray.length < 1) {
+      randomUser = userArray[getRandomInt(userArray.length)];
+    }
+    io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
   });
 
 });
