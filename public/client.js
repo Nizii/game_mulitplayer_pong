@@ -146,12 +146,12 @@ function windowResized() {
 }
 
 socket.on("userArray", function(userArray) {
-	let yAxis = 30;
+	let yAxis = 0;
 	
 	for(let x = 0; x < userArray.length; x++) {
 		let h5 = createElement('h5', userArray[x]);
-		h5.style('color', 'white');
-		h5.position(200, yAxis);
+		h5.style('color', 'black');
+		h5.position(20, yAxis);
 		yAxis += 20;
 		console.log(userArray[x]);
 	}
