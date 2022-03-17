@@ -6,19 +6,14 @@ var id;
 var isplaying = false;
 // Die Spielfeldbreite
 var canvasWidth = 900;
-// Ball wird beim ersten Zug Random auf X platziert
-var xBall = Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4;
-// Starthöhe 
-var yBall = 50;
-// Geschwindikeit des Balls X und Y am Start
-var xSpeed = 0;
-var ySpeed = 3;
+// Paddle Breite
+var paddleWidth = 80;
 // Die Scorevarriabeln
 var myScore = 0;
 var enemyScore = 0;
 
 var w = window.innerWidth;
-var h = window.innerHeight;  
+var h = 700;  
 
 // Array mit allen Bällen
 var ballArray = [];
@@ -36,6 +31,7 @@ function setup() {
 
 	// Hier wird der Startbutton aufgesetzt
 	button = createButton("Start");
+	button.id("start-button")
 	button.mouseClicked(startGame);
 	button.size(50,25);
 	button.position(10,625);
@@ -47,10 +43,10 @@ function setup() {
 function draw() {
 	background(0,);
 
-	// Zeigt die Framerate unten rechts an
-	let fps = frameRate();
-	text("FPS: " + fps.toFixed(2), canvasWidth - 150, height - 10);
-
+	// STRESSTEST: Zeigt die Framerate unten rechts an
+/* 	let fps = frameRate();
+	text("FPS: " + fps.toFixed(2), w - 10, height - 10);
+ */
 	for (let ball of ballArray) {
 		// Zeigt den Ball an
 		ball.show();
@@ -63,7 +59,7 @@ function draw() {
 		}
 
 		// Hier wird der Bounce zwischen den Bällen und dem Paddle verwaltet
-		if ((ball.x > mouseX - 45 && ball.x < mouseX + 45) && (ball.y + 10 >= 600)) {
+		if ((ball.x > mouseX - paddleWidth/2+5 && ball.x < mouseX + paddleWidth/2+5) && (ball.y + 10 >= 600)) {
 			ball.ySpeed = ball.ySpeed + 0.5;
 			ball.ySpeed *= -1;
 			//console.log(ballArray);
@@ -81,21 +77,35 @@ function draw() {
 				}
 			}	
 		}
+
+		if (ball.y >= 700 - 10) {
+			for (let x = 0; x < ballArray.length; x++) {
+				if (ball.ballId === ballArray[x].ballId) {
+					ballArray.splice(x, 1); 
+					socket.emit('score', enemyScore);
+					socket.emit('scoreid', id);
+				}
+			}	
+	
+			// Automatic ball reset
+			//ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50 , 0, 3, 20, this.ballId));
+
+		}
 	}
 
 	// Das Paddle
-	//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
-	//rect(mouseX, 600, 80, 2);
-	//rect(mouseX, 605, 60, 2);
-	//rect(mouseX, 610, 30, 2);
-
-fill(196);
-  noStroke();
-  rect(mouseX, 600, 200, 20, 25, 25, 4, 4);
+	//arc(mouseX, 605, paddleWidth, 30, PI, 0, CHORD);
+	//rect(mouseX, 600, paddleWidth, 2);
+	//rect(mouseX, 605, paddleWidth/2, 2);
+	//rect(mouseX, 620, paddleWidth/3, 2);
+	fill(196);
+  	noStroke();
+  	rect(mouseX, 600, paddleWidth, 20, 25, 25, 4, 4);
 		
 	// Score Text
 	textSize(24);
-	text("ME " + myScore + '-' + enemyScore + " OPPONENT", canvasWidth-250, 40);
+	textAlign(RIGHT);
+	text("ME " + myScore + '-' + enemyScore + " OPPONENT", w-10, 40);
 }
 
 window.onresize = function() {
@@ -111,24 +121,14 @@ function windowResized() {
 
 // Startet das Spiel
 function startGame() {
-	ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50 , 0, 3, 20, this.ballId));
 	//button.remove();
 }
 
 /*
 // Ist für Bouncerei des Balls zuständig
 function bounce() {
-
-	// Triggert Ballseitenwechsel verschickt die ID des Absenders, die X-Pos und die Richtung des Balls
-	if (yBall < 10 ) {
-		socket.emit("triggerid", id);
-		socket.emit("getX", xBall);
-		ySpeed *= -1;
-		socket.emit("getYSpeed", ySpeed);
-		socket.emit("getXSpeed", -xSpeed);
-		ballArray.push(new Ball(this.xBall, 0 , this.xSpeed , this.ySpeed, this.ballId));
-	}
-		
+	
 	// Triggert Punkt
 	if (yBall > 700 - 10) {
 		ySpeed *= -1;
@@ -145,10 +145,10 @@ function bounce() {
 */
 
 	// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
-socket.on("triggerid", function(triggerid){
-	if (triggerid == id) {
-		isplaying = true;
-		
+socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
+	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId));
+	
+	/* if (triggerid == id) {
 		// Holt sich neue X Position und Richtung des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
 		socket.on("getX", function(newX){
 			xBall = canvasWidth-newX;
@@ -159,9 +159,7 @@ socket.on("triggerid", function(triggerid){
 		socket.on("getXSpeed", function(newXSpeed){
 			xSpeed = newXSpeed;
 		});
-	} else {
-		isplaying = false;
-	}
+	} */
 });
 	
 // Hier wird die Score über die Socket gehandelt
