@@ -16,12 +16,16 @@ var ySpeed = 3;
 // Die Scorevarriabeln
 var myScore = 0;
 var enemyScore = 0;
-
 var w = window.innerWidth;
 var h = window.innerHeight;  
-
 // Array mit allen Bällen
 var ballArray = [];
+// Alle aktiven User
+var userArray = [];
+// Game States
+var start = true;
+var game = false;
+var gameOver = false;
 
 // Hier wird der Setup gemacht
 function setup() {
@@ -41,61 +45,67 @@ function setup() {
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
+
+	startButton = createButton("Start");
+	startButton.id("startButton");
 }
 
 // Background
 function draw() {
-	background(0,);
-
-	// Zeigt die Framerate unten rechts an
-	let fps = frameRate();
-	text("FPS: " + fps.toFixed(2), canvasWidth - 150, height - 10);
-
-	for (let ball of ballArray) {
-		// Zeigt den Ball an
-		ball.show();
-		// Bewegt Ball
-		ball.update();
-		
-		// Seitenabpraller
-		if (ball.x < 10 || ball.x > w - 10) {
-			ball.xSpeed *= -1;
-		}
-
-		// Hier wird der Bounce zwischen den Bällen und dem Paddle verwaltet
-		if ((ball.x > mouseX - 45 && ball.x < mouseX + 45) && (ball.y + 10 >= 600)) {
-			ball.ySpeed = ball.ySpeed + 0.5;
-			ball.ySpeed *= -1;
-			//console.log(ballArray);
-			
-			// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
-			var d = mouseX - ball.x;
-			ball.xSpeed += d * -0.1;
-		}
-
-		if (ball.y < 10) {
-			for (let x = 0; x < ballArray.length; x++) {
-				if (ball.ballId === ballArray[x].ballId) {
-					socket.emit("ballData", ball.ballId, ball.x, ball.xSpeed, ball.ySpeed);
-					ballArray.splice(x, 1); 
-				}
-			}	
-		}
+	if (start) {
+		background('rgb(100%,0%,10%)');
+		fill(255);
+		textAlign(CENTER, CENTER);
+		text("Ready?", width/2, height/2);
+		return;
 	}
 
-	// Das Paddle
-	//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
-	//rect(mouseX, 600, 80, 2);
-	//rect(mouseX, 605, 60, 2);
-	//rect(mouseX, 610, 30, 2);
+	if (game) {
+		background(0);
+		// Zeigt die Framerate unten rechts an
+		let fps = frameRate();
+		text("FPS: " + fps.toFixed(2), canvasWidth - 150, height - 10);
+		for (let ball of ballArray) {
+			// Zeigt den Ball an
+			ball.show();
+			// Bewegt Ball
+			ball.update();
+			// Seitenabpraller
+			if (ball.x < 10 || ball.x > w - 10) {
+				ball.xSpeed *= -1;
+			}
 
-fill(196);
-  noStroke();
-  rect(mouseX, 600, 200, 20, 25, 25, 4, 4);
-		
-	// Score Text
-	textSize(24);
-	text("ME " + myScore + '-' + enemyScore + " OPPONENT", canvasWidth-250, 40);
+			// Hier wird der Bounce zwischen den Bällen und dem Paddle verwaltet
+			if ((ball.x > mouseX - 45 && ball.x < mouseX + 45) && (ball.y + 10 >= 600)) {
+				ball.ySpeed = ball.ySpeed + 0.5;
+				ball.ySpeed *= -1;
+				// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
+				var d = mouseX - ball.x;
+				ball.xSpeed += d * -0.1;
+			}
+
+			if (ball.y < 10) {
+				for (let x = 0; x < ballArray.length; x++) {
+					if (ball.ballId === ballArray[x].ballId) {
+						socket.emit("ballData", ball.ballId, ball.x, ball.xSpeed, ball.ySpeed);
+						ballArray.splice(x, 1); 
+					}
+				}	
+			}
+		}
+
+		// Das Paddle
+		//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
+		//rect(mouseX, 600, 80, 2);
+		//rect(mouseX, 605, 60, 2);
+		//rect(mouseX, 610, 30, 2);
+		fill(196);
+  		noStroke();
+  		rect(mouseX, 600, 200, 20, 25, 25, 4, 4);
+		// Score Text
+		textSize(24);
+		text("ME " + myScore + '-' + enemyScore + " OPPONENT", canvasWidth-250, 40);
+	}
 }
 
 window.onresize = function() {
@@ -163,6 +173,10 @@ socket.on("triggerid", function(triggerid){
 		isplaying = false;
 	}
 });
+
+socket.on("userList", function(userArray){
+	
+})
 	
 // Hier wird die Score über die Socket gehandelt
 socket.on('scoreid', function(scoreId) {
@@ -207,5 +221,3 @@ function generateRandomString() {
 	}
 	return randomstring;
 }
-
-	
