@@ -23,9 +23,9 @@ var ballArray = [];
 // Alle aktiven User
 var userArray = [];
 // Game States
-var start = true;
-var game = false;
-var gameOver = false;
+var startScreen = true;
+var gamesScreen = false;
+var gameOverScreen = false;
 
 // Hier wird der Setup gemacht
 function setup() {
@@ -40,7 +40,9 @@ function setup() {
 
 	// Hier wird der Startbutton aufgesetzt
 	button = createButton("Start");
-	button.mouseClicked(startGame);
+	button.mouseClicked(function() {
+		ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
+	});
 	button.size(50,25);
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
@@ -48,19 +50,22 @@ function setup() {
 
 	startButton = createButton("Start");
 	startButton.id("startButton");
+	startButton.mouseClicked(function() {
+		startScreen = false;
+		gamesScreen = true;
+	});
 }
 
 // Background
 function draw() {
-	if (start) {
+	if (startScreen) {
 		background('rgb(100%,0%,10%)');
 		fill(255);
 		textAlign(CENTER, CENTER);
-		text("Ready?", width/2, height/2);
 		return;
 	}
 
-	if (game) {
+	if (gamesScreen) {
 		background(0);
 		// Zeigt die Framerate unten rechts an
 		let fps = frameRate();
@@ -94,6 +99,10 @@ function draw() {
 			}
 		}
 
+		if (gameOverScreen) {
+			background(255, 204, 0);
+		}
+
 		// Das Paddle
 		//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
 		//rect(mouseX, 600, 80, 2);
@@ -121,8 +130,6 @@ function windowResized() {
 
 // Startet das Spiel
 function startGame() {
-	ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
-	//button.remove();
 }
 
 /*
