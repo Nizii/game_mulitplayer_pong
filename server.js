@@ -82,11 +82,8 @@ io.on('connection', (socket) => {
   socket.on('getXSpeed', (xSpeed) => {
     io.emit('getXSpeed', xSpeed);
   }); */
-  socket.on('ballData', (x, xSpeed, ySpeed) => {
-    console.log(parseInt(x));
-    console.log(xSpeed);
-    console.log(ySpeed);
-    io.emit('ballData', x, xSpeed, ySpeed);
+  socket.on('ballData', (ballId, x, xSpeed, ySpeed) => {
+    io.emit('ballData', ballId, x, xSpeed, ySpeed);
   });
 
 });

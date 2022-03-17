@@ -52,7 +52,6 @@ function draw() {
 	background(0);
 
 	for (let ball of ballArray) {
-
 		ball.show();
 		ball.update();
 		
@@ -65,7 +64,7 @@ function draw() {
 		if ((ball.x > mouseX - 45 && ball.x < mouseX + 45) && (ball.y + 10 >= 600)) {
 			ball.ySpeed = ball.ySpeed + 0.5;
 			ball.ySpeed *= -1;
-			console.log(ballArray);
+			//console.log(ballArray);
 			
 			// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
 			var d = mouseX - ball.x;
@@ -73,18 +72,13 @@ function draw() {
 		}
 
 		if (ball.y < 10) {
-			socket.emit("ballData", ball.x, ball.xSpeed, ball.ySpeed)
-/* 			socket.emit("triggerid", id);
-			socket.emit("getX", ball.x);
-			//ball.y *= -1;
-			socket.emit("getYSpeed", ySpeed);
-			socket.emit("getXSpeed", -xSpeed); */
-			console.log(ball);
-			ballArray.pop();
-			
-			
+			for (let x = 0; x < ballArray.length; x++) {
+				if (ball.ballId === ballArray[x].ballId) {
+					socket.emit("ballData", ball.ballId, ball.x, ball.xSpeed, ball.ySpeed);
+					ballArray.splice(x, 1); 
+				}
+			}	
 		}
-
 	}
 
 
@@ -112,16 +106,13 @@ function move() {
 
 // Startet das Spiel
 function startGame(){
-	
 	ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
 	button.disabled = true;
 }
 
-
+/*
 // Ist für Bouncerei des Balls zuständig
 function bounce() {
-
-
 
 	// Triggert Ballseitenwechsel verschickt die ID des Absenders, die X-Pos und die Richtung des Balls
 	if (yBall < 10 ) {
@@ -131,7 +122,6 @@ function bounce() {
 		socket.emit("getYSpeed", ySpeed);
 		socket.emit("getXSpeed", -xSpeed);
 		ballArray.push(new Ball(this.xBall, 0 , this.xSpeed , this.ySpeed, this.ballId));
-
 	}
 		
 	// Triggert Punkt
@@ -147,51 +137,45 @@ function bounce() {
 		ySpeed = 3;
 	}
 }
-
+*/
 
 	// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
-	socket.on("triggerid", function(triggerid){
-		if (triggerid == id) {
-			isplaying = true;
-
-			
-			// Holt sich neue X Position und Richtung des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
-			socket.on("getX", function(newX){
-				xBall = canvasWidth-newX;
-			});
-			socket.on("getYSpeed", function(newYSpeed){
-				ySpeed = newYSpeed;
-			});
-			socket.on("getXSpeed", function(newXSpeed){
-				xSpeed = newXSpeed;
-			});
-
-			console.log(ballArray);
-		} else {
-			isplaying = false;
-		}
-	});
-	
-	// Hier wird die Score über die Socket gehandelt
-	socket.on('scoreid', function(scoreId) {
-		// Wer bekommt den Punkt?
-		if (scoreId != id) {
-			myScore++;
-		} else {
-			enemyScore++;
-		}
-	});
-
-	
-	// Erzeugt den Ball
-	function display() {
-		fill('#fff');
-		e = ellipse(xBall, yBall, 20, 20);
+socket.on("triggerid", function(triggerid){
+	if (triggerid == id) {
+		isplaying = true;
+		
+		// Holt sich neue X Position und Richtung des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
+		socket.on("getX", function(newX){
+			xBall = canvasWidth-newX;
+		});
+		socket.on("getYSpeed", function(newYSpeed){
+			ySpeed = newYSpeed;
+		});
+		socket.on("getXSpeed", function(newXSpeed){
+			xSpeed = newXSpeed;
+		});
+	} else {
+		isplaying = false;
 	}
+});
 	
-
+// Hier wird die Score über die Socket gehandelt
+socket.on('scoreid', function(scoreId) {
+	// Wer bekommt den Punkt?
+	if (scoreId != id) {
+		myScore++;
+	} else {
+		enemyScore++;
+	}
+});
 	
-	// ID wird einmalig zugeteilt und auf Screen ausgegeben
+// Erzeugt den Ball
+function display() {
+	fill('#fff');
+	e = ellipse(xBall, yBall, 20, 20);
+}
+	
+// ID wird einmalig zugeteilt und auf Screen ausgegeben
 function getID(){
 	socket.once('user', function(msg) {
 		id = msg;
@@ -203,7 +187,7 @@ function getID(){
 
 function checkMobileInput() {
 	if (window.DeviceOrientationEvent) {
-		console.log("is Working");
+		//console.log("is Working");
 		window.addEventListener("deviceorientation", function(event) {
 			event.gamma
 			console.log(event.gamma);
@@ -213,6 +197,7 @@ function checkMobileInput() {
 	}
 }
 	
+// Generiert einen Random String, kann für IDs verwendet werden
 function generateRandomString() {
 	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	var string_length = 6;
