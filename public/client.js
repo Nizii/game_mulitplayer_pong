@@ -110,7 +110,6 @@ function draw() {
 		
 				// Automatic ball reset
 				//ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50 , 0, 3, 20, this.ballId));
-	
 			}
 		}
 
