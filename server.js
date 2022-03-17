@@ -60,32 +60,16 @@ io.on('connection', (socket) => {
   });
 });
 
-// Ordnet zu in welchem Screen gerade der Ball ist
-io.on('connection', (socket) => {
-  socket.on('triggerid', (id) => {
-    io.emit('triggerid', userArray[getRandomInt(userArray.length)]);
-  });
-});
-
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
 io.on('connection', (socket) => {
-/*   // übermittelt Ball X Position
-  socket.on('getX', (xBall) => {
-    io.emit('getX', xBall);
-  });
-  // übermittelt Ball Y Speed
-  socket.on('getYSpeed', (ySpeed) => {
-    io.emit('getYSpeed', ySpeed);
-  });
-  // übermittelt Ball X Speed
-  socket.on('getXSpeed', (xSpeed) => {
-    io.emit('getXSpeed', xSpeed);
-  }); */
   socket.on('ballData', (ballId, x, xSpeed, ySpeed) => {
-    io.emit('ballData', ballId, x, xSpeed, ySpeed);
+    console.log(ballId, x, xSpeed, ySpeed)
+    ySpeed *= -1;
+    io.to(userArray[getRandomInt(userArray.length)]).emit('ballData', ballId, x, xSpeed, ySpeed);
+    console.log(ballId, x, xSpeed, ySpeed)
   });
 
 });
