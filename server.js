@@ -23,6 +23,7 @@ io.on('connection', (socket) => {
   index++;
   reorgArray();
   io.emit('user', socket.id);
+  io.emit('userList', userArray);
  
   // Löscht user der disconnected
   socket.on('disconnect', () => {
@@ -32,6 +33,7 @@ io.on('connection', (socket) => {
       }
     }
     reorgArray();
+    io.emit('userList', userArray);
   });
 });
 
@@ -83,5 +85,4 @@ io.on('connection', (socket) => {
   });
 
 });
-
 
