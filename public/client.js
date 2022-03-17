@@ -17,7 +17,6 @@ var ySpeed = 3;
 var myScore = 0;
 var enemyScore = 0;
 
-
 var w = window.innerWidth;
 var h = window.innerHeight;  
 
@@ -106,7 +105,6 @@ window.onresize = function() {
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 }
-
 
 // Bewegt Ball
 function move() {
