@@ -50,13 +50,15 @@ function setup() {
 	startButton.mouseClicked(function() {
 		startScreen = false;
 		gamesScreen = true;
+		startButton.remove();
 	});
+	startButton.position(0,0);
 }
 
 // Background
 function draw() {
 	if (startScreen) {
-		background('rgb(100%,0%,10%)');
+		background('white');
 		fill(255);
 		textAlign(CENTER, CENTER);
 		return;
@@ -144,11 +146,12 @@ function windowResized() {
 }
 
 socket.on("userArray", function(userArray) {
-	let yAxis = 10;
+	let yAxis = 30;
+	
 	for(let x = 0; x < userArray.length; x++) {
 		let h5 = createElement('h5', userArray[x]);
-		h5.style('color', '#fcfefe');
-		h5.position(10, yAxis);
+		h5.style('color', 'white');
+		h5.position(200, yAxis);
 		yAxis += 20;
 		console.log(userArray[x]);
 	}

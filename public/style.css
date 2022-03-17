@@ -14,6 +14,19 @@ canvas {
 }
 
 #startButton {
-  background-color: greenyellow;
+
+  background-color: rgb(243, 152, 152); 
   text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 2.5%;
+  width: 80%;
+  height: 80%;
+  border: 0;
+  border-radius: 20px;
+}
+
+#startButton:hover {
+  background-color: #d30909;
+  color: white;
 }
