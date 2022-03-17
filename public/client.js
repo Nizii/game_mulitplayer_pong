@@ -186,7 +186,7 @@ function getID(){
 	});
 }
 
-// Reservefunktion falls noch Zeit vorhanden Handy input
+// Reservefunktion falls noch Zeit vorhanden Handy
 function checkMobileInput() {
 	if (window.DeviceOrientationEvent) {
 		//console.log("is Working");
