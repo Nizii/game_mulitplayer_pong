@@ -34,6 +34,7 @@ function setup() {
 	rectMode(CENTER);
 	colorMode(HSB);
 	noStroke();
+	fill("#fff");
 
 	// Hier wird der Startbutton aufgesetzt
 	button = createButton("Start");
@@ -42,17 +43,21 @@ function setup() {
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
-	button.disabled = true;
-
-
+	
 }
 
 // Background
 function draw() {
-	background(0);
+	background(0,60);
+
+	// Zeigt die Framerate unten rechts an
+	let fps = frameRate();
+	text("FPS: " + fps.toFixed(2), canvasWidth - 150, height - 10);
 
 	for (let ball of ballArray) {
+		// Zeigt den Ball an
 		ball.show();
+		// Bewegt Ball
 		ball.update();
 		
 		// Seitenabpraller
@@ -83,31 +88,20 @@ function draw() {
 
 
 	// Das Paddle
-	fill("#fff");
 	//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
 	rect(mouseX, 600, 80, 2);
 	rect(mouseX, 605, 60, 2);
 	rect(mouseX, 610, 30, 2);
-	
-	
-	// Wird nur ausgeführt wenn der Ball im Screen ist
-	
+		
 	// Score Text
-	fill('#fff');
 	textSize(24);
 	text("ME " + myScore + '-' + enemyScore + " OPPONENT", canvasWidth-250, 40);
-}
-
-// Bewegt Ball
-function move() {
-	xBall += xSpeed;
-	yBall += ySpeed;
 }
 
 // Startet das Spiel
 function startGame(){
 	ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
-	button.disabled = true;
+	//button.remove();
 }
 
 /*
@@ -168,12 +162,6 @@ socket.on('scoreid', function(scoreId) {
 		enemyScore++;
 	}
 });
-	
-// Erzeugt den Ball
-function display() {
-	fill('#fff');
-	e = ellipse(xBall, yBall, 20, 20);
-}
 	
 // ID wird einmalig zugeteilt und auf Screen ausgegeben
 function getID(){
