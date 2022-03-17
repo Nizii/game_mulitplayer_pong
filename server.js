@@ -12,7 +12,7 @@ app.use(express.static('public'));
 
 server.listen(process.env.PORT||3000, () => {
   console.log('listening on *:3000');
-  console.log('Link: http://localhost:3000')
+  console.log('Link: http://localhost:3000');
 });
 
 //Connect and Disconnetct User from Server
@@ -65,14 +65,17 @@ function getRandomInt(max) {
 }
 
 io.on('connection', (socket) => {
-  socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed) => {
-    ySpeed *= -1;
-    let randomUser = userArray[getRandomInt(userArray.length)];
-    while(userId === randomUser && userArray.length < 1) {
-      randomUser = userArray[getRandomInt(userArray.length)];
-    }
-    io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
+  
+
+    socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed) => {
+      ySpeed *= -1;
+      let randomUser = userArray[getRandomInt(userArray.length)];
+      io.to(randomUser).emit('ready', 0);
+      socket.on('ready', (ready) => {
+        while(userId === randomUser && userArray.length < 1 || ready === false) {
+          randomUser = userArray[getRandomInt(userArray.length)];
+        }
+      io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
+    });
   });
-
 });
-
