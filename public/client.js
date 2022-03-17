@@ -42,11 +42,7 @@ function setup() {
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
-<<<<<<< HEAD
 	button.disabled = true;
-=======
-	
->>>>>>> d13b8d1308aefa76ba6e624a73ce9fbbf0544de9
 }
 
 // Background
@@ -100,8 +96,6 @@ function draw() {
 	text("ME " + myScore + '-' + enemyScore + " OPPONENT", canvasWidth-250, 40);
 }
 
-<<<<<<< HEAD
-//console.log(ballArray);
 window.onresize = function() {
 	// assigns new values for width and height variables
 	w = window.innerWidth;
@@ -120,10 +114,8 @@ function move() {
 	yBall += ySpeed;
 }
 
-=======
->>>>>>> d13b8d1308aefa76ba6e624a73ce9fbbf0544de9
 // Startet das Spiel
-function startGame(){
+function startGame() {
 	ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
 	//button.remove();
 }
