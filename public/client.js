@@ -41,12 +41,11 @@ function setup() {
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
-	button.disabled = true;
 }
 
 // Background
 function draw() {
-	background(0,60);
+	background(0,);
 
 	// Zeigt die Framerate unten rechts an
 	let fps = frameRate();
@@ -108,12 +107,6 @@ window.onresize = function() {
 
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
-}
-
-// Bewegt Ball
-function move() {
-	xBall += xSpeed;
-	yBall += ySpeed;
 }
 
 // Startet das Spiel
