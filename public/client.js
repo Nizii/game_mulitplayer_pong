@@ -135,6 +135,7 @@ function draw() {
 	}
 }
 
+// URSACHE FÜR BLACK BACKGROUND BEI RESIZE
 // macht Fullscreen in width
 window.onresize = function() {
 	w = window.innerWidth;
@@ -152,23 +153,15 @@ function windowResized() {
 
 socket.on("userArray", function(userArray) {
 	let yAxis = 0;
-	userReload();
+	$(".users").remove();
 	for(let x = 0; x < userArray.length; x++) {
 		const user = createElement('h5', userArray[x]);
 		user.addClass( "users" );
 		user.style('color', 'black');
-		//user.position(20, yAxis);
-		//yAxis += 20;
 		console.log(userArray[x]);
 	}
-})
+});
 
-function userReload() {
-	var userList = document.getElementsByClassName("users");
-	while(userList.length > 0){
-        userList[0].parentNode.removeChild(userList[0]);
-    }
-}
 
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
