@@ -18,16 +18,15 @@ var myScore = 0;
 var enemyScore = 0;
 
 
+var w = window.innerWidth;
+var h = window.innerHeight;  
+
 // Array mit allen Bällen
 var ballArray = [];
 
-//console.log(ballArray);
-
-
-
 // Hier wird der Setup gemacht
 function setup() {
-	createCanvas(canvasWidth, 700);
+	canvas = createCanvas(w, h);
 	// ID wird verteilt
 	getID();
 	cursor('ew-resize');
@@ -43,8 +42,6 @@ function setup() {
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
 	button.disabled = true;
-
-
 }
 
 // Background
@@ -56,7 +53,7 @@ function draw() {
 		ball.update();
 		
 		// Seitenabpraller
-		if (ball.x < 10 || ball.x > canvasWidth - 10) {
+		if (ball.x < 10 || ball.x > w - 10) {
 			ball.xSpeed *= -1;
 		}
 
@@ -81,7 +78,6 @@ function draw() {
 		}
 	}
 
-
 	// Das Paddle
 	fill("#fff");
 	//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
@@ -97,6 +93,19 @@ function draw() {
 	textSize(24);
 	text("ME " + myScore + '-' + enemyScore + " OPPONENT", canvasWidth-250, 40);
 }
+
+//console.log(ballArray);
+window.onresize = function() {
+	// assigns new values for width and height variables
+	w = window.innerWidth;
+	h = window.innerHeight;  
+	canvas.size(w,h);
+}
+
+function windowResized() {
+	resizeCanvas(windowWidth, windowHeight);
+}
+
 
 // Bewegt Ball
 function move() {
