@@ -69,12 +69,11 @@ function draw() {
 	}
 
 	if (gamesScreen) {
-		startButton.remove();
 		background(0);
 		// STRESSTEST: Zeigt die Framerate unten rechts an
-		/* 	let fps = frameRate();
-			text("FPS: " + fps.toFixed(2), w - 10, height - 10);
-		*/
+			/* let fps = frameRate();
+			text("FPS: " + fps.toFixed(2), w - 10, height - 10); */
+		
 		for (let ball of ballArray) {
 			// Zeigt den Ball an
 			ball.show();
@@ -131,6 +130,7 @@ function draw() {
   		rect(mouseX, 600, paddleWidth, 20, 25, 25, 4, 4);
 		// Score Text
 		textSize(24);
+		textAlign(RIGHT);
 		text("ME " + myScore + '-' + enemyScore + " OPPONENT", w-10, 40);
 	}
 }
@@ -144,18 +144,32 @@ window.onresize = function() {
 
 // Function wird aufgerufen wenn Windowgrösse geändert wird
 function windowResized() {
-	resizeCanvas(windowWidth, windowHeight);
+	resizeCanvas(windowWidth, h);
 }
+
+
+
 
 socket.on("userArray", function(userArray) {
 	let yAxis = 0;
+	userReload();
 	for(let x = 0; x < userArray.length; x++) {
-		let h5 = createElement('h5', userArray[x]);
-		h5.style('color', 'black');
-		h5.position(20, yAxis);
-		yAxis += 20;
+		const user = createElement('h5', userArray[x]);
+		user.addClass( "users" );
+		user.style('color', 'black');
+		//user.position(20, yAxis);
+		//yAxis += 20;
+		console.log(userArray[x]);
 	}
-});
+})
+
+function userReload() {
+	var userList = document.getElementsByClassName("users");
+	while(userList.length > 0){
+        userList[0].parentNode.removeChild(userList[0]);
+    }
+}
+
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {

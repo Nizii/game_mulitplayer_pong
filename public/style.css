@@ -3,13 +3,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&family=Wallpoet&display=swap');
 
 
-html, body {
+* {
   margin: 0;
   padding: 0;
 }
 
-canvas {
+main {
   display: block;
+  position: absolute;
 }
 
 #startscreen {
@@ -69,7 +70,9 @@ h1 {
   color: rgba(147, 185, 103, 0.7) ;
 }
   
-
+.users {
+  position: relative;
+}
 
 
 
