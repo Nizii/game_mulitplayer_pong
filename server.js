@@ -5,7 +5,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-var userArray = [200];
+var userArray = [];
 var index = 0;
 
 app.use(express.static('public'));
@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
 
 // Reorganisiert das Array, löscht Lücken
 function reorgArray() {
-  let tempArray = [100];
+  let tempArray = [];
   let y = 0;
   for(let x = 0; x < userArray.length; x++) {
       if (userArray[x] !== undefined) {

@@ -143,15 +143,16 @@ function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 }
 
-socket.on("userList", function(userArray) {
+socket.on("userArray", function(userArray) {
 	let yAxis = 10;
 	for(let x = 0; x < userArray.length; x++) {
 		let h5 = createElement('h5', userArray[x]);
-		h5.style('color', '#00a1d3');
+		h5.style('color', '#fcfefe');
 		h5.position(10, yAxis);
 		yAxis += 20;
 		console.log(userArray[x]);
 	}
+	console.log();
 })
 
 
