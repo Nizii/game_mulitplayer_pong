@@ -71,11 +71,9 @@ io.on('connection', (socket) => {
       ySpeed *= -1;
       let randomUser = userArray[getRandomInt(userArray.length)];
       //io.to(randomUser).emit('ready', 0);
-      socket.on('ready', (ready) => {
-        while(userId === randomUser && userArray.length < 1 || ready === false) {
+        while(userId === randomUser && userArray.length < 1) {
           randomUser = userArray[getRandomInt(userArray.length)];
         }
       io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
-    //});
   });
 });
