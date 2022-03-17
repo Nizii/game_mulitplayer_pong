@@ -70,12 +70,12 @@ io.on('connection', (socket) => {
     socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed) => {
       ySpeed *= -1;
       let randomUser = userArray[getRandomInt(userArray.length)];
-      io.to(randomUser).emit('ready', 0);
+      //io.to(randomUser).emit('ready', 0);
       socket.on('ready', (ready) => {
         while(userId === randomUser && userArray.length < 1 || ready === false) {
           randomUser = userArray[getRandomInt(userArray.length)];
         }
       io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
-    });
+    //});
   });
 });
