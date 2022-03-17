@@ -22,6 +22,8 @@ var userArray = [];
 var startScreen = true;
 var gamesScreen = false;
 var gameOverScreen = false;
+// Hat Spieler Ready Button gedrückt?
+var ready = false;
 
 // Hier wird der Setup gemacht
 function setup() {
@@ -33,6 +35,7 @@ function setup() {
 	colorMode(HSB);
 	noStroke();
 	fill("#fff");
+	socket.emit("ready", ready, id);
 
 	// Hier wird der Startbutton aufgesetzt
 	button = createButton("Start");
@@ -51,6 +54,7 @@ function setup() {
 		startScreen = false;
 		gamesScreen = true;
 		startButton.remove();
+		ready = true;
 	});
 	startButton.position(0,0);
 }
@@ -110,7 +114,6 @@ function draw() {
 						socket.emit('scoreid', id);
 					}
 				}	
-		
 				// Automatic ball reset
 				//ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50 , 0, 3, 20, this.ballId));
 			}
@@ -134,73 +137,37 @@ function draw() {
 	}
 }
 
+// macht Fullscreen in width
 window.onresize = function() {
-	// assigns new values for width and height variables
 	w = window.innerWidth;
 	h = 700;  
 	canvas.size(w,h);
 }
 
+// Function wird aufgerufen wenn Windowgrösse geändert wird
 function windowResized() {
 	resizeCanvas(windowWidth, windowHeight);
 }
 
-
 socket.on("userArray", function(userArray) {
 	let yAxis = 0;
-	
 	for(let x = 0; x < userArray.length; x++) {
 		let h5 = createElement('h5', userArray[x]);
 		h5.style('color', 'black');
 		h5.position(20, yAxis);
 		yAxis += 20;
-		console.log(userArray[x]);
 	}
-	console.log();
-})
-
-
-/*
-// Ist für Bouncerei des Balls zuständig
-function bounce() {
-	
-	// Triggert Punkt
-	if (yBall > 700 - 10) {
-		ySpeed *= -1;
-		socket.emit('score', enemyScore);
-		socket.emit('scoreid', id);
-
-		// Automatic ball reset
-		yBall = 50;
-		xBall = Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4;
-		xSpeed = 0;
-		ySpeed = 3;
-	}
-}
-*/
-
-	// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
-socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
-	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId));
-	
-	/* if (triggerid == id) {
-		// Holt sich neue X Position und Richtung des Balls damit der Übergang zum nächsten Spieler auch schön geschmeidig ist
-		socket.on("getX", function(newX){
-			xBall = canvasWidth-newX;
-		});
-		socket.on("getYSpeed", function(newYSpeed){
-			ySpeed = newYSpeed;
-		});
-		socket.on("getXSpeed", function(newXSpeed){
-			xSpeed = newXSpeed;
-		});
-	} */
 });
 
-socket.on("userList", function(userArray){
-	
-})
-	
+// Socket sendet ID von dem Spieler der gerade den Ball abgiebt
+socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
+	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId));
+});
+
+socket.on("ready", function() {
+	socket.emit("ready", ready);
+});
+
 // Hier wird die Score über die Socket gehandelt
 socket.on('scoreid', function(scoreId) {
 	// Wer bekommt den Punkt?
@@ -221,6 +188,7 @@ function getID(){
 	});
 }
 
+// Reservefunktion falls noch Zeit vorhanden Handy input
 function checkMobileInput() {
 	if (window.DeviceOrientationEvent) {
 		//console.log("is Working");
