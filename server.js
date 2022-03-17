@@ -65,8 +65,6 @@ function getRandomInt(max) {
 }
 
 io.on('connection', (socket) => {
-  
-
     socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed) => {
       ySpeed *= -1;
       let randomUser = userArray[getRandomInt(userArray.length)];
