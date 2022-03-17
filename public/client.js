@@ -87,9 +87,13 @@ function draw() {
 
 	// Das Paddle
 	//arc(mouseX, 605, 80, 30, PI, 0, CHORD);
-	rect(mouseX, 600, 80, 2);
-	rect(mouseX, 605, 60, 2);
-	rect(mouseX, 610, 30, 2);
+	//rect(mouseX, 600, 80, 2);
+	//rect(mouseX, 605, 60, 2);
+	//rect(mouseX, 610, 30, 2);
+
+fill(196);
+  noStroke();
+  rect(mouseX, 600, 200, 20, 25, 25, 4, 4);
 		
 	// Score Text
 	textSize(24);
