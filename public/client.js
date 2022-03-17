@@ -98,7 +98,7 @@ function draw() {
 window.onresize = function() {
 	// assigns new values for width and height variables
 	w = window.innerWidth;
-	h = window.innerHeight;  
+	h = 700;  
 	canvas.size(w,h);
 }
 
