@@ -72,6 +72,7 @@ io.on('connection', (socket) => {
       let randomUser = userArray[getRandomInt(userArray.length)];
       //io.to(randomUser).emit('ready', 0);
         while(userId === randomUser && userArray.length < 1) {
+          console.log("Randomuser " + randomUser+" = "+userId);
           randomUser = userArray[getRandomInt(userArray.length)];
         }
       io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
