@@ -29,13 +29,12 @@ var ready = false;
 function setup() {
 	canvas = createCanvas(w, h);
 	// ID wird verteilt
-	getID();
+
 	cursor('ew-resize');
 	rectMode(CENTER);
 	colorMode(HSB);
 	noStroke();
 	fill("#fff");
-	socket.emit("ready", ready, id);
 
 	// Hier wird der Startbutton aufgesetzt
 	button = createButton("Start");
@@ -61,6 +60,7 @@ function setup() {
 
 // Background
 function draw() {
+
 	if (startScreen) {
 		background('white');
 		fill(255);
@@ -97,7 +97,7 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
-						console.log(id);
+						console.log("ID = "+ id);
 						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed);
 						ballArray.splice(x, 1); 
 					}
@@ -149,8 +149,14 @@ function windowResized() {
 	resizeCanvas(windowWidth, h);
 }
 
-
-
+// ID wird einmalig zugeteilt und auf Screen ausgegeben
+socket.once('user', function(msg) {
+	console.log(" in GetID "+ msg);
+	id = msg;
+	let h5 = createElement('h5', msg);
+	h5.style('color', '#00a1d3');
+	h5.position(10, 650);
+});
 
 socket.on("userArray", function(userArray) {
 	let yAxis = 0;
@@ -159,11 +165,8 @@ socket.on("userArray", function(userArray) {
 		const user = createElement('h5', userArray[x]);
 		user.addClass( "users" );
 		user.style('color', 'black');
-		console.log(userArray[x]);
 	}
 });
-
-
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
@@ -183,16 +186,6 @@ socket.on('scoreid', function(scoreId) {
 		enemyScore++;
 	}
 });
-	
-// ID wird einmalig zugeteilt und auf Screen ausgegeben
-function getID(){
-	socket.once('user', function(msg) {
-		id = msg;
-		let h5 = createElement('h5', msg);
-		h5.style('color', '#00a1d3');
-		h5.position(10, 650);
-	});
-}
 
 // Reservefunktion falls noch Zeit vorhanden Handy
 function checkMobileInput() {
