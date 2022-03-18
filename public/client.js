@@ -2,6 +2,7 @@
 var socket = io();
 // Aktuelle ID des Spielers
 var id;
+var playerName;
 // State zeigt ob der Spieler gerade den Ball hat
 var isplaying = false;
 // Die Spielfeldbreite
@@ -25,6 +26,8 @@ var gameOverScreen = false;
 // Hat Spieler Ready Button gedrückt?
 var ready = false;
 
+var idAndNameObject;
+
 // Hier wird der Setup gemacht
 function setup() {
 	canvas = createCanvas(w, h);
@@ -36,23 +39,33 @@ function setup() {
 	noStroke();
 	fill("#fff");
 
-	// Hier wird der Startbutton aufgesetzt
+	// Temporärer Button zum Bälle generieren
 	button = createButton("Start");
 	button.mouseClicked(function() {
 		ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
 	});
-
 	button.size(50,25);
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
 	button.style("font-size", "12px");
 
+	// @Lavanya Playername Inputfeld für Startscreen
+	nameInput = createInput();
+	// @Lavanya id vom nameInput isch mitem File style.css verbunde du chasch det schaffe falls es eifacher isch 
+	nameInput.id("nameInput");
+	nameInput.position(0, 0);
+
+	// @Lavanya Grosser Startbutton für Startscreen
 	startButton = createButton("Start");
+	// @Lavanya id vom startButton isch mitem File style.css verbunde du chasch det schaffe falls es eifacher isch 
 	startButton.id("startButton");
 	startButton.mouseClicked(function() {
+		playerName = nameInput.value();
+		socket.emit("player", new Player(playerName, id));
 		startScreen = false;
 		gamesScreen = true;
 		startButton.remove();
+		nameInput.remove();
 		ready = true;
 	});
 	startButton.position(0,0);
@@ -61,11 +74,9 @@ function setup() {
 // Background
 function draw() {
 
+	// @Lavanya Da isch de Startscreen
 	if (startScreen) {
-		background('white');
-		fill(255);
-		textAlign(CENTER, CENTER);
-		return;
+		background('black');
 	}
 
 	if (gamesScreen) {
@@ -151,20 +162,20 @@ function windowResized() {
 
 // ID wird einmalig zugeteilt und auf Screen ausgegeben
 socket.once('user', function(msg) {
-	console.log(" in GetID "+ msg);
 	id = msg;
 	let h5 = createElement('h5', msg);
 	h5.style('color', '#00a1d3');
 	h5.position(10, 650);
 });
 
-socket.on("userArray", function(userArray) {
-	let yAxis = 0;
+//socket.on("userArray", function(userArray) {
+socket.on("player", function(playerObjectArray) {
 	$(".users").remove();
-	for(let x = 0; x < userArray.length; x++) {
-		const user = createElement('h5', userArray[x]);
+	for(let x = 0; x < playerObjectArray.length; x++) {
+		const user = createElement('h5', Object.values(playerObjectArray[x])[0]);
 		user.addClass( "users" );
-		user.style('color', 'black');
+		user.style('color', 'white');
+		user.style('font-size', '20px');
 	}
 });
 
@@ -210,4 +221,11 @@ function generateRandomString() {
 		randomstring += chars.substring(rnum,rnum+1);
 	}
 	return randomstring;
+}
+
+class Player {
+    constructor(playerName, id) {
+        this.playerName = playerName;
+        this.id = id;
+    }
 }

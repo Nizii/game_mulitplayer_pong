@@ -8,7 +8,9 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 var userArray = [];
+var playerObjectArray = [];
 var index = 0;
+var playerArrayIndex = 0;
 
 app.use(express.static('public'));
 
@@ -23,7 +25,8 @@ io.on('connection', (socket) => {
   var id = socket.id;
   userArray[index] = id;
   index++;
-  reorgArray();
+  userArray = reorgArray(userArray);
+  index = userArray.length;
   io.emit('user', id);
   io.emit('userArray', userArray);
  
@@ -34,22 +37,24 @@ io.on('connection', (socket) => {
         userArray.splice(i, 1);
       }
     }
-    reorgArray();
+    userArray = reorgArray(userArray);
+    index = userArray.length;
     io.emit('userArray', userArray);
   });
 });
 
 // Reorganisiert das Array, löscht Lücken
-function reorgArray() {
+function reorgArray(inputArray) {
   let tempArray = [];
   let y = 0;
-  for(let x = 0; x < userArray.length; x++) {
-      if (userArray[x] !== undefined) {
-        tempArray[y] = userArray[x];
+  for(let x = 0; x < inputArray.length; x++) {
+      if (inputArray[x] !== undefined) {
+        tempArray[y] = inputArray[x];
         y++;
       }
   }
-  userArray = tempArray;
+  return tempArray;
+  //userArray = tempArray;
 }
 
 // Aktualisiert beim Mitspieler den Score falls der Ball ins eigene Tor geflogen ist
@@ -75,5 +80,28 @@ io.on('connection', (socket) => {
           randomUser = userArray[getRandomInt(userArray.length)];
         }
       io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
+  });
+});
+
+io.on('connection', (socket) => {
+  socket.on('player', (playerObject) => {
+    playerObjectArray[playerArrayIndex]  = playerObject;
+    playerArrayIndex++;
+    playerObjectArray = reorgArray(playerObjectArray);
+    playerArrayIndex = playerObjectArray.length;
+    io.emit("player", playerObjectArray)
+  });
+
+    // Löscht user der disconnected
+  socket.on('disconnect', () => {
+    for(let i = 0; i < playerObjectArray.length; i++) {  
+      for (const value of Object.values(playerObjectArray[i])) {
+        if (socket.id == value) {
+          playerObjectArray.splice(i, 1);
+        }
+      }
+    }
+    playerObjectArray = reorgArray(playerObjectArray);
+    io.emit('player', playerObjectArray);
   });
 });
