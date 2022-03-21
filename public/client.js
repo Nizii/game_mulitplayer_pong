@@ -3,12 +3,13 @@ var socket = io();
 // Aktuelle ID des Spielers
 var id;
 var playerName;
+var playerColor;
 // State zeigt ob der Spieler gerade den Ball hat
 var isplaying = false;
-// Die Spielfeldbreite
-var canvasWidth = 900;
 // Paddle Breite
 var paddleWidth = 80;
+// Paddle Position in Y Achse
+var paddleYPos = 600;
 // Die Scorevarriabeln
 var myScore = 0;
 var enemyScore = 0;
@@ -28,22 +29,23 @@ var ready = false;
 
 var idAndNameObject;
 
+
+
 // Hier wird der Setup gemacht
 function setup() {
-	canvas = createCanvas(w, h);
+	canvas = createCanvas(windowWidth, h);
 	// ID wird verteilt
-
+	
 	cursor('ew-resize');
 	rectMode(CENTER);
 	colorMode(HSB);
 	noStroke();
 	fill("#fff");
 
-	// Temporärer Button zum Bälle generieren
-	button = createButton("Start");
-	button.mouseClicked(function() {
-		ballArray.push(new Ball(Math.floor(Math.random() * canvasWidth/2) + canvasWidth/4, 50 , 0, 3, 20, this.ballId));
-	});
+	// Hier wird der Ballbutton aufgesetzt (Provisorisch)
+	button = createButton("Ball");
+	button.mouseClicked(newBall);
+
 	button.size(50,25);
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
@@ -59,9 +61,12 @@ function setup() {
 	startButton = createButton("Start");
 	// @Lavanya id vom startButton isch mitem File style.css verbunde du chasch det schaffe falls es eifacher isch 
 	startButton.id("startButton");
+
 	startButton.mouseClicked(function() {
+		// Zufälliger Hue Wert für die Spielfarbe des Players
+		playerColor = Math.floor(Math.random() * 360);
 		playerName = nameInput.value();
-		socket.emit("player", new Player(playerName, id));
+		socket.emit("player", new Player(playerName, id, playerColor));
 		startScreen = false;
 		gamesScreen = true;
 		startButton.remove();
@@ -71,22 +76,33 @@ function setup() {
 	startButton.position(0,0);
 }
 
+function newBall(ySpeed) {
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50 , 0, ySpeed, 20, this.ballId, ballType));
+	console.log(ballArray);
+	//setTimeout(newBall, 2000);
+}
+
 // Background
 function draw() {
 
 	// @Lavanya Da isch de Startscreen
 	if (startScreen) {
 		background('black');
+/* 		titleText1 = createElement('h1', 'SUPERPOONG');
+		titleText1.addClass('title text1');
+		titleText2 = createElement('h1', 'SUPERPOONG');
+		titleText2.addClass('title text2');
+		titleText3 = createElement('h1', 'SUPERPOONG');
+		titleText3.addClass('title text3'); */
 	}
 
 	if (gamesScreen) {
+		// Hintergrund
 		background(0);
-		// STRESSTEST: Zeigt die Framerate unten rechts an
-			/* let fps = frameRate();
-			text("FPS: " + fps.toFixed(2), w - 10, height - 10); */
-		
+
 		for (let ball of ballArray) {
 			// Zeigt den Ball an
+			
 			ball.show();
 			// Bewegt Ball
 			ball.update();
@@ -96,12 +112,13 @@ function draw() {
 			}
 
 			// Hier wird der Bounce zwischen den Bällen und dem Paddle verwaltet
-			if ((ball.x > mouseX - paddleWidth/2+5 && ball.x < mouseX + paddleWidth/2+5) && (ball.y + 10 >= 600)) {
+			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
 				ball.ySpeed = ball.ySpeed + 0.5;
 				ball.ySpeed *= -1;
+				 
 				// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
 				var d = mouseX - ball.x;
-				ball.xSpeed += d * -0.1;
+				ball.xSpeed += d * -0.075;				
 			}
 			
 			// Wenn der Ball die obere Kante erreicht wird er aus dem ballArray gelöscht und die Daten des Balls an den Server geschickt
@@ -109,7 +126,7 @@ function draw() {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
 						console.log("ID = "+ id);
-						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed);
+						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed, ball.ballType);
 						ballArray.splice(x, 1); 
 					}
 				}	
@@ -117,14 +134,15 @@ function draw() {
 
 			// UPDATE NEEDED
 			// Wenn der Ball die untere Kante erreicht wird er gelöscht und der Score wird erhöht
-			if (ball.y >= 700 - 10) {
-				for (let x = 0; x < ballArray.length; x++) {
+			if (ball.y >= h) {
+				ball.ySpeed *= -1;
+				/* for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
 						ballArray.splice(x, 1); 
 						socket.emit('score', enemyScore);
 						socket.emit('scoreid', id);
 					}
-				}	
+				}	 */
 			}
 		}
 
@@ -133,27 +151,42 @@ function draw() {
 		}
 
 		// Das Paddle
-		//arc(mouseX, 605, paddleWidth, 30, PI, 0, CHORD);
-		//rect(mouseX, 600, paddleWidth, 2);
-		//rect(mouseX, 605, paddleWidth/2, 2);
-		//rect(mouseX, 610, paddleWidth/3, 2);
-		fill(196);
+		//arc(mouseX, paddleYPos + 5, paddleWidth, 30, PI, 0, CHORD);
+		//rect(mouseX, paddleYPos, paddleWidth, 2);
+		//rect(mouseX, paddleYPos + 5, paddleWidth/2, 2);
+		//rect(mouseX, paddleYPos + 5, paddleWidth/3, 2);
+		fill(playerColor, 40, 100);
   		noStroke();
-  		rect(mouseX, 600, paddleWidth, 20, 25, 25, 4, 4);
+  		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);
+		
+
 		// Score Text
+		fill(196);
 		textSize(24);
 		textAlign(RIGHT);
 		text("ME " + myScore + '-' + enemyScore + " OPPONENT", w-10, 40);
+
+		// STRESSTEST: Zeigt die Framerate unten rechts an
+		/* let fps = frameRate();
+		text("FPS: " + fps.toFixed(2), w - 10, height - 10); */
 	}
+
+
+	function keyPressed() {
+		if (keyCode === SPACE) {
+		  newBall();
+		}
+	}
+
 }
 
-// URSACHE FÜR BLACK BACKGROUND BEI RESIZE
+// DEBUG: URSACHE FÜR BLACK BACKGROUND BEI RESIZE
 // macht Fullscreen in width
-window.onresize = function() {
+/* window.onresize = function() {
 	w = window.innerWidth;
 	h = 700;  
 	canvas.size(w,h);
-}
+} */
 
 // Function wird aufgerufen wenn Windowgrösse geändert wird
 function windowResized() {
@@ -163,16 +196,16 @@ function windowResized() {
 // ID wird einmalig zugeteilt und auf Screen ausgegeben
 socket.once('user', function(msg) {
 	id = msg;
-	let h5 = createElement('h5', msg);
-	h5.style('color', '#00a1d3');
-	h5.position(10, 650);
+	let playerId = createElement('h5', msg);
+	playerId.style('color', '#00a1d3');
+	playerId.position(10, 650);
 });
 
 //socket.on("userArray", function(userArray) {
 socket.on("player", function(playerObjectArray) {
 	$(".users").remove();
 	for(let x = 0; x < playerObjectArray.length; x++) {
-		const user = createElement('h5', Object.values(playerObjectArray[x])[0]);
+		let user = createElement('h5', Object.values(playerObjectArray[x])[0]);
 		user.addClass( "users" );
 		user.style('color', 'white');
 		user.style('font-size', '20px');
@@ -182,6 +215,8 @@ socket.on("player", function(playerObjectArray) {
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
 	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId));
+	
+
 });
 
 socket.on("ready", function() {
@@ -227,5 +262,6 @@ class Player {
     constructor(playerName, id) {
         this.playerName = playerName;
         this.id = id;
+		this.playerColor = playerColor;
     }
 }

@@ -1,5 +1,3 @@
-//tetetetetetetete
-
 const express = require('express');
 const { use } = require('express/lib/application');
 const app = express();
@@ -19,7 +17,7 @@ server.listen(process.env.PORT||3000, () => {
   console.log('Link: http://localhost:3000');
 });
 
-//Connect and Disconnetct User from Server
+//Connect and Disconnect User from Server
 //Fügt id in Array aus und sendet Id zurück an Tab
 io.on('connection', (socket) => {
   var id = socket.id;
@@ -72,14 +70,14 @@ function getRandomInt(max) {
 }
 
 io.on('connection', (socket) => {
-    socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed) => {
+    socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType) => {
       ySpeed *= -1;
       let randomUser = userArray[getRandomInt(userArray.length)];
       io.to(randomUser).emit('ready', 0);
         while(userId === randomUser && userArray.length >= 2) {
           randomUser = userArray[getRandomInt(userArray.length)];
         }
-      io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed);
+      io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed, ballType);
   });
 });
 

@@ -63,29 +63,30 @@ h1 {
   font-weight: 400;
 }
 
-.titel{
+.titlewrapper {
   /*position: relative;*/
   margin-left: 50px;
 }
 
-.text1 {
-  position: absolute; 
-  margin-top: 30px;
+.title {
+  z-index: 1;
+  position: absolute;
   font-family: 'Wallpoet', cursive;
-  color: rgba(255, 255, 255, 0,5)
+  /* mix-blend-mode: hard-light; */
+}
+
+.text1 {
+  margin-top: 30px;
+  color: rgba(255, 255, 255, 0.5);
 }
 .text2 {
-  position: absolute; 
   margin-top: 25px;
-  font-family: 'Wallpoet', cursive;
-  color: rgba(199, 146, 217, 1) ;
+  color: rgba(199, 146, 217, 1);
 }
 
 .text3 {
-  position: absolute; 
   margin-top: 28px;
-  font-family: 'Wallpoet', cursive;
-  color: rgba(147, 185, 103, 0.7) ;
+  color: rgba(147, 185, 103, 0.7);
 }
   
 .users {
