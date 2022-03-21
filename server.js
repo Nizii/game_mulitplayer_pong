@@ -18,7 +18,7 @@ server.listen(process.env.PORT||3000, () => {
   console.log('Link: http://localhost:3000');
 });
 
-io.on('connection', (socket) => {
+io.once('connection', (socket) => {
   socket.once("timer", () => {
     setInterval(superTimer, 1500);
   });
