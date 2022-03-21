@@ -46,12 +46,13 @@ function setup() {
 		color = Math.floor(Math.random() * 360);
 		name = nameInput.value();
 		playerObject = new Player(name, id, color, 0);
-		socket.emit("player", playerObject);
+		socket.emit("lobby", playerObject);
 		startScreen = false;
 		gamesScreen = true;
 		startButton.remove();
 		nameInput.remove();
 		ready = true;
+		socket.emit("timer");
 	});
 	startButton.position(0,0);
 }
@@ -61,7 +62,6 @@ function newBall() {
 	// TODO: Delay funktioniert irgendwie noch nicht
 	setTimeout(AddnewBall(3,2), 1000);
 	setTimeout(AddnewBall(8,3), 1000);
-	console.log(ballArray);
 }
 
 function AddnewBall(ySpeed, ballType) {
@@ -127,12 +127,6 @@ function draw() {
   		noStroke();
   		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);
 		
-		// Score Text
-		fill(196);
-		textSize(24);
-		textAlign(RIGHT);
-		text();
-
 		// STRESSTEST: Zeigt die Framerate unten rechts an
 		/* let fps = frameRate();
 		text("FPS: " + fps.toFixed(2), w - 10, height - 10); */
@@ -158,16 +152,12 @@ function windowResized() {
 	resizeCanvas(windowWidth, h);
 }
 
-// ID wird einmalig zugeteilt und auf Screen ausgegeben
+// ID wird einmalig zugeteilt
 socket.once('user', function(msg) {
 	id = msg;
-	let playerId = createElement('h5', msg);
-	playerId.style('color', '#00a1d3');
-	playerId.position(10, 650);
 });
 
-//socket.on("userArray", function(userArray) {
-socket.on("player", function(playerObjectArray) {
+socket.on("lobby", function(playerObjectArray) {
 	$(".users").remove();
 	for(let x = 0; x < playerObjectArray.length; x++) {
 		let playerInfoString = " " + Object.values(playerObjectArray[x])[0] + " " + Object.values(playerObjectArray[x])[3];
@@ -176,6 +166,16 @@ socket.on("player", function(playerObjectArray) {
 		user.style('color', 'white');
 		user.style('font-size', '20px');
 	}
+});
+
+socket.on("timer", function(time) {
+	$(".timer").remove();
+	let timerString = time;
+	let remain = createElement('h5', timerString);
+	remain.addClass( "timer" );
+	remain.style('color', 'white');
+	remain.style('font-size', '60px');
+	remain.position(windowWidth-100,0);
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
@@ -187,23 +187,11 @@ socket.on("ready", function() {
 	socket.emit("ready", ready);
 });
 
-// Hier wird die Score über die Socket gehandelt
-socket.on('scoreid', function(scoreId) {
-	// Wer bekommt den Punkt?
-	if (scoreId != id) {
-		myScore++;
-	} else {
-		enemyScore++;
-	}
-});
-
 // Reservefunktion falls noch Zeit vorhanden Handy
 function checkMobileInput() {
 	if (window.DeviceOrientationEvent) {
-		//console.log("is Working");
 		window.addEventListener("deviceorientation", function(event) {
 			event.gamma
-			console.log(event.gamma);
 		}, true);
 	} else {
 		console.log("Not Supportet Device");

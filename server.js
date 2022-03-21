@@ -9,6 +9,7 @@ var userArray = [];
 var playerObjectArray = [];
 var index = 0;
 var playerArrayIndex = 0;
+var remain = 120;
 
 app.use(express.static('public'));
 
@@ -17,8 +18,18 @@ server.listen(process.env.PORT||3000, () => {
   console.log('Link: http://localhost:3000');
 });
 
+io.on('connection', (socket) => {
+  socket.once("timer", () => {
+    setInterval(superTimer, 1500);
+  });
+});
+
+function superTimer() {
+  remain = remain - 1;
+  io.emit('timer', remain);
+}
+
 //Connect and Disconnect User from Server
-//Fügt id in Array aus und sendet Id zurück an Tab
 io.on('connection', (socket) => {
   var id = socket.id;
   userArray[index] = id;
@@ -27,6 +38,7 @@ io.on('connection', (socket) => {
   index = userArray.length;
   io.emit('user', id);
   io.emit('userArray', userArray);
+  remain = 120;
  
   // Löscht user der disconnected
   socket.on('disconnect', () => {
@@ -71,15 +83,14 @@ io.on('connection', (socket) => {
 });
 
 io.on('connection', (socket) => {
-  socket.on('player', (playerObject) => {
+  socket.on('lobby', (playerObject) => {
     playerObjectArray[playerArrayIndex] = playerObject;
     playerArrayIndex++;
     playerObjectArray = reorgArray(playerObjectArray);
     playerArrayIndex = playerObjectArray.length;
-    io.emit("player", playerObjectArray)
+    io.emit("lobby", playerObjectArray);
   });
 
-    // Löscht user der disconnected
   socket.on('disconnect', () => {
     for(let i = 0; i < playerObjectArray.length; i++) {  
       for (const value of Object.values(playerObjectArray[i])) {
@@ -89,17 +100,18 @@ io.on('connection', (socket) => {
       }
     }
     playerObjectArray = reorgArray(playerObjectArray);
-    io.emit('player', playerObjectArray);
+    io.emit('lobby', playerObjectArray);
   });
 });
 
 io.on('connection', (socket) => {
   socket.on('updateScore', (playerObject) => {
+    console.log(playerObject.score);
     for(let i = 0; i < playerObjectArray.length; i++) {
       if (playerObjectArray[i].id === playerObject.id) {
         playerObjectArray[i] = playerObject;
       } 
     }
-    io.emit("player", playerObjectArray);
+    io.emit("lobby", playerObjectArray);
   });
 });
