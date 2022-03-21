@@ -76,12 +76,17 @@ function setup() {
 	startButton.position(0,0);
 }
 
-function newBall(ySpeed) {
-	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50 , 0, ySpeed, 20, this.ballId, ballType));
+function newBall() {
+	AddnewBall(3,1);
+	// TODO: Delay funktioniert irgendwie noch nicht
+	setTimeout(AddnewBall(3,2), 1000);
+	setTimeout(AddnewBall(8,3), 1000);
 	console.log(ballArray);
-	//setTimeout(newBall, 2000);
 }
 
+function AddnewBall(ySpeed, ballType) {
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType));
+}
 // Background
 function draw() {
 
