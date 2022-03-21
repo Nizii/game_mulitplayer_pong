@@ -52,18 +52,7 @@ function reorgArray(inputArray) {
       }
   }
   return tempArray;
-  //userArray = tempArray;
 }
-
-// Aktualisiert beim Mitspieler den Score falls der Ball ins eigene Tor geflogen ist
-io.on('connection', (socket) => {
-  socket.on('score', (newScore) => {
-    io.emit('score', newScore);
-  });
-  socket.on('scoreid', (scoreId) => {
-    io.emit('scoreid', scoreId);
-  });
-});
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -83,7 +72,7 @@ io.on('connection', (socket) => {
 
 io.on('connection', (socket) => {
   socket.on('player', (playerObject) => {
-    playerObjectArray[playerArrayIndex]  = playerObject;
+    playerObjectArray[playerArrayIndex] = playerObject;
     playerArrayIndex++;
     playerObjectArray = reorgArray(playerObjectArray);
     playerArrayIndex = playerObjectArray.length;
@@ -94,12 +83,23 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     for(let i = 0; i < playerObjectArray.length; i++) {  
       for (const value of Object.values(playerObjectArray[i])) {
-        if (socket.id == value) {
+        if (socket.id === value) {
           playerObjectArray.splice(i, 1);
         }
       }
     }
     playerObjectArray = reorgArray(playerObjectArray);
     io.emit('player', playerObjectArray);
+  });
+});
+
+io.on('connection', (socket) => {
+  socket.on('updateScore', (playerObject) => {
+    for(let i = 0; i < playerObjectArray.length; i++) {
+      if (playerObjectArray[i].id === playerObject.id) {
+        playerObjectArray[i] = playerObject;
+      } 
+    }
+    io.emit("player", playerObjectArray);
   });
 });

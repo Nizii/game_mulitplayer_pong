@@ -1,41 +1,22 @@
-// Unsere liebe Socket
 var socket = io();
-// Aktuelle ID des Spielers
 var id;
-var playerName;
-var playerColor;
-// State zeigt ob der Spieler gerade den Ball hat
+var name;
+var color;
 var isplaying = false;
-// Paddle Breite
 var paddleWidth = 80;
-// Paddle Position in Y Achse
 var paddleYPos = 600;
-// Die Scorevarriabeln
-var myScore = 0;
-var enemyScore = 0;
 var w = window.innerWidth;
 var h = 700;  
-
-// Array mit allen Bällen
 var ballArray = [];
-// Alle aktiven User
-var userArray = [];
-// Game States
+var ready = false;
+var playerObject;
+// Gamestates
 var startScreen = true;
 var gamesScreen = false;
 var gameOverScreen = false;
-// Hat Spieler Ready Button gedrückt?
-var ready = false;
 
-var idAndNameObject;
-
-
-
-// Hier wird der Setup gemacht
 function setup() {
 	canvas = createCanvas(windowWidth, h);
-	// ID wird verteilt
-	
 	cursor('ew-resize');
 	rectMode(CENTER);
 	colorMode(HSB);
@@ -45,7 +26,6 @@ function setup() {
 	// Hier wird der Ballbutton aufgesetzt (Provisorisch)
 	button = createButton("Ball");
 	button.mouseClicked(newBall);
-
 	button.size(50,25);
 	button.position(10,625);
 	button.style("font-family", "Bodoni");
@@ -63,10 +43,10 @@ function setup() {
 	startButton.id("startButton");
 
 	startButton.mouseClicked(function() {
-		// Zufälliger Hue Wert für die Spielfarbe des Players
-		playerColor = Math.floor(Math.random() * 360);
-		playerName = nameInput.value();
-		socket.emit("player", new Player(playerName, id, playerColor));
+		color = Math.floor(Math.random() * 360);
+		name = nameInput.value();
+		playerObject = new Player(name, id, color, 0);
+		socket.emit("player", playerObject);
 		startScreen = false;
 		gamesScreen = true;
 		startButton.remove();
@@ -102,14 +82,9 @@ function draw() {
 	}
 
 	if (gamesScreen) {
-		// Hintergrund
 		background(0);
-
 		for (let ball of ballArray) {
-			// Zeigt den Ball an
-			
 			ball.show();
-			// Bewegt Ball
 			ball.update();
 			// Seitenabpraller
 			if (ball.x < 10 || ball.x > w - 10) {
@@ -120,7 +95,8 @@ function draw() {
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
 				ball.ySpeed = ball.ySpeed + 0.5;
 				ball.ySpeed *= -1;
-				 
+				playerObject.score += 1;
+				socket.emit("updateScore", playerObject);
 				// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
 				var d = mouseX - ball.x;
 				ball.xSpeed += d * -0.075;				
@@ -130,24 +106,15 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
-						console.log("ID = "+ id);
 						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed, ball.ballType);
 						ballArray.splice(x, 1); 
 					}
 				}	
 			}
 
-			// UPDATE NEEDED
 			// Wenn der Ball die untere Kante erreicht wird er gelöscht und der Score wird erhöht
 			if (ball.y >= h) {
 				ball.ySpeed *= -1;
-				/* for (let x = 0; x < ballArray.length; x++) {
-					if (ball.ballId === ballArray[x].ballId) {
-						ballArray.splice(x, 1); 
-						socket.emit('score', enemyScore);
-						socket.emit('scoreid', id);
-					}
-				}	 */
 			}
 		}
 
@@ -156,33 +123,26 @@ function draw() {
 		}
 
 		// Das Paddle
-		//arc(mouseX, paddleYPos + 5, paddleWidth, 30, PI, 0, CHORD);
-		//rect(mouseX, paddleYPos, paddleWidth, 2);
-		//rect(mouseX, paddleYPos + 5, paddleWidth/2, 2);
-		//rect(mouseX, paddleYPos + 5, paddleWidth/3, 2);
-		fill(playerColor, 40, 100);
+		fill(color, 40, 100);
   		noStroke();
   		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);
 		
-
 		// Score Text
 		fill(196);
 		textSize(24);
 		textAlign(RIGHT);
-		text("ME " + myScore + '-' + enemyScore + " OPPONENT", w-10, 40);
+		text();
 
 		// STRESSTEST: Zeigt die Framerate unten rechts an
 		/* let fps = frameRate();
 		text("FPS: " + fps.toFixed(2), w - 10, height - 10); */
 	}
 
-
 	function keyPressed() {
 		if (keyCode === SPACE) {
 		  newBall();
 		}
 	}
-
 }
 
 // DEBUG: URSACHE FÜR BLACK BACKGROUND BEI RESIZE
@@ -210,7 +170,8 @@ socket.once('user', function(msg) {
 socket.on("player", function(playerObjectArray) {
 	$(".users").remove();
 	for(let x = 0; x < playerObjectArray.length; x++) {
-		let user = createElement('h5', Object.values(playerObjectArray[x])[0]);
+		let playerInfoString = " " + Object.values(playerObjectArray[x])[0] + " " + Object.values(playerObjectArray[x])[3];
+		let user = createElement('h5', playerInfoString);
 		user.addClass( "users" );
 		user.style('color', 'white');
 		user.style('font-size', '20px');
@@ -220,8 +181,6 @@ socket.on("player", function(playerObjectArray) {
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
 	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId));
-	
-
 });
 
 socket.on("ready", function() {
@@ -264,9 +223,10 @@ function generateRandomString() {
 }
 
 class Player {
-    constructor(playerName, id) {
-        this.playerName = playerName;
+    constructor(name, id, color, score) {
+        this.name = name;
         this.id = id;
-		this.playerColor = playerColor;
+		this.color = color;
+		this.score = score;
     }
 }
