@@ -94,9 +94,11 @@ function draw() {
 			// Hier wird der Bounce zwischen den Bällen und dem Paddle verwaltet
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
 				ball.ySpeed = ball.ySpeed + 0.5;
+				if (ball.ySpeed > 0) {
+					playerObject.score += 1;
+					socket.emit("updateScore", playerObject);
+				}
 				ball.ySpeed *= -1;
-				playerObject.score += 1;
-				socket.emit("updateScore", playerObject);
 				// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
 				var d = mouseX - ball.x;
 				ball.xSpeed += d * -0.075;				
@@ -186,6 +188,7 @@ socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
 socket.on("ready", function() {
 	socket.emit("ready", ready);
 });
+
 
 // Reservefunktion falls noch Zeit vorhanden Handy
 function checkMobileInput() {

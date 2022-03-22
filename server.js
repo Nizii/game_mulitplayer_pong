@@ -39,6 +39,7 @@ io.on('connection', (socket) => {
   io.emit('user', id);
   io.emit('userArray', userArray);
   remain = 120;
+  resetScore();
  
   // Löscht user der disconnected
   socket.on('disconnect', () => {
@@ -69,6 +70,15 @@ function reorgArray(inputArray) {
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
+
+function resetScore() {
+  for(let i = 0; i < playerObjectArray.length; i++) {
+    playerObjectArray[i].score = 0;
+  }
+  io.emit("lobby", playerObjectArray);
+}
+
+io.emit("lobby", playerObjectArray);
 
 io.on('connection', (socket) => {
     socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType) => {
