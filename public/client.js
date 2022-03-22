@@ -1,6 +1,5 @@
 var socket = io();
 var id;
-var name;
 var color;
 var isplaying = false;
 var paddleWidth = 80;
@@ -48,8 +47,7 @@ function setup() {
 
 	startButton.mouseClicked(function() {
 		color = Math.floor(Math.random() * 360);
-		name = nameInput.value();
-		playerObject = new Player(name, id, color, 0);
+		playerObject = new Player(nameInput.value(), id, color, 0);
 		socket.emit("lobby", playerObject);
 		startScreen = false;
 		gamesScreen = true;
@@ -82,12 +80,12 @@ function draw() {
 		for (let ball of ballArray) {
 			ball.show();
 			ball.update();
-			// Seitenabpraller
+			// Seitentrigger
 			if (ball.x < 10 || ball.x > w - 10) {
 				ball.xSpeed *= -1;
 			}
 
-			// Hier wird der Bounce zwischen den Bällen und dem Paddle verwaltet
+			// Paddle Ball Trigger
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
 				ball.ySpeed = ball.ySpeed + 0.5;
 				if (ball.ySpeed > 0) {
@@ -100,7 +98,7 @@ function draw() {
 				ball.xSpeed += d * -0.075;				
 			}
 			
-			// Wenn der Ball die obere Kante erreicht wird er aus dem ballArray gelöscht und die Daten des Balls an den Server geschickt
+			// Decken Trigger
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
@@ -110,7 +108,7 @@ function draw() {
 				}	
 			}
 
-			// Wenn der Ball die untere Kante erreicht wird er gelöscht und der Score wird erhöht
+			// Bodentrigger
 			if (ball.y >= h) {
 				ball.ySpeed *= -1;
 			}
@@ -149,13 +147,18 @@ socket.on("lobby", function(playerObjectArray) {
 });
 
 socket.on("timer", function(time) {
-	$(".timer").remove();
-	let timerString = time;
-	let remain = createElement('h5', timerString);
-	remain.addClass( "timer" );
-	remain.style('color', 'white');
-	remain.style('font-size', '60px');
-	remain.position(windowWidth - 100, 0);
+	if (time > 0) {
+		$(".timer").remove();
+		let timerString = time;
+		let remain = createElement('h5', timerString);
+		remain.addClass( "timer" );
+		remain.style('color', 'white');
+		remain.style('font-size', '60px');
+		remain.position(windowWidth - 100, 0);
+	} else {
+		console.log("GameOver");
+	}
+
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt

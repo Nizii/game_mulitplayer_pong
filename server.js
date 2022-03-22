@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 var playerObjectArray = [];
 var playerArrayIndex = 0;
-var remain = 120;
+var remain = 5;
 
 app.use(express.static('public'));
 
@@ -17,19 +17,18 @@ server.listen(process.env.PORT||3000, () => {
 
 io.once('connection', (socket) => {
   socket.once("timer", () => {
-    setInterval(superTimer, 1500);
+    var interval;
+    clearInterval(interval);
+    interval = setInterval(function(){
+      remain = remain - 1;
+      io.emit('timer', remain);
+    }, 1200);
   });
 });
-
-function superTimer() {
-  remain = remain - 1;
-  io.emit('timer', remain);
-}
 
 //Neuer Spieler tritt ein
 io.on('connection', (socket) => {
   io.emit('user', socket.id);
-  remain = 120;
   resetScore();
 });
 
