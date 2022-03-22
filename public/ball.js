@@ -10,11 +10,8 @@ class Ball {
     }
 
     show() {
-        //push();
-        //translate(this.x, this.y);
         fill(this.colorHue,60,100);
         circle(this.x, this.y, this.size);
-        //pop();
     }
 
     update() {
