@@ -6,8 +6,8 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 var playerObjectArray = [];
 var playerArrayIndex = 0;
-var startTime = 5;
-var remain = 5;
+var startTime = 120;
+var remain = startTime;
 var timer;
 
 app.use(express.static('public'));
