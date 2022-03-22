@@ -11,9 +11,9 @@ var ballArray = [];
 var ready = false;
 var playerObject;
 // Gamestates
-var startScreen = true;
-var gamesScreen = false;
-var gameOverScreen = false;
+var startScreen;
+var gamesScreen;
+var gameOverScreen;
 
 function setup() {
 	canvas = createCanvas(windowWidth, h);
@@ -22,6 +22,10 @@ function setup() {
 	colorMode(HSB);
 	noStroke();
 	fill("#fff");
+
+	startScreen = true;
+	gamesScreen = false;
+	gameOverScreen = false;
 
 	// Hier wird der Ballbutton aufgesetzt (Provisorisch)
 	button = createButton("Ball");
@@ -67,18 +71,10 @@ function newBall() {
 function AddnewBall(ySpeed, ballType) {
 	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType));
 }
-// Background
-function draw() {
 
-	// @Lavanya Da isch de Startscreen
+function draw() {
 	if (startScreen) {
 		background('black');
-/* 		titleText1 = createElement('h1', 'SUPERPOONG');
-		titleText1.addClass('title text1');
-		titleText2 = createElement('h1', 'SUPERPOONG');
-		titleText2.addClass('title text2');
-		titleText3 = createElement('h1', 'SUPERPOONG');
-		titleText3.addClass('title text3'); */
 	}
 
 	if (gamesScreen) {
@@ -128,26 +124,8 @@ function draw() {
 		fill(color, 40, 100);
   		noStroke();
   		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);
-		
-		// STRESSTEST: Zeigt die Framerate unten rechts an
-		/* let fps = frameRate();
-		text("FPS: " + fps.toFixed(2), w - 10, height - 10); */
-	}
-
-	function keyPressed() {
-		if (keyCode === SPACE) {
-		  newBall();
-		}
 	}
 }
-
-// DEBUG: URSACHE FÜR BLACK BACKGROUND BEI RESIZE
-// macht Fullscreen in width
-/* window.onresize = function() {
-	w = window.innerWidth;
-	h = 700;  
-	canvas.size(w,h);
-} */
 
 // Function wird aufgerufen wenn Windowgrösse geändert wird
 function windowResized() {
@@ -155,8 +133,8 @@ function windowResized() {
 }
 
 // ID wird einmalig zugeteilt
-socket.once('user', function(msg) {
-	id = msg;
+socket.once('user', function(incomeId) {
+	id = incomeId;
 });
 
 socket.on("lobby", function(playerObjectArray) {
@@ -177,18 +155,13 @@ socket.on("timer", function(time) {
 	remain.addClass( "timer" );
 	remain.style('color', 'white');
 	remain.style('font-size', '60px');
-	remain.position(windowWidth-100,0);
+	remain.position(windowWidth - 100, 0);
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
 	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId));
 });
-
-socket.on("ready", function() {
-	socket.emit("ready", ready);
-});
-
 
 // Reservefunktion falls noch Zeit vorhanden Handy
 function checkMobileInput() {
@@ -211,13 +184,4 @@ function generateRandomString() {
 		randomstring += chars.substring(rnum,rnum+1);
 	}
 	return randomstring;
-}
-
-class Player {
-    constructor(name, id, color, score) {
-        this.name = name;
-        this.id = id;
-		this.color = color;
-		this.score = score;
-    }
 }

@@ -1,13 +1,10 @@
 const express = require('express');
-const { use } = require('express/lib/application');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-var userArray = [];
 var playerObjectArray = [];
-var index = 0;
 var playerArrayIndex = 0;
 var remain = 120;
 
@@ -29,29 +26,11 @@ function superTimer() {
   io.emit('timer', remain);
 }
 
-//Connect and Disconnect User from Server
+//Neuer Spieler tritt ein
 io.on('connection', (socket) => {
-  var id = socket.id;
-  userArray[index] = id;
-  index++;
-  userArray = reorgArray(userArray);
-  index = userArray.length;
-  io.emit('user', id);
-  io.emit('userArray', userArray);
+  io.emit('user', socket.id);
   remain = 120;
   resetScore();
- 
-  // Löscht user der disconnected
-  socket.on('disconnect', () => {
-    for(let i = 0; i < userArray.length; i++) {
-      if (socket.id == userArray[i]) {
-        userArray.splice(i, 1);
-      }
-    }
-    userArray = reorgArray(userArray);
-    index = userArray.length;
-    io.emit('userArray', userArray);
-  });
 });
 
 // Reorganisiert das Array, löscht Lücken
@@ -78,17 +57,14 @@ function resetScore() {
   io.emit("lobby", playerObjectArray);
 }
 
-io.emit("lobby", playerObjectArray);
-
 io.on('connection', (socket) => {
     socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType) => {
       ySpeed *= -1;
-      let randomUser = userArray[getRandomInt(userArray.length)];
-      io.to(randomUser).emit('ready', 0);
-        while(userId === randomUser && userArray.length >= 2) {
-          randomUser = userArray[getRandomInt(userArray.length)];
+      let randomUserId = playerObjectArray[getRandomInt(playerObjectArray.length)].id;
+        while(userId === randomUserId && playerObjectArray.length >= 2) {
+          randomUserId = playerObjectArray[getRandomInt(playerObjectArray.length)].id;
         }
-      io.to(randomUser).emit('ballData', ballId, x, xSpeed, ySpeed, ballType);
+      io.to(randomUserId).emit('ballData', ballId, x, xSpeed, ySpeed, ballType);
   });
 });
 
@@ -116,7 +92,6 @@ io.on('connection', (socket) => {
 
 io.on('connection', (socket) => {
   socket.on('updateScore', (playerObject) => {
-    console.log(playerObject.score);
     for(let i = 0; i < playerObjectArray.length; i++) {
       if (playerObjectArray[i].id === playerObject.id) {
         playerObjectArray[i] = playerObject;
