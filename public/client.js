@@ -1,6 +1,5 @@
 var socket = io();
 var id;
-var color;
 var isplaying = false;
 var paddleWidth = 80;
 var paddleYPos = 600;
@@ -46,8 +45,7 @@ function setup() {
 	startButton.id("startButton");
 
 	startButton.mouseClicked(function() {
-		color = Math.floor(Math.random() * 360);
-		playerObject = new Player(nameInput.value(), id, color, 0);
+		playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
 		socket.emit("lobby", playerObject);
 		startScreen = false;
 		gamesScreen = true;
@@ -119,7 +117,7 @@ function draw() {
 		}
 
 		// Das Paddle
-		fill(color, 40, 100);
+		fill(playerObject.color , 40, 100);
   		noStroke();
   		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);
 	}
@@ -147,7 +145,7 @@ socket.on("lobby", function(playerObjectArray) {
 });
 
 socket.on("timer", function(time) {
-	if (time > 0) {
+	if (time > -1) {
 		$(".timer").remove();
 		let timerString = time;
 		let remain = createElement('h5', timerString);
@@ -157,8 +155,9 @@ socket.on("timer", function(time) {
 		remain.position(windowWidth - 100, 0);
 	} else {
 		console.log("GameOver");
+		gamesScreen = false;
+		gameOverScreen = true;
 	}
-
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
