@@ -6,7 +6,9 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 var playerObjectArray = [];
 var playerArrayIndex = 0;
+var startTime = 5;
 var remain = 5;
+var timer;
 
 app.use(express.static('public'));
 
@@ -16,12 +18,14 @@ server.listen(process.env.PORT||3000, () => {
 });
 
 io.once('connection', (socket) => {
-  socket.once("timer", () => {
-    var interval;
-    clearInterval(interval);
-    interval = setInterval(function(){
+  socket.on("timer", () => {
+    clearInterval(timer);
+    timer = setInterval(function() {
       remain = remain - 1;
       io.emit('timer', remain);
+      if (remain < 1) {
+        clearInterval(timer);
+      }
     }, 1200);
   });
 });
@@ -29,6 +33,7 @@ io.once('connection', (socket) => {
 //Neuer Spieler tritt ein
 io.on('connection', (socket) => {
   io.emit('user', socket.id);
+  remain = startTime;
   resetScore();
 });
 
