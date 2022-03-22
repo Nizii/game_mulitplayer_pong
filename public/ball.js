@@ -1,16 +1,17 @@
 class Ball {
-    constructor(x, y, xSpeed, ySpeed, size, ballId, ballType) {
+    constructor(x, y, xSpeed, ySpeed, size, ballId, ballType, color) {
         this.x = x;
         this.y = y;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         this.size = size;
         this.ballId = generateRandomString();
+        this.color = color;
         this.ballType = ballType;
     }
 
     show() {
-        fill(this.colorHue,60,100);
+        fill(this.color);
         circle(this.x, this.y, this.size);
     }
 
