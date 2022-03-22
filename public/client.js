@@ -1,4 +1,5 @@
 var socket = io();
+var canvas;
 var id;
 var isplaying = false;
 var paddleWidth = 80;
@@ -6,7 +7,6 @@ var paddleYPos = 600;
 var w = window.innerWidth;
 var h = 700;  
 var ballArray = [];
-var ready = false;
 var playerObject;
 // Gamestates
 var startScreen;
@@ -25,25 +25,11 @@ function setup() {
 	gamesScreen = false;
 	gameOverScreen = false;
 
-	// Hier wird der Ballbutton aufgesetzt (Provisorisch)
-	button = createButton("Ball");
-	button.mouseClicked(newBall);
-	button.size(50,25);
-	button.position(10,625);
-	button.style("font-family", "Bodoni");
-	button.style("font-size", "12px");
-
-	// @Lavanya Playername Inputfeld für Startscreen
 	nameInput = createInput();
-	// @Lavanya id vom nameInput isch mitem File style.css verbunde du chasch det schaffe falls es eifacher isch 
 	nameInput.id("nameInput");
 	nameInput.position(0, 0);
-
-	// @Lavanya Grosser Startbutton für Startscreen
 	startButton = createButton("Start");
-	// @Lavanya id vom startButton isch mitem File style.css verbunde du chasch det schaffe falls es eifacher isch 
 	startButton.id("startButton");
-
 	startButton.mouseClicked(function() {
 		playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
 		socket.emit("lobby", playerObject);
@@ -51,21 +37,14 @@ function setup() {
 		gamesScreen = true;
 		startButton.remove();
 		nameInput.remove();
-		ready = true;
 		socket.emit("timer");
+		addBall(3, 1, getRandomColor());
 	});
 	startButton.position(0,0);
 }
 
-function newBall() {
-	AddnewBall(3,1);
-	// TODO: Delay funktioniert irgendwie noch nicht
-	setTimeout(AddnewBall(3,2), 1000);
-	setTimeout(AddnewBall(8,3), 1000);
-}
-
-function AddnewBall(ySpeed, ballType) {
-	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType));
+function addBall(ySpeed, ballType, color) {
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType, color));
 }
 
 function draw() {
@@ -87,7 +66,13 @@ function draw() {
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
 				ball.ySpeed = ball.ySpeed + 0.5;
 				if (ball.ySpeed > 0) {
-					playerObject.score += 1;
+					if (ball.color === "red") {
+						playerObject.score -= 3;
+					} else if (ball.color === "green") {
+						playerObject.score += 3;
+					} else {
+						playerObject.score += 1;
+					}
 					socket.emit("updateScore", playerObject);
 				}
 				ball.ySpeed *= -1;
@@ -100,7 +85,7 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
-						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed, ball.ballType);
+						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed, ball.ballType, ball.color);
 						ballArray.splice(x, 1); 
 					}
 				}	
@@ -113,7 +98,7 @@ function draw() {
 		}
 
 		if (gameOverScreen) {
-			background(255, 204, 0);
+			background(white);
 		}
 
 		// Das Paddle
@@ -145,24 +130,32 @@ socket.on("lobby", function(playerObjectArray) {
 });
 
 socket.on("timer", function(time) {
-	if (time > -1) {
-		$(".timer").remove();
-		let timerString = time;
-		let remain = createElement('h5', timerString);
-		remain.addClass( "timer" );
-		remain.style('color', 'white');
-		remain.style('font-size', '60px');
-		remain.position(windowWidth - 100, 0);
-	} else {
-		console.log("GameOver");
-		gamesScreen = false;
-		gameOverScreen = true;
+	$(".timer").remove();
+	let timerString = time;
+	let remain = createElement('h5', timerString);
+	remain.addClass( "timer" );
+	remain.style('color', 'white');
+	remain.style('font-size', '60px');
+	remain.position(windowWidth - 100, 0);
+});
+
+// Jede 5. Sekunde wird ein Ball gedropt
+socket.on("addBall", function(time) {
+	if (time % 5 === 0) {
+		addBall(3, 1, getRandomColor());
 	}
 });
 
+socket.once("gameOver", function() {
+	console.log("GameOver");
+	gamesScreen = false;
+	gameOverScreen = true;
+	canvas.remove();
+});
+
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
-socket.on("ballData", function(ballId, x, xSpeed, ySpeed) {
-	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId));
+socket.on("ballData", function(ballId, x, xSpeed, ySpeed, ballType, color) {
+	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId, ballType, color));
 });
 
 // Reservefunktion falls noch Zeit vorhanden Handy
@@ -186,4 +179,19 @@ function generateRandomString() {
 		randomstring += chars.substring(rnum,rnum+1);
 	}
 	return randomstring;
+}
+
+function getRandomInt(max) {
+	return Math.floor(Math.random() * max);
+  }
+
+function getRandomColor(){
+	let randNumb = Math.floor(Math.random() * 3);
+	if (randNumb === 0) {
+		return "red";
+	} else if (randNumb === 1) {
+		return "white";
+	} else {
+		return "green";
+	}
 }

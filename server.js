@@ -17,58 +17,28 @@ server.listen(process.env.PORT||3000, () => {
   console.log('Link: http://localhost:3000');
 });
 
-io.once('connection', (socket) => {
-  socket.on("timer", () => {
-    clearInterval(timer);
-    timer = setInterval(function() {
-      remain = remain - 1;
-      io.emit('timer', remain);
-      if (remain < 1) {
-        clearInterval(timer);
-      }
-    }, 1200);
+io.on('connection', (socket) => {
+  socket.once("timer", () => {
+    configTimer();
   });
 });
 
 //Neuer Spieler tritt ein
 io.on('connection', (socket) => {
   io.emit('user', socket.id);
-  remain = startTime;
+  configTimer();
   resetScore();
+  remain = startTime;
 });
 
-// Reorganisiert das Array, löscht Lücken
-function reorgArray(inputArray) {
-  let tempArray = [];
-  let y = 0;
-  for(let x = 0; x < inputArray.length; x++) {
-      if (inputArray[x] !== undefined) {
-        tempArray[y] = inputArray[x];
-        y++;
-      }
-  }
-  return tempArray;
-}
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
-
-function resetScore() {
-  for(let i = 0; i < playerObjectArray.length; i++) {
-    playerObjectArray[i].score = 0;
-  }
-  io.emit("lobby", playerObjectArray);
-}
-
 io.on('connection', (socket) => {
-    socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType) => {
+    socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType, color) => {
       ySpeed *= -1;
       let randomUserId = playerObjectArray[getRandomInt(playerObjectArray.length)].id;
         while(userId === randomUserId && playerObjectArray.length >= 2) {
           randomUserId = playerObjectArray[getRandomInt(playerObjectArray.length)].id;
         }
-      io.to(randomUserId).emit('ballData', ballId, x, xSpeed, ySpeed, ballType);
+      io.to(randomUserId).emit('ballData', ballId, x, xSpeed, ySpeed, ballType, color);
   });
 });
 
@@ -104,3 +74,40 @@ io.on('connection', (socket) => {
     io.emit("lobby", playerObjectArray);
   });
 });
+
+function configTimer() {
+  clearInterval(timer);
+  timer = setInterval(function() {
+    remain = remain - 1;
+    io.emit('timer', remain);
+    io.emit('addBall', remain);
+    if (remain < 1) {
+      clearInterval(timer);
+      io.emit("gameOver", remain);
+    }
+  }, 1200);
+}
+
+// Reorganisiert das Array, löscht Lücken
+function reorgArray(inputArray) {
+  let tempArray = [];
+  let y = 0;
+  for(let x = 0; x < inputArray.length; x++) {
+      if (inputArray[x] !== undefined) {
+        tempArray[y] = inputArray[x];
+        y++;
+      }
+  }
+  return tempArray;
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function resetScore() {
+  for(let i = 0; i < playerObjectArray.length; i++) {
+    playerObjectArray[i].score = 0;
+  }
+  io.emit("lobby", playerObjectArray);
+}
