@@ -186,12 +186,18 @@ function getRandomInt(max) {
   }
 
 function getRandomColor(){
+	let i = 0;
 	let randNumb = Math.floor(Math.random() * 3);
-	if (randNumb === 0) {
-		return "red";
-	} else if (randNumb === 1) {
+	if (i < 4) {
 		return "white";
-	} else {
-		return "green";
+		i++;
+		} else {
+		if (randNumb === 0) {
+			return "red";
+		} else if (randNumb === 1) {
+			return "white";
+		} else {
+			return "green";
+		}
 	}
 }
