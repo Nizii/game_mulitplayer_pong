@@ -1,7 +1,7 @@
 var socket = io();
 var canvas;
 var id;
-var isplaying = false;
+var keyDelay = 0;
 var paddleWidth = 80;
 var paddleYPos = 600;
 var w = window.innerWidth;
@@ -15,45 +15,172 @@ var gameOverScreen;
 
 function setup() {
 	canvas = createCanvas(windowWidth, h);
-	cursor('ew-resize');
 	rectMode(CENTER);
 	colorMode(HSB);
 	noStroke();
 	fill("#fff");
 
 	startScreen = true;
+	tutorialScreen1 = false;
+	tutorialScreen2 = false;
+	tutorialScreen3 = false;
+	enterNameScreen = false;
 	gamesScreen = false;
 	gameOverScreen = false;
 
-	nameInput = createInput();
-	nameInput.id("nameInput");
-	nameInput.position(0, 0);
-	startButton = createButton("Start");
-	startButton.id("startButton");
-	startButton.mouseClicked(function() {
-		playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
-		socket.emit("lobby", playerObject);
-		startScreen = false;
-		gamesScreen = true;
-		startButton.remove();
-		nameInput.remove();
-		socket.emit("timer");
-		addBall(3, 1, getRandomColor());
-	});
-	startButton.position(0,0);
-}
+	// DEBUG Ball zum testen (Provisorisch)
+/* 	button = createButton("DEBUG Ball");
+	button.mouseClicked(addBall);
+	button.size(90,25);
+	button.position(10,625); */
 
-function addBall(ySpeed, ballType, color) {
-	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType, color));
+
+	// Elemente für den Start Screen
+	startButton = createButton("START");
+	startButton.id('start-button');
+	titleText1 = createElement('h1', 'SUPERPOOONG');
+	titleText1.addClass('title text1');
+	titleText2 = createElement('h1', 'SUPERPOOONG');
+	titleText2.addClass('title text2');
+	titleText3 = createElement('h1', 'SUPERPOOONG');
+	titleText3.addClass('title text3');
+	pressSpace = createElement('p', 'or press [Space] for tutorial');
+	pressSpace.addClass('press-space');
+
+
+	startButton.mouseClicked(function() {
+		startScreen = false;
+		enterNameScreen = true;
+		enterNameText = createElement('p', 'Enter your Name');
+		enterNameText.addClass('enter-name-text');
+		nameInput = createInput();
+		nameInput.id('name-input');
+
+
+		startButton.remove();
+		pressSpace.remove();
+		titleText1.remove();
+		titleText2.remove();
+		titleText3.remove();
+
+		startGameButton = createButton("Start Game");
+		startGameButton.id('start-game-button');
+		startGameButton.mouseClicked(function() {
+			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
+			socket.emit("lobby", playerObject);
+			addBall(3, 1, getRandomColor());
+			socket.emit("timer");
+			enterNameScreen = false;
+			gamesScreen = true;
+
+			enterNameText.remove();
+			nameInput.remove();
+			startGameButton.remove();
+
+		});
+	});
 }
 
 function draw() {
 	if (startScreen) {
-		background('black');
+		background(100,4,13);
+		if (keyIsPressed === true) {
+			if (keyCode === 32) {
+				startScreen = false;
+				tutorialScreen1 = true;
+				
+				startButton.remove();
+				pressSpace.remove();
+				titleText1.remove();
+				titleText2.remove();
+				titleText3.remove();
+			}
+		}	
+	}
+	 
+	
+	if (tutorialScreen1) {
+		if (keyIsPressed === true) {
+			if (keyCode === 32 && keyDelay > 20) {
+				tutorialScreen1 = false;
+				tutorialScreen2 = true;
+				
+				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
+			}
+			keyDelay = 0;
+		}
+		background(100,4,13);
+		fill('white');
+		textSize(30);
+
+		text("tutpage1", 100, 100)
+		keyDelay++;
 	}
 
+	if (tutorialScreen2) {
+		if (keyIsPressed === true) {
+			if (keyCode === 32 && keyDelay > 20) {
+				
+				tutorialScreen2 = false;
+				tutorialScreen3 = true;
+				
+				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
+			}
+			keyDelay = 0;
+		}
+		background(100,4,13);
+		fill('white');
+		textSize(30);
+		text("tutpage2", 100, 100)
+		keyDelay++;
+	}
+
+	if (tutorialScreen3) {
+		if (keyIsPressed === true) {
+			if (keyCode === 32 && keyDelay > 20) {
+				tutorialScreen3 = false;
+				enterNameScreen = true;
+				
+				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
+				nameInput = createInput();
+				nameInput.id('name-input');
+				startGameButton = createButton("Start Game");
+				startGameButton.id('start-game-button');
+				enterNameText = createElement('p', 'Enter your Name');
+				enterNameText.addClass('enter-name-text');
+			}
+			keyDelay = 0;
+		}
+		background(100,4,13);
+		fill('white');
+		textSize(30);
+		text("tutpage3", 100, 100)
+		keyDelay++;
+	}
+
+	if (enterNameScreen) {
+		background(100,4,13);
+		keyDelay = 0;
+
+		
+		startGameButton.mouseClicked(function() {
+			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
+			socket.emit("lobby", playerObject);
+			addBall(3, 1, getRandomColor());
+			socket.emit("timer");
+			enterNameScreen = false;
+			gamesScreen = true;
+
+			enterNameText.remove();
+			nameInput.remove();
+			startGameButton.remove();
+		});
+
+
+	}
 	if (gamesScreen) {
-		background(0);
+		cursor('ew-resize');
+		background(100,4,13);
 		for (let ball of ballArray) {
 			ball.show();
 			ball.update();
@@ -66,9 +193,9 @@ function draw() {
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
 				ball.ySpeed = ball.ySpeed + 0.5;
 				if (ball.ySpeed > 0) {
-					if (ball.color === "red") {
+					if (ball.color === 'red') {
 						playerObject.score -= 3;
-					} else if (ball.color === "green") {
+					} else if (ball.color === 'green') {
 						playerObject.score += 3;
 					} else {
 						playerObject.score += 1;
@@ -98,14 +225,18 @@ function draw() {
 		}
 
 		if (gameOverScreen) {
-			background(white);
+			background('white');
 		}
 
 		// Das Paddle
 		fill(playerObject.color , 40, 100);
   		noStroke();
-  		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);
+  		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);	
 	}
+}
+
+function addBall(ySpeed, ballType, color) {
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType, color));
 }
 
 // Function wird aufgerufen wenn Windowgrösse geändert wird
@@ -188,10 +319,10 @@ function getRandomInt(max) {
 function getRandomColor(){
 	let randNumb = Math.floor(Math.random() * 3);
 	if (randNumb === 0) {
-		return "red";
+		return 'red';
 	} else if (randNumb === 1) {
-		return "white";
+		return 'white';
 	} else {
-		return "green";
+		return 'green';
 	}
 }
