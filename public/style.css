@@ -2,49 +2,114 @@
 @import url('https://fonts.googleapis.com/css2?family=Wallpoet&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&family=Wallpoet&display=swap');
 
+
+:root{
+  --lightgray: #9B9C9B; 
+  --darkgray: #212320;
+  --darkbg: #212220;
+  --green: #769355;
+  --darkpink: #C792D9;
+}
+
+
 * {
   margin: 0;
   padding: 0;
+  font-family: 'Saira';
+}
+body {
+  overflow-x: hidden;
 }
 
 main {
   display: block;
   position: absolute;
+  z-index: -1;
 }
 
-#startButton {
-  background-color: rgb(243, 152, 152); 
-  text-align: center;
-  margin-left: 20%;
-  margin-right: 20%;
-  margin-top: 1%;
-  width: 60%;
-  height: 40%;
+#start-button {
+  font-family: 'Saira';
+  font-style:italic;
+  font-weight: bold;
+  position: absolute;
+  top: 350px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10rem;
+  height: 10rem;
   border: 0;
-  border-radius: 20px;
-  color: white;
-  font-size: 150px;
-  margin-bottom: 40%;
-}
-
-#startButton:hover {
-  background-color: #d30909;
-  color: white;
-}
-
-#nameInput{
-  background-color: rgb(106, 85, 141); 
+  color: var(--darkgray);
+  background-color: var(--lightgray);  
   text-align: center;
-  margin-left: 20%;
-  margin-right: 20%;
-  margin-top: 20%;
-  width: 60%;
-  height: 10%;
-  margin-bottom: 40%;
-  border: 0;
-  border-radius: 20px;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+
+#start-button::before {
+  content: "";
+  width: 11rem;
+  height: 11rem;
+  top: 50%;
+  left: 50%;
+  border: solid var(--green) 1px;
+  border-style: dashed; 
+  display: inline-block;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+    width: 11rem;
+    height: 11rem;
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(359deg);
+    width: 12rem;
+    height: 12rem;
+  }
+}
+#start-button::after {
+  content: "";
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 14rem;
+  height: 14rem;
+  border: solid var(--darkpink) 1px;
+  border-style: solid; 
+  display: inline-block;
+  border-radius: 50%;
+}
+
+
+
+  
+#start-button:hover {
+  background-color: var(--green);
   color: white;
-  font-size: 60px;
+}
+
+#name-input{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #9b9c9b80;
+  color: white;
+  font-family: 'Wallpoet';
+  text-align: center;
+  width: 12rem;
+  border: 0;
+  border-radius: 5px;
+  font-size: 1.5rem;
 }
 
 h1 {
@@ -52,30 +117,90 @@ h1 {
   font-weight: 400;
 }
 
-.titlewrapper {
-  margin-left: 50px;
+.title-wrapper {
+  position: absolute;
+  text-align: center;
 }
 
 .title {
-  z-index: 1;
   position: absolute;
-  font-family: 'Wallpoet', cursive;
+  top: 120px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Wallpoet';
+  z-index: 1;
+  font-size: 4rem;
 }
 
 .text1 {
-  margin-top: 30px;
-  color: rgba(255, 255, 255, 0.5);
+margin-top: -4px;
+  color: #9B9C9BBD;
 }
+
 .text2 {
-  margin-top: 25px;
-  color: rgba(199, 146, 217, 1);
+margin-left: 3px;
+  color: #76935578;
 }
 
 .text3 {
-  margin-top: 28px;
-  color: rgba(147, 185, 103, 0.7);
+margin-top: 2px;
+  color: #c792d980;
+
 }
+
+.press-space {
+  position: absolute;
+  top: calc(500px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--lightgray);
+  font-family: 'Saira';
+  font-style: italic;
+  text-align: center;
   
+}
+
+.enter-name-text {
+  position: absolute;
+  top: 310px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--lightgray);
+  font-family: 'Saira';
+  font-style: italic;
+  text-align: center;
+  
+}
 .users {
   position: relative;
+  left: 5%;
+  color: #FFFFFF;
+  opacity: 0.25;
+
+}
+
+
+#start-game-button {
+  font-family: 'Saira';
+  font-style: italic;
+  font-weight: bold;
+  position: absolute;
+  top: 480px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12rem;
+  height: 4rem;
+  border: 0;
+  color: var(--darkgray);
+  background-color: var(--lightgray);
+  text-align: center;
+  border-radius: 2rem;
+  font-size: 1.75rem;
+  user-select: none;
+  cursor: pointer;
+}
+
+#start-game-button:hover {
+  background-color: var(--green);
+  color: white;
 }
