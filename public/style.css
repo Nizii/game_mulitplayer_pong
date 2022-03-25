@@ -179,11 +179,27 @@ margin-top: 2px;
 
 }
 
-.paddle {
+.paddletutorial {
     height: 35px;
     width: 200px;
     background-color:var(--lightgray);
     border-radius:10px 10px 0 0;
+}
+
+.balltutorial {
+  height: 50px;
+  width: 50px;
+  background-color:var(--green);
+  border-radius: 100%;
+}
+
+.randtutorial {
+  height: 400px;
+  width: 390px;
+  border-radius: 15%;
+  border-style: solid;
+  border-color: #9B9C9B;
+  border-width: 1rem;
 }
 
 #start-game-button {
