@@ -148,6 +148,11 @@ margin-top: 2px;
 
 }
 
+.text {
+  font-family: 'Wallpoet';
+
+}
+
 .press-space {
   position: absolute;
   top: calc(500px);

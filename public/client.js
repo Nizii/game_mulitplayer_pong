@@ -135,7 +135,6 @@ function draw() {
 		background(100,4,13);
 		fill('white');
 		textSize(30);
-		textFont('Wallpoet');
 		text("If you miss the ball", 100, 100)
 		keyDelay++;
 	}
