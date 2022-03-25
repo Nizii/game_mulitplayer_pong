@@ -108,6 +108,7 @@ function draw() {
 			}
 			keyDelay = 0;
 		}
+	}
 		paddle = createElement('div');
 		paddle.addClass('paddle');
 
@@ -117,7 +118,7 @@ function draw() {
 		text("Use the paddle to deflect the ball", 100, 100)
 		keyDelay++;
 		
-	}
+
 
 	if (tutorialScreen2) {
 		if (keyIsPressed === true) {
