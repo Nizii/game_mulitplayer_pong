@@ -113,7 +113,7 @@ function draw() {
 		fill('white');
 		textSize(30);
 
-		text("tutpage1", 100, 100)
+		text("Use the paddle to deflect the ball", 100, 100)
 		keyDelay++;
 	}
 
