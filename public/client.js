@@ -107,12 +107,14 @@ function draw() {
 				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
 			}
 			keyDelay = 0;
-		}
+
 		background(100,4,13);
 		fill('white');
 		textSize(30);
 		text("Use the paddle to deflect the ball", 100, 100)
 		keyDelay++;
+		}
+		
 	}
 		paddle = createElement('div');
 		paddle.addClass('paddle');
