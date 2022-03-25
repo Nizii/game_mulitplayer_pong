@@ -111,6 +111,7 @@ function draw() {
 		background(100,4,13);
 		fill('white');
 		textSize(30);
+		textFont('Wallpoet');
 		text("Use the paddle to deflect the ball", 100, 100)
 		keyDelay++;
 		}
@@ -134,6 +135,7 @@ function draw() {
 		background(100,4,13);
 		fill('white');
 		textSize(30);
+		textFont('Wallpoet');
 		text("If you miss the ball", 100, 100)
 		keyDelay++;
 	}
@@ -157,6 +159,7 @@ function draw() {
 		background(100,4,13);
 		fill('white');
 		textSize(30);
+		textFont('Wallpoet');
 		text("Avoid the red ones ! It must not be touched !", 100, 100)
 		keyDelay++;
 	}
