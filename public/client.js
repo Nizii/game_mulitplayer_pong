@@ -134,7 +134,7 @@ function draw() {
 		background(100,4,13);
 		fill('white');
 		textSize(30);
-		text("tutpage2", 100, 100)
+		text("If you miss the ball", 100, 100)
 		keyDelay++;
 	}
 
@@ -157,7 +157,7 @@ function draw() {
 		background(100,4,13);
 		fill('white');
 		textSize(30);
-		text("tutpage3", 100, 100)
+		text("Avoid the red ones ! It must not be touched !", 100, 100)
 		keyDelay++;
 	}
 
