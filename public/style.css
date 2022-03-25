@@ -178,13 +178,9 @@ margin-top: 2px;
   opacity: 0.25;
 
 }
+
+
 div {
-  position: absolute;
-  top: 50%;
-
-}
-
-.paddle {
     height: 35px;
     width: 200px;
     background-color:var(--lightgray);
