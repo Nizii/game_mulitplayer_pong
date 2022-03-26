@@ -243,7 +243,8 @@ margin-top: 2px;
   left: 200px;
   height: 20px;
   width: 20px;
-  background-color: var(--green);
+  /*background-color: var(--green);*/
+  color: var(--green);
   border-radius: 50%;
 
   animation: bounce 0.9s infinite;
