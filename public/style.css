@@ -4,6 +4,7 @@
 
 
 :root{
+  --white: #fff;
   --lightgray: #9B9C9B; 
   --darkgray: #212320;
   --darkbg: #212220;
@@ -16,9 +17,11 @@
   margin: 0;
   padding: 0;
   font-family: 'Saira';
+  user-select: none;
 }
 body {
   overflow-x: hidden;
+  background-color: var(--lightgray);
 }
 
 main {
@@ -27,6 +30,7 @@ main {
   z-index: -1;
 }
 
+/* Start Screen */
 #start-button {
   font-family: 'Saira';
   font-style:italic;
@@ -45,76 +49,61 @@ main {
   font-size: 1.75rem;
   user-select: none;
   cursor: pointer;
+  transition: width 0.2s, height 0.2s;
 }
 
+#start-button:hover {
+  background-color: var(--green);
+  width: 11rem;
+  height: 11rem;
+  color: white;
+}
+
+#start-button:hover::before {
+  width: 13rem;
+  height: 13rem;
+}
 
 #start-button::before {
   content: "";
-  width: 11rem;
-  height: 11rem;
+  position: absolute;
   top: 50%;
   left: 50%;
-  border: solid var(--green) 1px;
-  border-style: dashed; 
-  display: inline-block;
-  border-radius: 50%;
-  position: absolute;
   transform: translate(-50%, -50%) rotate(0deg);
+  width: 11rem;
+  height: 11rem;
+  border: dashed var(--green) 1px;
+  border-radius: 50%;
+  transition: width 0.2s, height 0.2s;
   animation: rotate 30s linear infinite;
 }
 
 @keyframes rotate {
   from {
     transform: translate(-50%, -50%) rotate(0deg);
-    width: 11rem;
-    height: 11rem;
   }
   to {
     transform: translate(-50%, -50%) rotate(359deg);
-    width: 12rem;
-    height: 12rem;
   }
 }
+
 #start-button::after {
-  content: "";
+  content: " ";
   position: absolute;
-  transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   width: 14rem;
   height: 14rem;
   border: solid var(--darkpink) 1px;
   border-style: solid; 
-  display: inline-block;
   border-radius: 50%;
+  transition: width 0.5s 0.1s, height 0.5s 0.1s;
 }
 
-
-
-  
-#start-button:hover {
-  background-color: var(--green);
-  color: white;
-}
-
-#name-input{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #9b9c9b80;
-  color: white;
-  font-family: 'Wallpoet';
-  text-align: center;
-  width: 12rem;
-  border: 0;
-  border-radius: 5px;
-  font-size: 1.5rem;
-}
-
-h1 {
-  text-align: center;
-  font-weight: 400;
+#start-button:hover::after {
+  width: 16rem;
+  height: 16rem;
 }
 
 .title-wrapper {
@@ -128,38 +117,37 @@ h1 {
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Wallpoet';
-  z-index: 1;
+  font-weight: 400;
   font-size: 4rem;
+  z-index: 1;
 }
 
 .text1 {
 margin-top: -4px;
   color: #9B9C9BBD;
 }
-
 .text2 {
 margin-left: 3px;
   color: #76935578;
 }
-
 .text3 {
 margin-top: 2px;
   color: #c792d980;
-
 }
 
 .press-space {
   position: absolute;
-  top: calc(500px);
+  top: 540px;
   left: 50%;
   transform: translate(-50%, -50%);
   color: var(--lightgray);
   font-family: 'Saira';
   font-style: italic;
   text-align: center;
-  
 }
 
+
+/* Enter Name Screen */
 .enter-name-text {
   position: absolute;
   top: 310px;
@@ -168,39 +156,25 @@ margin-top: 2px;
   color: var(--lightgray);
   font-family: 'Saira';
   font-style: italic;
+}
+
+#name-input{
+  position: absolute;
+  top: 350px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #9b9c9b80;
+  color: white;
+  font-family: 'Wallpoet';
   text-align: center;
-  
-}
-.users {
-  position: relative;
-  left: 5%;
-  color: #FFFFFF;
-  opacity: 0.25;
-
+  width: 12rem;
+  border: 0;
+  border-radius: 5px;
+  font-size: 1.5rem;
 }
 
-
-.paddle {
-    height: 35px;
-    width: 200px;
-    background-color:var(--lightgray);
-    border-radius:10px 10px 0 0;
-}
-
-.balltutorial {
-  height: 50px;
-  width: 50px;
-  background-color:var(--green);
-  border-radius: 100%;
-}
-
-.randtutorial {
-  height: 400px;
-  width: 390px;
-  border-radius: 15%;
-  border-style: solid;
-  border-color: #9B9C9B;
-  border-width: 1rem;
+#name-input:focus {
+  outline: solid 1px var(--green);
 }
 
 #start-game-button {
@@ -226,4 +200,76 @@ margin-top: 2px;
 #start-game-button:hover {
   background-color: var(--green);
   color: white;
+}
+
+/* Tutorial Screen */
+.tut-text {
+  position: absolute;
+  top: 310px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  color: var(--lightgray);
+  font-family: 'Wallpoet';
+  font-size: 2rem;
+  text-align: center;
+}
+
+.tut-container {
+  height: 400px;
+  width: 400px;
+  border: solid 1px var(--lightgray);
+  border-radius: 20px;
+}
+
+
+.tut-paddle {
+  height: 20px;
+  width: 80px;
+  background-color:var(--lightgray);
+  border-radius:10px 10px 5px 5px;
+}
+
+.tut-ball {
+  height: 20px;
+  width: 20px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+
+
+
+
+.balltutorial {
+height: 50px;
+width: 50px;
+background-color:var(--green);
+border-radius: 100%;
+}
+
+.randtutorial {
+height: 400px;
+width: 390px;
+border-radius: 15%;
+border-style: solid;
+border-color: #9B9C9B;
+border-width: 1rem;
+}
+
+/* Game Screen */
+.users {
+  position: relative;
+  left: 5%;
+  color: var(--white);
+  opacity: 0.25;
+
+}
+
+.timer {
+  position: absolute;
+  font-family: 'Saira';
+  font-size: 3rem;
+  color: var(--white);
+  opacity: 0.25;
 }
