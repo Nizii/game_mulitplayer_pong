@@ -233,6 +233,8 @@ margin-top: 2px;
   width: 80px;
   background-color:var(--lightgray);
   border-radius:10px 10px 5px 5px;
+  animation-duration: 3s;
+  animation-name: slidein;
 }
 
 .tut-ball {
@@ -260,6 +262,19 @@ border-radius: 15%;
 border-style: solid;
 border-color: #9B9C9B;
 border-width: 1rem;
+}
+
+/* tutorial animation*/
+@keyframes slidein {
+  from {
+    margin-left: 0%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: 100%;
+    width: 100%;
+  }
 }
 
 /* Game Screen */
