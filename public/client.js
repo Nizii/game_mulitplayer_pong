@@ -215,7 +215,8 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
-						socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed, ball.ballType, ball.color);
+						//socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed, ball.ballType, ball.color);
+						socket.emit("ballData", id, ball);
 						ballArray.splice(x, 1); 
 					}
 				}	
@@ -228,6 +229,7 @@ function draw() {
 		}
 
 		if (gameOverScreen) {
+			socket.emit("gameOver");
 			background('white');
 		}
 
@@ -288,8 +290,8 @@ socket.once("gameOver", function() {
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
-socket.on("ballData", function(ballId, x, xSpeed, ySpeed, ballType, color) {
-	ballArray.push(new Ball(x, 10 , xSpeed, ySpeed, 20, ballId, ballType, color));
+socket.on("ballData", function(ball) {
+	ballArray.push(new Ball(ball.x, 10 , ball.xSpeed, ball.ySpeed, 20, ball.ballId, ball.ballType, ball.color));
 });
 
 // Reservefunktion falls noch Zeit vorhanden Handy

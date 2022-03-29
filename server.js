@@ -4,7 +4,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-var playerObjectArray = [];
+var playerArray = [];
 var playerArrayIndex = 0;
 var startTime = 120;
 var remain = startTime;
@@ -28,52 +28,53 @@ io.on('connection', (socket) => {
 
 // Neuer Spieler tritt ein
 io.on('connection', (socket) => {
-  io.emit('user', socket.id);
+  setUserId(socket);
   resetScore();
   remain = startTime;
 });
 
 io.on('connection', (socket) => {
-    socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType, color) => {
-      ySpeed *= -1;
-      let randomUserId = playerObjectArray[getRandomInt(playerObjectArray.length)].id;
-        while(userId === randomUserId && playerObjectArray.length >= 2) {
-          randomUserId = playerObjectArray[getRandomInt(playerObjectArray.length)].id;
+  //socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType, color) => {  
+  socket.on('ballData', (userId, ball) => {
+      ball.ySpeed *= -1;
+      let randomUserId = playerArray[getRandomInt(playerArray.length)].id;
+        while(userId === randomUserId && playerArray.length >= 2) {
+          randomUserId = playerArray[getRandomInt(playerArray.length)].id;
         }
-      io.to(randomUserId).emit('ballData', ballId, x, xSpeed, ySpeed, ballType, color);
+      io.to(randomUserId).emit('ballData', ball);
   });
 });
 
 io.on('connection', (socket) => {
   socket.on('lobby', (playerObject) => {
-    playerObjectArray[playerArrayIndex] = playerObject;
+    playerArray[playerArrayIndex] = playerObject;
     playerArrayIndex++;
-    playerObjectArray = reorgArray(playerObjectArray);
-    playerArrayIndex = playerObjectArray.length;
-    io.emit("lobby", playerObjectArray);
+    playerArray = reorgArray(playerArray);
+    playerArrayIndex = playerArray.length;
+    updateLobbyData();
   });
 
   socket.on('disconnect', () => {
-    for(let i = 0; i < playerObjectArray.length; i++) {  
-      for (const value of Object.values(playerObjectArray[i])) {
+    for(let i = 0; i < playerArray.length; i++) {  
+      for (const value of Object.values(playerArray[i])) {
         if (socket.id === value) {
-          playerObjectArray.splice(i, 1);
+          playerArray.splice(i, 1);
         }
       }
     }
-    playerObjectArray = reorgArray(playerObjectArray);
-    io.emit('lobby', playerObjectArray);
+    playerArray = reorgArray(playerArray);
+    updateLobbyData();
   });
 });
 
 io.on('connection', (socket) => {
   socket.on('updateScore', (playerObject) => {
-    for(let i = 0; i < playerObjectArray.length; i++) {
-      if (playerObjectArray[i].id === playerObject.id) {
-        playerObjectArray[i] = playerObject;
+    for(let i = 0; i < playerArray.length; i++) {
+      if (playerArray[i].id === playerObject.id) {
+        playerArray[i] = playerObject;
       } 
     }
-    io.emit("lobby", playerObjectArray);
+    updateLobbyData();
   });
 });
 
@@ -82,11 +83,11 @@ function configTimer() {
   timer = setInterval(function() {
     remain = remain - 1;
     if (timerIsRunning) {
-      io.emit('timer', remain);
-      io.emit('addBall', remain);
+      updateTimerDisplay();
+      addBallsToTheGame();
       if (remain < 1) {
         clearInterval(timer);
-        io.emit("gameOver", remain);
+        startGameOverScreen();
       }
     }}, 1200);
   }
@@ -110,8 +111,28 @@ function getRandomInt(max) {
 }
 
 function resetScore() {
-  for(let i = 0; i < playerObjectArray.length; i++) {
-    playerObjectArray[i].score = 0;
+  for(let i = 0; i < playerArray.length; i++) {
+    playerArray[i].score = 0;
   }
-  io.emit("lobby", playerObjectArray);
+  io.emit("lobby", playerArray);
+}
+
+function startGameOverScreen() {
+  io.emit("gameOver", playerArray);
+}
+
+function addBallsToTheGame() {
+  io.emit('addBall', remain);
+}
+
+function updateTimerDisplay() {
+  io.emit('timer', remain);
+}
+
+function updateLobbyData() {
+  io.emit('lobby', playerArray);
+}
+
+function setUserId(socket) {
+  io.emit('user', socket.id);
 }
