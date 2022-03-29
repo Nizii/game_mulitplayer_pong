@@ -90,7 +90,8 @@ function draw() {
 				tutContainer = createElement('div');
 				tutContainer.addClass('tut-container');
 				tutBall = createElement('div');
-				tutBall.addClass('tut-ball tut-ball-green');
+				tutBall.addClass('tut-ball tut-ball-green tut-ball-anim1');
+
 				tutPaddle = createElement('div');
 				tutPaddle.addClass('tut-paddle tut-paddle-anim1');
 
@@ -111,7 +112,7 @@ function draw() {
 				
 				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
 				tutText1.remove();
-				tutContainer.remove();
+				
 				tutBall.remove();
 				tutPaddle.remove();
 			}
@@ -147,6 +148,7 @@ function draw() {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen3 = false;
 				enterNameScreen = true;
+				tutContainer.remove();
 				
 				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
 				nameInput = createInput();
