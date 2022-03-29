@@ -11,8 +11,16 @@ class Ball {
     }
 
     show() {
-        stroke("white");
-        fill(this.color);
+        //stroke('#000');
+        if (this.color === 'red') {
+            fill('#C94B45');
+        } else if (this.color === 'green') {
+           fill('#769355');
+        } else if (this.color === "white") {
+            fill('#fff');
+        } else {
+            fill('#000');
+        }
         circle(this.x, this.y, this.size);
     }
 
