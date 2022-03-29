@@ -236,10 +236,6 @@ margin-top: 2px;
   height: 20px;
   width: 80px;
   border-radius:10px 10px 5px 5px;
-<<<<<<< HEAD
-  animation-duration: 3s;
-  animation-name: slidein;
-=======
   background-color:var(--lightgray);
   position: absolute;
   
@@ -247,7 +243,6 @@ margin-top: 2px;
   top: 500px;
   left: 50%;
   transform: translate(-50%, -50%);
->>>>>>> 96b785b3fcb2d95ba401162975b0b5cc56fb43cc
 }
 
 .tut-ball {
@@ -256,47 +251,9 @@ margin-top: 2px;
   left: 200px;
   height: 20px;
   width: 20px;
-<<<<<<< HEAD
-  /*background-color: var(--green);*/
-  color: var(--green);
-  border-radius: 50%;
-
-  animation: bounce 0.9s infinite;
-
-}
-/* tutorial animation*/
-@keyframes bounce {
-  10% {
-    height: 50px;
-    width: 50px;
-  } 
-
-    30% {
-      height: 50px;
-      width: 40px;
-    } 
-
-    50% {
-      height: 30px;
-      width: 57px;
-      /*transform: translateY(240px);*/
-    }
-
-    75%{
-      height: 50px;
-      width: 57px;
-    } 
-
-    /*100% {
-      transform: translateY(0px);
-    }*/
-
-    }
-=======
   border-radius: 50%;
   background-color: var(--lightgray);
   position: absolute;
->>>>>>> 96b785b3fcb2d95ba401162975b0b5cc56fb43cc
 
   /* Positioning for animation*/
   top: 400px;
@@ -314,25 +271,6 @@ margin-top: 2px;
   background-color: var(--darkpink);
 }
 
-<<<<<<< HEAD
-
-    }
-  
-
-
-}
-
-
-@keyframes slidein {
-  from {
-    margin-left: 0%;
-    width: 300%;
-  }
-
-  to {
-    margin-left: 100%;
-    width: 100%;
-=======
 .tut-paddle-anim1 {
   animation: tut-paddle1 2s ease-in-out infinite alternate-reverse;
 }
@@ -343,7 +281,6 @@ margin-top: 2px;
   }
   to {
     left: calc(50% - 100px);
->>>>>>> 96b785b3fcb2d95ba401162975b0b5cc56fb43cc
   }
 }
 
