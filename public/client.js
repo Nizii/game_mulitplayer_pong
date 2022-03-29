@@ -253,7 +253,6 @@ function draw() {
 		}
 
 		if (gameOverScreen) {
-			socket.emit("gameOver");
 			background('white');
 		}
 
@@ -305,7 +304,7 @@ socket.on("timer", function(time) {
 	remain.position(windowWidth - 100, 0);
 });
 
-// Jede 5. Sekunde wird ein Ball gedropt
+// Jede x. Sekunde wird ein Ball gedropt
 socket.on("addBall", function(time) {
 	if (time % 10 === 0) {
 		addBall(3, 1, getRandomColor());
@@ -323,16 +322,6 @@ socket.once("gameOver", function(array) {
     	return b.score - a.score;
 	});
 	playerArray = array;
-	// Bastlerei von Nizam
-	let ground = document.createElement("ul");
-	array.forEach((e) => {
-		//ground.appendChild(createElement('h4', `${e.score} ${e.name}`));
-		let li = document.createElement("li");	
-		li.style('color', 'white');
-		li.position((windowWidth/2)-200, 300);
-		li.innerHTML = `${e.score} ${e.name}`;
-		document.body.appendChild(li);
-	});
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
