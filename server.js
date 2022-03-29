@@ -17,16 +17,20 @@ server.listen(process.env.PORT||3000, () => {
   console.log('Link: http://localhost:3000');
 });
 
+// Handled den Timer
 io.on('connection', (socket) => {
+  timerIsRunning = false;
+  console.log("Timer Ready");
   socket.once("timer", () => {
+    console.log("Timer Running");
+    timerIsRunning = true;
     configTimer();
   });
 });
 
-//Neuer Spieler tritt ein
+// Neuer Spieler tritt ein
 io.on('connection', (socket) => {
   io.emit('user', socket.id);
-  configTimer();
   resetScore();
   remain = startTime;
 });
@@ -79,14 +83,16 @@ function configTimer() {
   clearInterval(timer);
   timer = setInterval(function() {
     remain = remain - 1;
-    io.emit('timer', remain);
-    io.emit('addBall', remain);
-    if (remain < 1) {
-      clearInterval(timer);
-      io.emit("gameOver", remain);
-    }
-  }, 1200);
-}
+    if (timerIsRunning) {
+      io.emit('timer', remain);
+      io.emit('addBall', remain);
+      if (remain < 1) {
+        clearInterval(timer);
+        io.emit("gameOver", remain);
+      }
+    }}, 1200);
+  }
+
 
 // Reorganisiert das Array, löscht Lücken
 function reorgArray(inputArray) {
