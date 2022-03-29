@@ -20,9 +20,7 @@ server.listen(process.env.PORT||3000, () => {
 // Handled den Timer
 io.on('connection', (socket) => {
   timerIsRunning = false;
-  console.log("Timer Ready");
   socket.once("timer", () => {
-    console.log("Timer Running");
     timerIsRunning = true;
     configTimer();
   });

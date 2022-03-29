@@ -192,14 +192,16 @@ function draw() {
 
 			// Paddle Ball Trigger
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
-				ball.ySpeed = ball.ySpeed + 0.5;
+				ball.ySpeed += 0.5;
 				if (ball.ySpeed > 0) {
 					if (ball.color === 'red') {
 						playerObject.score -= 3;
 					} else if (ball.color === 'green') {
 						playerObject.score += 3;
-					} else {
+					} else if (ball.color === "white") {
 						playerObject.score += 1;
+					} else {
+						playerObject.score -= 20;
 					}
 					socket.emit("updateScore", playerObject);
 				}
@@ -320,7 +322,11 @@ function getRandomInt(max) {
 let i = 0;
 function getRandomColor(){
 	let randNumb = Math.floor(Math.random() * 3);
-	if (i < 4) {
+	if (i < 1) {
+		i++;
+		return "black";
+	}
+	if (i < 4 && i >= 1) {
 		i++;
 		return "white";
 		} else {
@@ -330,6 +336,6 @@ function getRandomColor(){
 				return "white";
 			} else {
 				return "green";
-			}
+			} 
 		}
 	}

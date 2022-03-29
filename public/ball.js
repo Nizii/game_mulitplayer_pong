@@ -11,6 +11,7 @@ class Ball {
     }
 
     show() {
+        stroke("white");
         fill(this.color);
         circle(this.x, this.y, this.size);
     }
