@@ -34,8 +34,9 @@ io.on('connection', (socket) => {
 
 // Neuer Spieler tritt ein
 io.on('connection', (socket) => {
-  setUserId(socket);
+  setUserIdForNewJoinedUser(socket);
   resetScore();
+  resetBalls();
   remain = startTime;
 });
 
@@ -96,6 +97,10 @@ function resetScore() {
   io.emit("lobby", playerArray);
 }
 
+function resetBalls() {
+  io.emit("resetBalls");
+}
+
 function startGameOverScreen() {
   io.emit("gameOver", playerArray);
 }
@@ -112,7 +117,7 @@ function updateLobbyData() {
   io.emit('lobby', playerArray);
 }
 
-function setUserId(socket) {
+function setUserIdForNewJoinedUser(socket) {
   io.emit('user', socket.id);
 }
 

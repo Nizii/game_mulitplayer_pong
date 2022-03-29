@@ -7,6 +7,7 @@ var paddleYPos = 600;
 var w = window.innerWidth;
 var h = 700;  
 var ballArray = [];
+var playerArray = []
 var playerObject;
 // Gamestates
 var startScreen;
@@ -306,16 +307,32 @@ socket.on("timer", function(time) {
 
 // Jede 5. Sekunde wird ein Ball gedropt
 socket.on("addBall", function(time) {
-	if (time % 5 === 0) {
+	if (time % 10 === 0) {
 		addBall(3, 1, getRandomColor());
 	}
 });
 
-socket.once("gameOver", function() {
-	console.log("GameOver");
+socket.on("resetBalls", function(){
+	ballArray = [];
+}) 
+
+socket.once("gameOver", function(array) {
 	gamesScreen = false;
 	gameOverScreen = true;
-	canvas.remove();
+	array.sort((a, b) => {
+    	return b.score - a.score;
+	});
+	playerArray = array;
+	// Bastlerei von Nizam
+	let ground = document.createElement("ul");
+	array.forEach((e) => {
+		//ground.appendChild(createElement('h4', `${e.score} ${e.name}`));
+		let li = document.createElement("li");	
+		li.style('color', 'white');
+		li.position((windowWidth/2)-200, 300);
+		li.innerHTML = `${e.score} ${e.name}`;
+		document.body.appendChild(li);
+	});
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
