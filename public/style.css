@@ -135,6 +135,11 @@ margin-top: 2px;
   color: #c792d980;
 }
 
+.text {
+  font-family: 'Wallpoet';
+
+}
+
 .press-space {
   position: absolute;
   top: 540px;
@@ -241,6 +246,7 @@ margin-top: 2px;
 }
 
 .tut-ball {
+  position: absolute;
   height: 20px;
   width: 20px;
   border-radius: 50%;
@@ -275,6 +281,27 @@ margin-top: 2px;
     left: calc(50% - 100px);
   }
 }
+
+/* animation grüner Ball */
+
+.tut-ball-anim1 {
+ animation: tut-ball1 2s ease-in-out infinite alternate-reverse; ;
+}
+
+@keyframes tut-ball1 {
+  0% {
+    left:calc(50%-100px); 
+    top:300px;
+  }
+  50% {
+    left:50%; 
+    top:400px;
+  }
+  100% {
+    left:calc(50%+100px); 
+    top:300px
+  }}
+
 
 
 /* Game Screen */

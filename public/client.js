@@ -34,7 +34,7 @@ function setup() {
 	button.size(90,25);
 	button.position(10,625); */
 
-
+//hello
 	// Elemente für den Start Screen
 	startButton = createButton("START");
 	startButton.id('start-button');
@@ -140,6 +140,7 @@ function draw() {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen3 = false;
 				enterNameScreen = true;
+				tutContainer.remove();
 				
 				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
 				nameInput = createInput();
