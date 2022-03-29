@@ -291,11 +291,11 @@ margin-top: 2px;
 }
 
 @keyframes tut-ball1 {
-  0% {
-    transform: calc(50% + translatex(0px) translatey(0px))
+  from {
+    left: calc(50% + translatex(0px) translatey(0px))
   }
-  100% {
-    transform: calc(50% + translatex(100px) translatey(100px);
+  to {
+    left: calc(50% + translatex(100px) translatey(100px);
   }
 }
 
