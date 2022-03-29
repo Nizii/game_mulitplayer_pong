@@ -28,11 +28,6 @@ function setup() {
 	gamesScreen = false;
 	gameOverScreen = false;
 
-	// DEBUG Ball zum testen (Provisorisch)
-/* 	button = createButton("DEBUG Ball");
-	button.mouseClicked(addBall);
-	button.size(90,25);
-	button.position(10,625); */
 
 
 	// Elemente für den Start Screen
@@ -68,7 +63,7 @@ function setup() {
 		startGameButton.mouseClicked(function() {
 			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
 			socket.emit("lobby", playerObject);
-			addBall(3, 1, getRandomColor());
+			addBall(1, getRandomColor());
 			socket.emit("timer");
 			enterNameScreen = false;
 			gamesScreen = true;
@@ -90,14 +85,14 @@ function draw() {
 				startScreen = false;
 				tutorialScreen1 = true;
 
-				tutText1 = createElement('p', 'Use the paddle to deflect the ball');
+				tutText1 = createElement('p', 'Move the paddle to deflect the ball');
 				tutText1.addClass('tut-text');
 				tutContainer = createElement('div');
 				tutContainer.addClass('tut-container');
 				tutBall = createElement('div');
-				tutBall.addClass('tut-ball');
+				tutBall.addClass('tut-ball tut-ball-green');
 				tutPaddle = createElement('div');
-				tutPaddle.addClass('tut-paddle');
+				tutPaddle.addClass('tut-paddle tut-paddle-anim1');
 
 				startButton.remove();
 				pressSpace.remove();
@@ -179,7 +174,7 @@ function draw() {
 		startGameButton.mouseClicked(function() {
 			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
 			socket.emit("lobby", playerObject);
-			addBall(3, 1, getRandomColor());
+			addBall(1, getRandomColor());
 			socket.emit("timer");
 			enterNameScreen = false;
 			gamesScreen = true;
@@ -197,6 +192,7 @@ function draw() {
 		for (let ball of ballArray) {
 			ball.show();
 			ball.update();
+			
 			// Seitentrigger
 			if (ball.x < 10 || ball.x > windowWidth - 10) {
 				ball.xSpeed *= -1;
@@ -251,8 +247,8 @@ function draw() {
 	}
 }
 
-function addBall(ySpeed, ballType, color) {
-	ballArray.push(new Ball(Math.floor(Math.random() * windowWidth/2) + windowWidth/4, 50, (Math.random()*2)-1, ySpeed, 20, this.ballId, ballType, color));
+function addBall(ballType, color) {
+	ballArray.push(new Ball(Math.floor(Math.random() * windowWidth/2) + windowWidth/4, 50, (Math.random()*2)-1, (Math.random()*2)+3, 20, this.ballId, ballType, color));
 }
 
 // Function wird aufgerufen wenn Windowgrösse geändert wird
@@ -288,7 +284,7 @@ socket.on("timer", function(time) {
 // Jede 5. Sekunde wird ein Ball gedropt
 socket.on("addBall", function(time) {
 	if (time % 5 === 0) {
-		addBall(3, 1, getRandomColor());
+		addBall(1, getRandomColor());
 	}
 });
 

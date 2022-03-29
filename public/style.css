@@ -12,13 +12,13 @@
   --darkpink: #C792D9;
 }
 
-
 * {
   margin: 0;
   padding: 0;
   font-family: 'Saira';
   user-select: none;
 }
+
 body {
   overflow-x: hidden;
   background-color: var(--lightgray);
@@ -155,7 +155,7 @@ margin-top: 2px;
 /* Enter Name Screen */
 .enter-name-text {
   position: absolute;
-  top: 310px;
+  top: 240px;
   left: 50%;
   transform: translate(-50%, -50%);
   color: var(--lightgray);
@@ -165,7 +165,7 @@ margin-top: 2px;
 
 #name-input{
   position: absolute;
-  top: 350px;
+  top: 280px;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #9b9c9b80;
@@ -187,7 +187,7 @@ margin-top: 2px;
   font-style: italic;
   font-weight: bold;
   position: absolute;
-  top: 480px;
+  top: 420px;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 12rem;
@@ -210,7 +210,7 @@ margin-top: 2px;
 /* Tutorial Screen */
 .tut-text {
   position: absolute;
-  top: 310px;
+  top: 140px;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 480px;
@@ -221,8 +221,12 @@ margin-top: 2px;
 }
 
 .tut-container {
-  height: 400px;
-  width: 400px;
+  position: absolute;
+  top: 380px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 300px;
+  width: 300px;
   border: solid 1px var(--lightgray);
   border-radius: 20px;
 }
@@ -231,10 +235,19 @@ margin-top: 2px;
 .tut-paddle {
   height: 20px;
   width: 80px;
-  background-color:var(--lightgray);
   border-radius:10px 10px 5px 5px;
+<<<<<<< HEAD
   animation-duration: 3s;
   animation-name: slidein;
+=======
+  background-color:var(--lightgray);
+  position: absolute;
+  
+  /* Positioning for animation*/
+  top: 500px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+>>>>>>> 96b785b3fcb2d95ba401162975b0b5cc56fb43cc
 }
 
 .tut-ball {
@@ -243,6 +256,7 @@ margin-top: 2px;
   left: 200px;
   height: 20px;
   width: 20px;
+<<<<<<< HEAD
   /*background-color: var(--green);*/
   color: var(--green);
   border-radius: 50%;
@@ -278,9 +292,29 @@ margin-top: 2px;
     }*/
 
     }
+=======
+  border-radius: 50%;
+  background-color: var(--lightgray);
+  position: absolute;
+>>>>>>> 96b785b3fcb2d95ba401162975b0b5cc56fb43cc
 
+  /* Positioning for animation*/
+  top: 400px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
+.tut-ball-gray {
+  background-color: var(--lightgray);
+}
+.tut-ball-green {
+  background-color: var(--green);
+}
+.tut-ball-red {
+  background-color: var(--darkpink);
+}
 
+<<<<<<< HEAD
 
     }
   
@@ -298,8 +332,21 @@ margin-top: 2px;
   to {
     margin-left: 100%;
     width: 100%;
+=======
+.tut-paddle-anim1 {
+  animation: tut-paddle1 2s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes tut-paddle1 {
+  from {
+    left: calc(50% + 100px);
+  }
+  to {
+    left: calc(50% - 100px);
+>>>>>>> 96b785b3fcb2d95ba401162975b0b5cc56fb43cc
   }
 }
+
 
 /* Game Screen */
 .users {
