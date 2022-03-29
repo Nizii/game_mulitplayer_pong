@@ -28,6 +28,11 @@ function setup() {
 	gamesScreen = false;
 	gameOverScreen = false;
 
+	// DEBUG Ball zum testen (Provisorisch)
+/* 	button = createButton("DEBUG Ball");
+	button.mouseClicked(addBall);
+	button.size(90,25);
+	button.position(10,625); */
 
 
 	// Elemente für den Start Screen
@@ -63,7 +68,7 @@ function setup() {
 		startGameButton.mouseClicked(function() {
 			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
 			socket.emit("lobby", playerObject);
-			addBall(1, getRandomColor());
+			addBall(3, 1, getRandomColor());
 			socket.emit("timer");
 			enterNameScreen = false;
 			gamesScreen = true;
@@ -77,23 +82,13 @@ function setup() {
 }
 
 function draw() {
-	background(100,4,13);
 	if (startScreen) {
-		// Checkt ob die Leertaste gedrückt wird und passt den Inhalt des Screens an
+		background(100,4,13);
 		if (keyIsPressed === true) {
-			if (keyCode === 32) { // Keycode 32 = Spacekey
+			if (keyCode === 32) {
 				startScreen = false;
 				tutorialScreen1 = true;
-
-				tutText1 = createElement('p', 'Move the paddle to deflect the ball');
-				tutText1.addClass('tut-text');
-				tutContainer = createElement('div');
-				tutContainer.addClass('tut-container');
-				tutBall = createElement('div');
-				tutBall.addClass('tut-ball tut-ball-green');
-				tutPaddle = createElement('div');
-				tutPaddle.addClass('tut-paddle tut-paddle-anim1');
-
+				
 				startButton.remove();
 				pressSpace.remove();
 				titleText1.remove();
@@ -102,6 +97,7 @@ function draw() {
 			}
 		}	
 	}
+	 
 	
 	if (tutorialScreen1) {
 		if (keyIsPressed === true) {
@@ -110,20 +106,16 @@ function draw() {
 				tutorialScreen2 = true;
 				
 				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
-				tutText1.remove();
-				tutContainer.remove();
-				tutBall.remove();
-				tutPaddle.remove();
 			}
 			keyDelay = 0;
-			
-			
 		}
+		background(100,4,13);
+		fill('white');
+		textSize(30);
 
+		text("tutpage1", 100, 100)
 		keyDelay++;
-		
 	}
-	
 
 	if (tutorialScreen2) {
 		if (keyIsPressed === true) {
@@ -136,10 +128,10 @@ function draw() {
 			}
 			keyDelay = 0;
 		}
+		background(100,4,13);
 		fill('white');
 		textSize(30);
-		textFont('Wallpoet');
-		text("If you miss the ball", 100, 100)
+		text("tutpage2", 100, 100)
 		keyDelay++;
 	}
 
@@ -162,8 +154,7 @@ function draw() {
 		background(100,4,13);
 		fill('white');
 		textSize(30);
-		textFont('Wallpoet');
-		text("Avoid the red ones ! It must not be touched !", 100, 100)
+		text("tutpage3", 100, 100)
 		keyDelay++;
 	}
 
@@ -175,7 +166,7 @@ function draw() {
 		startGameButton.mouseClicked(function() {
 			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
 			socket.emit("lobby", playerObject);
-			addBall(1, getRandomColor());
+			addBall(3, 1, getRandomColor());
 			socket.emit("timer");
 			enterNameScreen = false;
 			gamesScreen = true;
@@ -193,17 +184,15 @@ function draw() {
 		for (let ball of ballArray) {
 			ball.show();
 			ball.update();
-			
 			// Seitentrigger
-			if (ball.x < 10 || ball.x > windowWidth - 10) {
+			if (ball.x < 10 || ball.x > w - 10) {
 				ball.xSpeed *= -1;
 			}
 
 			// Paddle Ball Trigger
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
-				
+				ball.ySpeed = ball.ySpeed + 0.5;
 				if (ball.ySpeed > 0) {
-					ball.ySpeed = ball.ySpeed + 0.5;
 					if (ball.color === 'red') {
 						playerObject.score -= 3;
 					} else if (ball.color === 'green') {
@@ -212,8 +201,6 @@ function draw() {
 						playerObject.score += 1;
 					}
 					socket.emit("updateScore", playerObject);
-				} else {
-					ball.ySpeed = ball.ySpeed - 0.5;
 				}
 				ball.ySpeed *= -1;
 				// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
@@ -232,7 +219,7 @@ function draw() {
 			}
 
 			// Bodentrigger
-			if (ball.y >= h - 10) {
+			if (ball.y >= h) {
 				ball.ySpeed *= -1;
 			}
 		}
@@ -248,8 +235,8 @@ function draw() {
 	}
 }
 
-function addBall(ballType, color) {
-	ballArray.push(new Ball(Math.floor(Math.random() * windowWidth/2) + windowWidth/4, 50, (Math.random()*2)-1, (Math.random()*2)+3, 20, this.ballId, ballType, color));
+function addBall(ySpeed, ballType, color) {
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType, color));
 }
 
 // Function wird aufgerufen wenn Windowgrösse geändert wird
@@ -274,18 +261,19 @@ socket.on("lobby", function(playerObjectArray) {
 });
 
 socket.on("timer", function(time) {
-	let timerString = time;
 	$(".timer").remove();
+	let timerString = time;
 	let remain = createElement('h5', timerString);
 	remain.addClass( "timer" );
-	remain.position(windowWidth - 140, 0);
-	
+	remain.style('color', 'white');
+	remain.style('font-size', '60px');
+	remain.position(windowWidth - 100, 0);
 });
 
 // Jede 5. Sekunde wird ein Ball gedropt
 socket.on("addBall", function(time) {
 	if (time % 5 === 0) {
-		addBall(1, getRandomColor());
+		addBall(3, 1, getRandomColor());
 	}
 });
 
