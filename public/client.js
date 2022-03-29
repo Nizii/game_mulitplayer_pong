@@ -24,17 +24,11 @@ function setup() {
 	tutorialScreen1 = false;
 	tutorialScreen2 = false;
 	tutorialScreen3 = false;
+	tutorialScreen4 = false;
 	enterNameScreen = false;
 	gamesScreen = false;
 	gameOverScreen = false;
 
-	// DEBUG Ball zum testen (Provisorisch)
-/* 	button = createButton("DEBUG Ball");
-	button.mouseClicked(addBall);
-	button.size(90,25);
-	button.position(10,625); */
-
-//hello
 	// Elemente für den Start Screen
 	startButton = createButton("START");
 	startButton.id('start-button');
@@ -88,7 +82,16 @@ function draw() {
 			if (keyCode === 32) {
 				startScreen = false;
 				tutorialScreen1 = true;
-				
+
+				tutText1 = createElement('p', 'Move the paddle to deflect the ball.');
+				tutText1.addClass('tut-text');
+				tutContainer = createElement('div');
+				tutContainer.addClass('tut-container');
+				tutBall1 = createElement('div');
+				tutBall1.addClass('tut-ball tut-ball-green tut-ball-anim1');
+				tutPaddle = createElement('div');
+				tutPaddle.addClass('tut-paddle tut-paddle-anim1');
+
 				startButton.remove();
 				pressSpace.remove();
 				titleText1.remove();
@@ -104,16 +107,18 @@ function draw() {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen1 = false;
 				tutorialScreen2 = true;
-				
-				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
+
+				tutText1.remove();
+				tutPaddle.remove();
+
+				tutText2 = createElement('p', 'Collect points but avoid the red colored ones.');
+				tutText2.addClass('tut-text');
+				tutBall1.removeClass('tut-ball-anim1');
+				tutBall2 = createElement('div');
+				tutBall2.addClass('tut-ball-gray tut-ball-green tut-ball-red');
 			}
 			keyDelay = 0;
 		}
-		background(100,4,13);
-		fill('white');
-		textSize(30);
-
-		text("tutpage1", 100, 100)
 		keyDelay++;
 	}
 
@@ -123,26 +128,46 @@ function draw() {
 				
 				tutorialScreen2 = false;
 				tutorialScreen3 = true;
-				
-				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
+
+				tutText2.remove();
+
+				tutText3 = createElement('p', 'You have 120 seconds to collect points.');
+				tutText3.addClass('tut-text');
+
 			}
 			keyDelay = 0;
 		}
-		background(100,4,13);
-		fill('white');
-		textSize(30);
-		text("tutpage2", 100, 100)
 		keyDelay++;
 	}
 
 	if (tutorialScreen3) {
 		if (keyIsPressed === true) {
 			if (keyCode === 32 && keyDelay > 20) {
+				
+				tutorialScreen3 = false;
+				tutorialScreen4 = true;
+
+				tutText3.remove();
+
+				tutText4 = createElement('p', 'The player with most points wins!');
+				tutText4.addClass('tut-text');
+
+				
+			}
+			keyDelay = 0;
+		}
+		keyDelay++;
+	}
+
+	if (tutorialScreen4) {
+		if (keyIsPressed === true) {
+			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen3 = false;
 				enterNameScreen = true;
+
 				tutContainer.remove();
+				tutText4.remove();
 				
-				// Hier Elemente, die nur einmal im DOM erstellt und entfernt werden sollen
 				nameInput = createInput();
 				nameInput.id('name-input');
 				startGameButton = createButton("Start Game");
@@ -152,10 +177,6 @@ function draw() {
 			}
 			keyDelay = 0;
 		}
-		background(100,4,13);
-		fill('white');
-		textSize(30);
-		text("tutpage3", 100, 100)
 		keyDelay++;
 	}
 
@@ -180,8 +201,8 @@ function draw() {
 
 	}
 	if (gamesScreen) {
-		cursor('ew-resize');
-		background(100,4,13);
+		cursor('none');
+		background(100,4,13,0.2);
 		for (let ball of ballArray) {
 			ball.show();
 			ball.update();
@@ -191,9 +212,10 @@ function draw() {
 			}
 
 			// Paddle Ball Trigger
-			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 20)) {
-				ball.ySpeed += 0.5;
+			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 30)) {
+				
 				if (ball.ySpeed > 0) {
+					ball.ySpeed += 0.5;
 					if (ball.color === 'red') {
 						playerObject.score -= 3;
 					} else if (ball.color === 'green') {
@@ -201,9 +223,11 @@ function draw() {
 					} else if (ball.color === "white") {
 						playerObject.score += 1;
 					} else {
-						playerObject.score -= 20;
+						playerObject.score = 0;
 					}
 					socket.emit("updateScore", playerObject);
+				} else {
+					ball.ySpeed -= 0.5;
 				}
 				ball.ySpeed *= -1;
 				// Dynamischer Bounce abhängig von wo der Paddle getroffen wurde
@@ -235,12 +259,18 @@ function draw() {
 		// Das Paddle
 		fill(playerObject.color , 40, 100);
   		noStroke();
-  		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);	
+  		rect(mouseX, paddleYPos + 5, paddleWidth, 20, 25, 25, 4, 4);
+		fill('#9B9C9B');
+		rect(mouseX, paddleYPos + 12, paddleWidth, 6, 0, 0, 4, 4);
+		fill(playerObject.color , 40, 70);
+		rect(mouseX,mouseY, 30,6);
+		triangle(mouseX-20, mouseY, mouseX-10, mouseY-10, mouseX-10, mouseY+10);
+		triangle(mouseX+20, mouseY, mouseX+10, mouseY-10, mouseX+10, mouseY+10);
 	}
 }
 
 function addBall(ySpeed, ballType, color) {
-	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50, 0, ySpeed, 20, this.ballId, ballType, color));
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50,(Math.random()*2)-1, (Math.random()*2)+3, 20, this.ballId, ballType, color));
 }
 
 // Function wird aufgerufen wenn Windowgrösse geändert wird
