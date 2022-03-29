@@ -284,6 +284,22 @@ margin-top: 2px;
   }
 }
 
+/* animation grüner Ball */
+.tut-ball-anim1 {
+ animation: tut-ball1 ;
+}
+
+
+
+@keyframes .tut-ball-anim1 {
+  from {
+    left: calc(50% + 100px);
+  }
+  to {
+    left: calc(50% - 100px);
+  }
+}
+
 
 /* Game Screen */
 .users {
