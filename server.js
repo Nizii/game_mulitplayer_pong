@@ -17,6 +17,12 @@ server.listen(process.env.PORT||3000, () => {
   console.log('Link: http://localhost:3000');
 });
 
+/*
+  ################################################################################################################
+  Io.on
+  ################################################################################################################
+*/
+
 // Handled den Timer
 io.on('connection', (socket) => {
   timerIsRunning = false;
@@ -34,7 +40,6 @@ io.on('connection', (socket) => {
 });
 
 io.on('connection', (socket) => {
-  //socket.on('ballData', (userId, ballId, x, xSpeed, ySpeed, ballType, color) => {  
   socket.on('ballData', (userId, ball) => {
       ball.ySpeed *= -1;
       let randomUserId = playerArray[getRandomInt(playerArray.length)].id;
@@ -78,37 +83,11 @@ io.on('connection', (socket) => {
   });
 });
 
-function configTimer() {
-  clearInterval(timer);
-  timer = setInterval(function() {
-    remain = remain - 1;
-    if (timerIsRunning) {
-      updateTimerDisplay();
-      addBallsToTheGame();
-      if (remain < 1) {
-        clearInterval(timer);
-        startGameOverScreen();
-      }
-    }}, 1200);
-  }
-
-
-// Reorganisiert das Array, löscht Lücken
-function reorgArray(inputArray) {
-  let tempArray = [];
-  let y = 0;
-  for(let x = 0; x < inputArray.length; x++) {
-      if (inputArray[x] !== undefined) {
-        tempArray[y] = inputArray[x];
-        y++;
-      }
-  }
-  return tempArray;
-}
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+/*
+  ################################################################################################################
+  io.emit
+  ################################################################################################################
+*/
 
 function resetScore() {
   for(let i = 0; i < playerArray.length; i++) {
@@ -135,4 +114,41 @@ function updateLobbyData() {
 
 function setUserId(socket) {
   io.emit('user', socket.id);
+}
+
+/*
+  ################################################################################################################
+  Functions
+  ################################################################################################################
+*/
+
+function configTimer() {
+  clearInterval(timer);
+  timer = setInterval(function() {
+    remain = remain - 1;
+    if (timerIsRunning) {
+      updateTimerDisplay();
+      addBallsToTheGame();
+      if (remain < 1) {
+        clearInterval(timer);
+        startGameOverScreen();
+      }
+    }}, 1200);
+  }
+
+// Reorganisiert das Array, löscht Lücken
+function reorgArray(inputArray) {
+  let tempArray = [];
+  let y = 0;
+  for(let x = 0; x < inputArray.length; x++) {
+      if (inputArray[x] !== undefined) {
+        tempArray[y] = inputArray[x];
+        y++;
+      }
+  }
+  return tempArray;
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
 }

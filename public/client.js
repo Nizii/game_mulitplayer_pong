@@ -215,7 +215,6 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
-						//socket.emit("ballData", id, ball.ballId, ball.x, ball.xSpeed, ball.ySpeed, ball.ballType, ball.color);
 						socket.emit("ballData", id, ball);
 						ballArray.splice(x, 1); 
 					}
