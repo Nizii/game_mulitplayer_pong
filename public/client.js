@@ -1,6 +1,6 @@
 var socket = io();
 var canvas;
-var id;
+var userId;
 var keyDelay = 0;
 var paddleWidth = 80;
 var paddleYPos = 600;
@@ -60,7 +60,7 @@ function setup() {
 		startGameButton = createButton("Start Game");
 		startGameButton.id('start-game-button');
 		startGameButton.mouseClicked(function() {
-			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
+			playerObject = new Player(nameInput.value(), userId, Math.floor(Math.random() * 360), 0);
 			socket.emit("lobby", playerObject);
 			addBall(3, 1, getRandomColor());
 			socket.emit("timer");
@@ -239,7 +239,7 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
-						socket.emit("ballData", id, ball);
+						socket.emit("ballData", userId, ball);
 						ballArray.splice(x, 1); 
 					}
 				}	
@@ -280,7 +280,7 @@ function windowResized() {
 
 // ID wird einmalig zugeteilt
 socket.once('user', function(incomeId) {
-	id = incomeId;
+	userId = incomeId;
 });
 
 socket.on("lobby", function(playerObjectArray) {
