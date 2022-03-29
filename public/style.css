@@ -286,12 +286,10 @@ margin-top: 2px;
 
 /* animation grüner Ball */
 .tut-ball-anim1 {
- animation: tut-ball1 ;
+ animation: tut-ball1 3s ease-in-out infinite alternate-reverse; ;
 }
 
-
-
-@keyframes .tut-ball-anim1 {
+@keyframes tut-ball-anim1 {
   0% {
     transform: translatex(0px) translatey(0px)
   }
