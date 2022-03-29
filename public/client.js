@@ -186,7 +186,7 @@ function draw() {
 
 		
 		startGameButton.mouseClicked(function() {
-			playerObject = new Player(nameInput.value(), id, Math.floor(Math.random() * 360), 0);
+			playerObject = new Player(nameInput.value(), userId, Math.floor(Math.random() * 360), 0);
 			socket.emit("lobby", playerObject);
 			addBall(3, 1, getRandomColor());
 			socket.emit("timer");
