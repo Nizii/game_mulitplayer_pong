@@ -29,7 +29,7 @@ function setup() {
 	gameOverScreen = false;
 
 
-
+//hello
 	// Elemente für den Start Screen
 	startButton = createButton("START");
 	startButton.id('start-button');
