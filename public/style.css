@@ -10,6 +10,8 @@
   --darkbg: #212220;
   --green: #769355;
   --darkpink: #C792D9;
+  --red: #c94c45;
+  --black: #000;
 }
 
 * {
@@ -25,12 +27,21 @@ body {
 }
 
 main {
-  display: block;
   position: absolute;
+  display: block;
   z-index: -1;
 }
 
-/* Start Screen */
+canvas {
+  box-shadow: 0 10px #212320bf, 0 20px #212320b3, 0 30px #21232096, 0 40px #21232070, 0 50px #2123203d, 0 60px #21232042;
+}
+
+/*
+  ################################################################################################################
+  Start Screen 
+  ################################################################################################################
+*/
+
 #start-button {
   font-family: 'Saira';
   font-style:italic;
@@ -151,8 +162,12 @@ margin-top: 2px;
   text-align: center;
 }
 
+/*
+  ################################################################################################################
+  Enter Name Screen
+  ################################################################################################################
+*/
 
-/* Enter Name Screen */
 .enter-name-text {
   position: absolute;
   top: 240px;
@@ -180,6 +195,7 @@ margin-top: 2px;
 
 #name-input:focus {
   outline: solid 1px var(--green);
+  outline-offset: 2px;
 }
 
 #start-game-button {
@@ -197,9 +213,29 @@ margin-top: 2px;
   background-color: var(--lightgray);
   text-align: center;
   border-radius: 2rem;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   user-select: none;
   cursor: pointer;
+}
+
+#start-game-button::before {
+  content: " ";
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 12rem;
+  height: 4rem;
+  border-radius: 2rem;
+  outline: solid 1px var(--lightgray);
+  outline-offset: -3px;
+  z-index: -1;
+  transition: outline-offset ease-out 0.3s;
+
+}
+
+#start-game-button:hover::before {
+  outline-offset: 6px;
 }
 
 #start-game-button:hover {
@@ -207,13 +243,18 @@ margin-top: 2px;
   color: white;
 }
 
-/* Tutorial Screen */
+/*
+  ################################################################################################################
+  Tutorial Screens
+  ################################################################################################################
+*/
+
 .tut-text {
   position: absolute;
   top: 140px;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 480px;
+  width: 490px;
   color: var(--lightgray);
   font-family: 'Wallpoet';
   font-size: 2rem;
@@ -231,6 +272,9 @@ margin-top: 2px;
   border-radius: 20px;
 }
 
+.tut-press-space {
+  top: 580px;
+}
 
 .tut-paddle {
   height: 20px;
@@ -238,8 +282,7 @@ margin-top: 2px;
   border-radius:10px 10px 5px 5px;
   background-color:var(--lightgray);
   position: absolute;
-  
-  /* Positioning for animation*/
+
   top: 500px;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -252,32 +295,9 @@ margin-top: 2px;
   border-radius: 50%;
   background-color: var(--lightgray);
 
-  /* Positioning for animation*/
   top: 500px;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.tut-ball-gray {
-  position: absolute;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background-color: var(--lightgray);
-}
-.tut-ball-green {
-  position: absolute;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background-color: var(--green);
-}
-.tut-ball-red {
-  position: absolute;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  background-color: var(--darkpink);
 }
 
 .tut-paddle-anim1 {
@@ -293,24 +313,22 @@ margin-top: 2px;
   }
 }
 
-/* animation grüner Ball */
-
 .tut-ball-anim1 {
- animation: tut-ball1 2s linear infinite alternate-reverse; ;
+ animation: tut-ball1 2s linear infinite;
 }
 
 @keyframes tut-ball1 {
   0% {
-    left:calc(50% + 100px); 
+    left:calc(50% - 100px); 
     top:300px;
     opacity: 0;
   }
 
-25% {
+  25% {
     opacity: 1;
   }
  
-    50% {
+  50% {
     left:50%; 
     top:480px;
   }
@@ -318,19 +336,77 @@ margin-top: 2px;
   75% {
     opacity:1;
   }
-  
-  
+   
   100% {
-    left:calc(50% - 100px ); 
+    left:calc(50% + 100px ); 
     top:300px;
     opacity: 0;
   }
-
 }
 
+.tut-ball-gray {
+  background-color: var(--lightgray); 
+}
+.tut-ball-green {
+  background-color: var(--green);
+}
+.tut-ball-red {
+  background-color: var(--red);
+}
+.tut-ball-black {
+  width: 12px;
+  height: 12px;
+  outline: solid 1px var(--black);
+  outline-offset: 4px;
+  background-color: #58221f;
+}
 
+.tut-ball-pos {
+  left: calc(50% - 50px);
+}
+.tut-ball-pos1 {
+  top: 305px;
+}
+.tut-ball-pos2 {
+  top: 355px;
+}
+.tut-ball-pos3 {
+top: 405px;
+}
+.tut-ball-pos4 {
+  top: 455px;
+}
 
-/* Game Screen */
+.score-text {
+  position: absolute;
+  color: var(--lightgray);
+  font-family: 'Saira';
+  font-size: 1rem;
+  transform: translateY(-50%);
+}
+
+.score-text-pos {
+  left: 50%;
+}
+.score-text-pos1 {
+  top: 305px;
+}
+.score-text-pos2 {
+  top: 355px;
+}
+.score-text-pos3 {
+  top: 405px;
+}
+.score-text-pos4 {
+  top: 455px;
+}
+
+/*
+  ################################################################################################################
+  Game Screen
+  ################################################################################################################
+*/
+
 .users {
   position: relative;
   left: 5%;
@@ -345,4 +421,24 @@ margin-top: 2px;
   font-size: 3rem;
   color: var(--white);
   opacity: 0.25;
+}
+
+/*
+  ################################################################################################################
+  Game Over Screen
+  ################################################################################################################
+*/
+/* Insert code here */
+
+
+/*
+  ################################################################################################################
+  Responsive
+  ################################################################################################################
+*/
+
+@media screen and (max-width: 600px) {
+  .title {
+    font-size: 2.5rem;
+  }
 }

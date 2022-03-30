@@ -11,17 +11,26 @@ class Ball {
     }
 
     show() {
-        //stroke('#000');
+        noStroke()
         if (this.color === 'red') {
             fill('#C94B45');
+            circle(this.x, this.y, this.size);
         } else if (this.color === 'green') {
            fill('#769355');
+           circle(this.x, this.y, this.size);
         } else if (this.color === "white") {
             fill('#fff');
+            circle(this.x, this.y, this.size);
         } else {
-            fill('#000');
+            //fill('#303030')
+            stroke('#000');
+            strokeWeight(1);
+            noFill()
+            circle(this.x, this.y, this.size-2);
+            noStroke()
+            fill('#58221f');
+            circle(this.x, this.y, this.size-10);
         }
-        circle(this.x, this.y, this.size);
     }
 
     update() {
