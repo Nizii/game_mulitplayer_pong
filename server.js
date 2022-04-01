@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 var playerArray = [];
 var playerArrayIndex = 0;
-var startTime = 4;
+var startTime = 120;
 var remain = startTime;
 var timer;
 
