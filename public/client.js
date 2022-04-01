@@ -370,8 +370,8 @@ socket.on("resetBalls", function(){
 	ballArray = [];
 }) 
 
-// Das ist die hässlichste Function/Socket die es gibt
-// Sie ist für das GameOver handling zuständig...
+// Und der Titel an die "Hässlichste Function/Socket geht an"...
+// Sie ist für das GameOver handling zuständig
 socket.once("gameOver", function(array) {
 	gameOver = true;
 	gamesScreen = false;
@@ -380,7 +380,6 @@ socket.once("gameOver", function(array) {
 	array.sort((a, b) => {
     	return b.score - a.score;
 	});
-	playerArray = array;
 	let resultTitle = createElement('h5', "Ranking");
 	resultTitle.addClass("resultTitle");
 	resultTitle.style('color', "White");
