@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 var playerArray = [];
 var playerArrayIndex = 0;
-var startTime = 120;
+var startTime = 4;
 var remain = startTime;
 var timer;
 
@@ -83,7 +83,13 @@ io.on('connection', (socket) => {
     updateLobbyData();
   });
 });
-
+/*
+io.on('connection', (socket) => {
+  socket.on('deleteLobby', () => {
+    io.emit("deleteLobby");
+  });
+});
+*/
 /*
   ################################################################################################################
   io.emit's

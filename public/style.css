@@ -412,7 +412,22 @@ top: 405px;
   left: 5%;
   color: var(--white);
   opacity: 0.25;
+}
 
+.resultElement {
+  position: relative;
+  left: 20%;
+  color: var(--white);
+  opacity: 1;
+  font-size: xx-large;
+}
+
+.resultTitle {
+  position: relative;
+  left: 20%;
+  color: var(--white);
+  opacity: 1;
+  font-size: 70px;
 }
 
 .timer {

@@ -12,6 +12,7 @@ var h = 700;
 var ballArray = [];
 var playerArray = []
 var playerObject;
+var gameOver;
 // Gamestates
 var startScreen,gamesScreen,gameOverScreen,tutorialScreen1,tutorialScreen2,tutorialScreen3,tutorialScreen4,enterNameScreen;
 
@@ -30,6 +31,7 @@ function setup() {
 	enterNameScreen = false;
 	gamesScreen = false;
 	gameOverScreen = false;
+	gameOver = false;
 
 	// Elemente für den Start Screen
 	startButton = createButton("START");
@@ -306,10 +308,6 @@ function draw() {
 			}
 		}
 
-		if (gameOverScreen) {
-			background('#fff');
-		}
-
 		// Das Paddle
 		fill(playerObject.color , 40, 100);
   		noStroke();
@@ -338,15 +336,19 @@ socket.once('user', function(incomeId) {
 });
 
 socket.on("lobby", function(playerObjectArray) {
-	console.log(playerObjectArray);
-	$(".users").remove();
-	for(let x = 0; x < playerObjectArray.length; x++) {
-		let playerInfoString = " " + Object.values(playerObjectArray[x])[0] + " " + Object.values(playerObjectArray[x])[3];
-		let user = createElement('h5', playerInfoString);
-		user.addClass("users");
-		let userColor = color(Object.values(playerObjectArray[x])[2], 40, 100);
-		user.style('color', userColor);
+	if(!gameOver) {
+		$(".users").remove();
+		for(let x = 0; x < playerObjectArray.length; x++) {
+			let playerInfoString = " " + Object.values(playerObjectArray[x])[0] + " " + Object.values(playerObjectArray[x])[3];
+			let user = createElement('h5', playerInfoString);
+			user.addClass("users");
+			 userColor = color(Object.values(playerObjectArray[x])[2], 40, 100);
+			user.style('color', userColor);
+		}
 	}
+	socket.on("deleteLobby", function(){
+		$(".users").remove();
+	});
 });
 
 socket.on("timer", function(time) {
@@ -368,13 +370,32 @@ socket.on("resetBalls", function(){
 	ballArray = [];
 }) 
 
+// Das ist die hässlichste Function/Socket die es gibt
+// Sie ist für das GameOver handling zuständig...
 socket.once("gameOver", function(array) {
+	gameOver = true;
 	gamesScreen = false;
-	gameOverScreen = true;
+	restartButton = createButton("Restart");
+	restartButton.id('start-button');
 	array.sort((a, b) => {
     	return b.score - a.score;
 	});
 	playerArray = array;
+	let resultTitle = createElement('h5', "Ranking");
+	resultTitle.addClass("resultTitle");
+	resultTitle.style('color', "White");
+	$(".resultElement").remove();
+	for(let x = 0; x < array.length; x++) {
+		let playerInfoString = " " + Object.values(array[x])[0] + " " + Object.values(array[x])[3];
+		let user = createElement('h5', playerInfoString);
+		user.addClass("resultElement");
+		let userColor = color(Object.values(array[x])[2], 40, 100);
+		user.style('color', userColor);
+	}
+	restartButton.mouseClicked(function() {
+		restartButton.remove();
+		location.reload();
+	});
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
