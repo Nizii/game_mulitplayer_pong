@@ -6,18 +6,19 @@ let tutCounter;
 let tutCounterText;
 var keyDelay = 0;
 var paddleWidth = 80;
-var paddleYPos = 600;
+var paddleYPos;
 var w = window.innerWidth;
-var h = 700;  
+var h = window.innerHeight;  
 var ballArray = [];
 var playerArray = []
 var playerObject;
 var gameOver;
+
 // Gamestates
 var startScreen,gamesScreen,gameOverScreen,tutorialScreen1,tutorialScreen2,tutorialScreen3,tutorialScreen4,enterNameScreen;
 
 function setup() {
-	canvas = createCanvas(windowWidth, h);
+	canvas = createCanvas(windowWidth, windowHeight);
 	rectMode(CENTER);
 	colorMode(HSB);
 	noStroke();
@@ -33,7 +34,12 @@ function setup() {
 	gameOverScreen = false;
 	gameOver = false;
 
-	// Elemente für den Start Screen
+/*
+  ################################################################################################################
+  Start Screen
+  ################################################################################################################
+*/
+
 	startButton = createButton("START");
 	startButton.id('start-button');
 	titleText1 = createElement('h1', 'SUPERPOOONG');
@@ -48,28 +54,33 @@ function setup() {
 	startButton.mouseClicked(function() {
 		startScreen = false;
 		enterNameScreen = true;
-		enterNameText = createP('Enter your Name');
-		enterNameText.addClass('enter-name-text');
-		nameInput = createInput();
-		nameInput.id('name-input');
-
-
-
+		
 		startButton.remove();
 		pressSpace.remove();
 		titleText1.remove();
 		titleText2.remove();
 		titleText3.remove();
-
+		
+		nameInput = createInput();
+		nameInput.id('name-input');
+		enterNameText = createP('Enter your Name');
+		enterNameText.addClass('enter-name-text');
 		startGameButton = createButton("Start Game");
 		startGameButton.id('start-game-button');
 	});
 }
 
 function draw() {
+	w = windowWidth;
+	h = windowHeight;
+	background(100,4,13);
+/*
+  ################################################################################################################
+  Navigation
+  ################################################################################################################
+*/
 	
 	if (startScreen) {
-		background(100,4,13);
 		if (keyIsPressed === true) {
 			if (keyCode === 32) {
 				startScreen = false;
@@ -77,16 +88,12 @@ function draw() {
 
 				tutText1 = createP('Move the paddle to deflect the ball');
 				tutText1.addClass('tut-text');
-
 				tutContainer = createDiv();
 				tutContainer.addClass('tut-container');
-
 				tutBall = createDiv();
 				tutBall.addClass('tut-ball tut-ball-green tut-ball-anim1');
-
 				tutPaddle = createDiv();
 				tutPaddle.addClass('tut-paddle tut-paddle-anim1');
-
 				tutPressSpace = createP('Press [Space] to continue');
 				tutPressSpace.addClass('press-space tut-press-space');
 
@@ -112,22 +119,18 @@ function draw() {
 
 				tutText2 = createP('Watch out for the colors !');
 				tutText2.addClass('tut-text');
-
-				tutBallText1 = createP('+10p')
+				tutBallText1 = createP('+10p');
 				tutBallText1.addClass('score-text score-text-pos score-text-pos1')
 				tutBall1 = createDiv();
 				tutBall1.addClass('tut-ball tut-ball-gray tut-ball-pos tut-ball-pos1');
-				
 				tutBallText2 = createElement('p', '+30p');
 				tutBallText2.addClass('score-text score-text-pos score-text-pos2');
 				tutBall2 = createDiv();
 				tutBall2.addClass('tut-ball tut-ball-green tut-ball-pos tut-ball-pos2');
-				
 				tutBallText3 = createElement('p', '-30p');
 				tutBallText3.addClass('score-text score-text-pos score-text-pos3');
 				tutBall3 = createDiv();
 				tutBall3.addClass('tut-ball tut-ball-red tut-ball-pos tut-ball-pos3');
-
 				tutBallText4 = createP('score reset');
 				tutBallText4.addClass('score-text score-text-pos score-text-pos4');
 				tutBall4 = createDiv();
@@ -141,7 +144,6 @@ function draw() {
 	if (tutorialScreen2) {
 		if (keyIsPressed === true) {
 			if (keyCode === 32 && keyDelay > 20) {
-				
 				tutorialScreen2 = false;
 				tutorialScreen3 = true;
 
@@ -166,10 +168,8 @@ function draw() {
 	}
 
 	if (tutorialScreen3) {
-		background(100,4,13);
 		if (keyIsPressed === true) {
 			if (keyCode === 32 && keyDelay > 20) {
-				
 				tutorialScreen3 = false;
 				tutorialScreen4 = true;
 
@@ -177,7 +177,6 @@ function draw() {
 
 				tutText4 = createP('The player with most points wins!');
 				tutText4.addClass('tut-text');
-
 				tutking = createDiv();
 				tutking.addClass('tutbild')
 			}
@@ -192,19 +191,18 @@ function draw() {
 		textFont('Saira');
 
 		if (tutCountdown <= 0) {
-			counterText = text("What are you still doing here?", windowWidth/2,400);
+			counterText = text("What are you still doing here?", windowWidth/2,windowHeight/2+50);
 			tutCountdown = 0;
 			
 		} else {
 			textSize(48);
-			counterText = text(tutCountdown + "s", windowWidth/2,400);
+			counterText = text(tutCountdown + "s", windowWidth/2,windowHeight/2+50);
 		}
 
 		keyDelay++;
 	}
 
 	if (tutorialScreen4) {
-		background(100,4,13);
 		if (keyIsPressed === true) {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen4 = false;
@@ -214,7 +212,6 @@ function draw() {
 				tutText4.remove();
 				tutPressSpace.remove();
 
-				
 				nameInput = createInput();
 				nameInput.id('name-input');
 				startGameButton = createButton("Start Game");
@@ -225,16 +222,14 @@ function draw() {
 			keyDelay = 0;
 		}
 		keyDelay++;
-
+		// Tut Crown Icon
 		fill('#DDE394');
-		triangle(windowWidth/2-30,420,windowWidth/2+30,420,windowWidth/2,350);
-		triangle(windowWidth/2-30,420,windowWidth/2+30,420,windowWidth/2+50,370);
-		triangle(windowWidth/2-30,420,windowWidth/2+30,420,windowWidth/2-50,370)
-
+		triangle(windowWidth/2-30,windowHeight/2+70,windowWidth/2+30,windowHeight/2+70,windowWidth/2,windowHeight/2);
+		triangle(windowWidth/2-30,windowHeight/2+70,windowWidth/2+30,windowHeight/2+70,windowWidth/2+50,windowHeight/2+20);
+		triangle(windowWidth/2-30,windowHeight/2+70,windowWidth/2+30,windowHeight/2+70,windowWidth/2-50,windowHeight/2+20);
 	}
 
 	if (enterNameScreen) {
-		background(100,4,13);
 		keyDelay = 0;
 
 		startGameButton.mouseClicked(function() {
@@ -253,12 +248,21 @@ function draw() {
 
 
 	}
+
+/*
+  ################################################################################################################
+  Game
+  ################################################################################################################
+*/
+
 	if (gamesScreen) {
 		cursor('none');
-		background(100,4,13);
+		paddleYPos = h - 100;
+
 		for (let ball of ballArray) {
 			ball.show();
 			ball.update();
+			
 			// Seitentrigger
 			if (ball.x < 10 || ball.x > w - 10) {
 				ball.xSpeed *= -1;
@@ -268,7 +272,7 @@ function draw() {
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 30)) {
 				
 				if (ball.ySpeed > 0) {
-					if (ball.ySpeed <= 10) { // Max Speed
+					if (ball.ySpeed <= 10) { // Max ySpeed
 						ball.ySpeed += 0.5;
 					}
 					if (ball.color === 'red') {
@@ -282,7 +286,7 @@ function draw() {
 					}
 					socket.emit("updateScore", playerObject);
 				} else {
-					if (ball.ySpeed >= -10) { // Max Speed
+					if (ball.ySpeed >= -10) { // Max ySpeed
 						ball.ySpeed -= 0.5;
 					}
 				}
@@ -321,14 +325,11 @@ function draw() {
 	}
 }
 
-function addBall(ySpeed, ballType, color) {
-	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50,(Math.random()*2)-1, Math.floor((Math.random())+3), 20, this.ballId, ballType, color));
-}
-
-// Function wird aufgerufen wenn Windowgrösse geändert wird
-function windowResized() {
-	resizeCanvas(windowWidth, h);
-}
+/*
+  ################################################################################################################
+  Sockets
+  ################################################################################################################
+*/
 
 // ID wird einmalig zugeteilt
 socket.once('user', function(incomeId) {
@@ -339,10 +340,9 @@ socket.on("lobby", function(playerObjectArray) {
 	if(!gameOver) {
 		$(".users").remove();
 		for(let x = 0; x < playerObjectArray.length; x++) {
-			let playerInfoString = " " + Object.values(playerObjectArray[x])[0] + " " + Object.values(playerObjectArray[x])[3];
-			let user = createElement('h5', playerInfoString);
+			userColor = color(Object.values(playerObjectArray[x])[2], 40, 100);
+			let user = createP("<span style='color:#fff; font-weight: 600'>" + Object.values(playerObjectArray[x])[0] + "</span>&nbsp;&nbsp;&nbsp;&nbsp;" + Object.values(playerObjectArray[x])[3]);
 			user.addClass("users");
-			 userColor = color(Object.values(playerObjectArray[x])[2], 40, 100);
 			user.style('color', userColor);
 		}
 	}
@@ -356,7 +356,6 @@ socket.on("timer", function(time) {
 	let timerString = time;
 	let remain = createElement('h5', timerString + 's');
 	remain.addClass( "timer" );
-	remain.position(windowWidth - 100, 0);
 });
 
 // Jede x. Sekunde wird ein Ball gedropt
@@ -375,32 +374,57 @@ socket.on("resetBalls", function(){
 socket.once("gameOver", function(array) {
 	gameOver = true;
 	gamesScreen = false;
+	cursor('default');
+	$(".users").remove();
+	$(".timer").remove();
 	restartButton = createButton("Restart");
 	restartButton.id('start-button');
+	restartButton.addClass('game-over-button')
+
 	array.sort((a, b) => {
     	return b.score - a.score;
 	});
 	let resultTitle = createElement('h5', "Ranking");
 	resultTitle.addClass("resultTitle");
-	resultTitle.style('color', "White");
 	$(".resultElement").remove();
+
+
 	for(let x = 0; x < array.length; x++) {
-		let playerInfoString = " " + Object.values(array[x])[0] + " " + Object.values(array[x])[3];
-		let user = createElement('h5', playerInfoString);
+		let playerPosition = x+1;
+		let user = createP("<span style='color:var(--lightgray); font-weight: 600'>" + playerPosition + ". " + Object.values(array[x])[0] + "</span>&nbsp;&nbsp;&nbsp;&nbsp;" + Object.values(array[x])[3]);
 		user.addClass("resultElement");
 		let userColor = color(Object.values(array[x])[2], 40, 100);
 		user.style('color', userColor);
 	}
+
+
+/* 	for(let x = 0; x = array.length; x++) {
+		let playerPosition = x+1;
+		let playerInfoName = Object.values(array[x])[0];
+		let playerInfoScore = Object.values(array[x])[3];
+		
+		let user = createP("<span style='color:#fff;'>" + playerPosition + ".&nbsp;" + playerInfoName + "</span>&nbsp;&nbsp;&nbsp;&nbsp;" + playerInfoScore);
+		user.addClass("resultElement");
+		let userColor = color(Object.values(array[x])[2], 40, 100);
+		user.style('color', userColor);
+	}*/
+
 	restartButton.mouseClicked(function() {
 		restartButton.remove();
 		location.reload();
-	});
+	}); 
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 socket.on("ballData", function(ball) {
 	ballArray.push(new Ball(ball.x, 10 , ball.xSpeed, ball.ySpeed, 20, ball.ballId, ball.ballType, ball.color));
 });
+	
+/*
+  ################################################################################################################
+  Functions
+  ################################################################################################################
+*/
 
 // Reservefunktion falls noch Zeit vorhanden Handy
 function checkMobileInput() {
@@ -412,7 +436,16 @@ function checkMobileInput() {
 		console.log("Not Supportet Device");
 	}
 }
-	
+
+function addBall(ySpeed, ballType, color) {
+	ballArray.push(new Ball(Math.floor(Math.random() * w/2) + w/4, 50,(Math.random()*2)-1, Math.floor((Math.random())+3), 20, this.ballId, ballType, color));
+}
+
+// Function wird aufgerufen wenn Windowgrösse geändert wird
+function windowResized() {
+	resizeCanvas(windowWidth, windowHeight);
+}
+
 // Generiert einen Random String, kann für IDs verwendet werden
 function generateRandomString() {
 	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
