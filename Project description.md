@@ -27,11 +27,9 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 ### Design
 * Figma
 
-# The Start
-![alt text](https://github.com/Nizii/pong/blob/main/imgs/start.PNG)
-# Enter your Name
-![alt text](https://github.com/Nizii/pong/blob/main/imgs/enterName.PNG)
 # The Game
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/start.PNG)
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/enterName.PNG)
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/game.PNG)
 # Rules
 * The player with the highest score wins.
@@ -48,8 +46,14 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 * Red   -3
 * Black clears your score to zero
 
-# The Resultscreen
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/rank.PNG)
 To get to the start screen you have to wait 8 seconds or refresh the browser.
 
+# Workflow
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/miro.PNG)
+We worked agile with a Kanban framework on our miroboard.
+
+# Ideation Part
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/mirobrainstorm.PNG)
+In the ideation part of our project, we wrote down all the ideas we got from the brainstorming on the miro board.
 # Architecture
