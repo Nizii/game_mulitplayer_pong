@@ -43,7 +43,6 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 
 # The Game
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/start.PNG)
-![alt text](https://github.com/Nizii/pong/blob/main/imgs/enterName.PNG)
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/game.PNG)
 # Rules
 * The player with the highest score wins.
