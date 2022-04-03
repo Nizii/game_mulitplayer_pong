@@ -6,9 +6,12 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 var playerArray = [];
 var playerArrayIndex = 0;
-var startTime = 120;
-var remain = startTime;
-var timer;
+var showResultTimer;
+var mainGameTimer;
+var gameDuration = 4;
+var showResultDuration = 8;
+var remain = gameDuration;
+
 
 app.use(express.static('public'));
 
@@ -28,7 +31,7 @@ io.on('connection', (socket) => {
   timerIsRunning = false;
   socket.once("timer", () => {
     timerIsRunning = true;
-    configTimer();
+    setMainGameTimer();
   });
 });
 
@@ -37,7 +40,9 @@ io.on('connection', (socket) => {
   setUserIdForNewJoinedUser(socket);
   resetScore();
   resetBalls();
-  remain = startTime;
+  remain = gameDuration;
+  clearInterval(showResultTimer);
+  showResultDuration = 8;
 });
 
 io.on('connection', (socket) => {
@@ -83,13 +88,13 @@ io.on('connection', (socket) => {
     updateLobbyData();
   });
 });
-/*
+
 io.on('connection', (socket) => {
-  socket.on('deleteLobby', () => {
-    io.emit("deleteLobby");
+  socket.on('gameOverTimer', () => {
+    setGameOverTimer();
   });
 });
-*/
+
 /*
   ################################################################################################################
   io.emit's
@@ -127,24 +132,36 @@ function setUserIdForNewJoinedUser(socket) {
   io.emit('user', socket.id);
 }
 
+function updateGameOverTimerDisplay() {
+  io.emit("gameOverTimer", showResultDuration);
+}
+
 /*
   ################################################################################################################
   Functions
   ################################################################################################################
 */
 
-function configTimer() {
-  clearInterval(timer);
-  timer = setInterval(function() {
+function setMainGameTimer() {
+  clearInterval(mainGameTimer);
+  mainGameTimer = setInterval(function() {
     remain = remain - 1;
     if (timerIsRunning) {
       updateTimerDisplay();
       addBallsToTheGame();
       if (remain < 1) {
-        clearInterval(timer);
+        clearInterval(mainGameTimer);
         startGameOverScreen();
       }
     }}, 1200);
+  }
+
+function setGameOverTimer() {
+  clearInterval(showResultTimer);
+  showResultTimer = setInterval(function() {
+    showResultDuration -= 1;
+    updateGameOverTimerDisplay();
+    }, 1200);
   }
 
 // Reorganisiert das Array, löscht Lücken

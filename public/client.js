@@ -381,9 +381,6 @@ socket.once("gameOver", function(array) {
 	cursor('default');
 	$(".users").remove();
 	$(".timer").remove();
-	restartButton = createButton("Restart");
-	restartButton.id('start-button');
-	restartButton.addClass('game-over-button')
 
 	array.sort((a, b) => {
     	return b.score - a.score;
@@ -413,10 +410,15 @@ socket.once("gameOver", function(array) {
 		user.style('color', userColor);
 	}*/
 
-	restartButton.mouseClicked(function() {
-		restartButton.remove();
-		location.reload();
-	}); 
+	socket.emit("gameOverTimer");
+	socket.on("gameOverTimer", function(remainTime) {
+		$(".t").remove();
+		let t = createElement('h5', "Back to Start in " + remainTime);
+		t.addClass("t");
+		if(remainTime < 1) {
+			location.reload();
+		}
+	});
 });
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
