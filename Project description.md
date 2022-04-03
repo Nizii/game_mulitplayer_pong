@@ -8,6 +8,13 @@ To play locally [node.js](https://nodejs.org/en/) needs to be installed on your 
 Start server by writing in the command line `node server.js`
 
 Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https://multiscreenapp.herokuapp.com/)
+
+# We are
+* Lavanya Ratnam------Digital Ideation mit Fokus Design--------->
+* Tino Freiburghaus---Digital Ideation mit Fokus Design--------->
+* Max Werner----------Digital Ideation mit Fokus Design--------->
+* Nizam Özdemir-------Digital Ideation mit Fokus Informatik----->
+
 # Technologies we used
 ### Serverside
 * Socket.IO
