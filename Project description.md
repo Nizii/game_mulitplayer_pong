@@ -13,6 +13,8 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/enterName.PNG)
 ## The Game
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/game.PNG)
+### Rules
+* The player with the highest score wins.
 * The goal is to hit the green or the white balls with the paddle to get points.
 * Avoid contact with the red or black balls. 
 * You can also hit the balls with the bottom of the paddle to speed up the balls. The balls will bounce off the ground.
