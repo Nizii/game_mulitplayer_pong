@@ -15,6 +15,7 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/game.PNG)
 ### Rules
 * The player with the highest score wins.
+* The duration of the game is 120 sec.
 * The goal is to hit the green or the white balls with the paddle to get points.
 * Avoid contact with the red or black balls. 
 * You can also hit the balls with the bottom of the paddle to speed up the balls. The balls will bounce off the ground.
@@ -22,10 +23,10 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 
 
 ### Score Overview
-* Green +3
-* White +1
-* Red   -3
-* Black clears your score to zero
+* <span style="color:green">*Green +3</span>
+* <span style="color:grey">*White +1</span>
+* <span style="color:red">*Red   -3</span>
+* <span style="color:black">*Black clears your score to zero</span>
 
 ## The Resultscreen
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/rank.PNG)
