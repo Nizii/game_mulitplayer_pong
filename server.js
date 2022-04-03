@@ -8,7 +8,7 @@ var playerArray = [];
 var playerArrayIndex = 0;
 var showResultTimer;
 var mainGameTimer;
-var gameDuration = 4;
+var gameDuration = 20;
 var showResultDuration = 8;
 var remain = gameDuration;
 
