@@ -8,5 +8,5 @@ Start server by writing in the command line `node server.js`
 
 Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https://multiscreenapp.herokuapp.com/)
 
-![alt text](/imgs/4.png)
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/4.png)
 ![alt text](/imgs/3.png)
