@@ -61,11 +61,3 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/rank.PNG)
 To get to the start screen you have to wait 8 seconds or refresh the browser.
-
-# Workflow
-![alt text](https://github.com/Nizii/pong/blob/main/imgs/miro.PNG)
-We worked agile with a Kanban framework on our miroboard.
-
-# Ideation Part
-![alt text](https://github.com/Nizii/pong/blob/main/imgs/mirobrainstorm.PNG)
-In the ideation part of our project, we wrote down all the ideas we got from the brainstorming on the miro board.
