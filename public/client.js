@@ -285,6 +285,8 @@ function draw() {
 			if (ball.y < 10) {
 				for (let x = 0; x < ballArray.length; x++) {
 					if (ball.ballId === ballArray[x].ballId) {
+						// X Pos in Prozent umrechnen für Übergang des Balls
+						ball.x = Math.round(((100 / window.innerWidth) * ball.x) * 10 ) / 10;
 						socket.emit("ballData", userId, ball);
 						ballArray.splice(x, 1); 
 					}
@@ -383,6 +385,7 @@ socket.once("gameOver", function(array) {
 		let t = createElement('h5', "Back to Start in " + remainTime);
 		t.addClass("t");
 		if(remainTime < 1) {
+			socket.emit("resetGameOverTimer");
 			location.reload();
 		}
 	});
@@ -390,6 +393,8 @@ socket.once("gameOver", function(array) {
 
 // Socket sendet ID von dem Spieler der gerade den Ball abgiebt
 socket.on("ballData", function(ball) {
+	// x Pos in Prozent wird zu x Pos in Pixel
+	ball.x = (window.innerWidth / 100) * ball.x
 	ballArray.push(new Ball(ball.x, 10 , ball.xSpeed, ball.ySpeed, 20, ball.ballId, ball.ballType, ball.color));
 });
 	

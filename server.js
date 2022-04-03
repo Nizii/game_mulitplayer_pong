@@ -41,8 +41,13 @@ io.on('connection', (socket) => {
   resetScore();
   resetBalls();
   remain = gameDuration;
-  clearInterval(showResultTimer);
-  showResultDuration = 8;
+});
+
+io.on('connection', (socket) => {
+  socket.on('resetGameOverTimer', () => {
+    clearInterval(showResultTimer);
+    showResultDuration = 8;
+  });
 });
 
 io.on('connection', (socket) => {
