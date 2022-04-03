@@ -380,12 +380,12 @@ socket.once("gameOver", function(array) {
 		user.style('color', userColor);
 	}
 	socket.emit("gameOverTimer");
-	socket.on("gameOverTimer", function(remainTime) {
+	socket.once("gameOverTimer", function(remainTime) {
 		$(".t").remove();
 		let t = createElement('h5', "Back to Start in " + remainTime);
 		t.addClass("t");
 		if(remainTime < 1) {
-			socket.emit("resetGameOverTimer");
+			//socket.emit("resetGameOverTimer");
 			location.reload();
 		}
 	});
@@ -404,7 +404,7 @@ socket.on("ballData", function(ball) {
   ################################################################################################################
 */
 
-// Reservefunktion falls noch Zeit vorhanden Handy
+// NICHT IN BETRIEB falls noch Zeit vorhanden Handy
 function checkMobileInput() {
 	if (window.DeviceOrientationEvent) {
 		window.addEventListener("deviceorientation", function(event) {
