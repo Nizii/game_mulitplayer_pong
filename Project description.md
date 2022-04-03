@@ -11,8 +11,8 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 
 # We are
 * Lavanya Ratnam------Digital Ideation mit Fokus Design--------->
-* Tino Freiburghaus---Digital Ideation mit Fokus Design--------->
-* Max Werner----------Digital Ideation mit Fokus Design--------->
+* Tino Freiburghaus----Digital Ideation mit Fokus Design--------->
+* Max Werner-----------Digital Ideation mit Fokus Design--------->
 * Nizam Özdemir-------Digital Ideation mit Fokus Informatik----->
 
 # Technologies we used
