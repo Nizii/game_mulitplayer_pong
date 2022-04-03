@@ -335,20 +335,24 @@ socket.once('user', function(incomeId) {
 	userId = incomeId;
 });
 
-socket.on("lobby", function(playerObjectArray) {
+socket.on("lobby", function(array) {
 	if(!gameOver) {
+		array.sort((a, b) => {
+			return b.score - a.score;
+		});
 		$(".users").remove();
-		for(let x = 0; x < playerObjectArray.length; x++) {
-			let playerInfoString = " " + Object.values(playerObjectArray[x])[0] + " " + Object.values(playerObjectArray[x])[3];
+		for(let x = 0; x < array.length; x++) {
+			let playerInfoString = " " + Object.values(array[x])[0] + " " + Object.values(array[x])[3];
 			let user = createElement('h5', playerInfoString);
 			user.addClass("users");
-			 userColor = color(Object.values(playerObjectArray[x])[2], 40, 100);
+			 userColor = color(Object.values(array[x])[2], 40, 100);
 			user.style('color', userColor);
 		}
-	}
-	socket.on("deleteLobby", function(){
+	} else {
+	//socket.on("deleteLobby", function(){
 		$(".users").remove();
-	});
+	//});
+	}
 });
 
 socket.on("timer", function(time) {
