@@ -22,6 +22,7 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 ### Collaboration
 * GitHub
 * Slack
+* Miro
 
 ### Design
 * Figma
