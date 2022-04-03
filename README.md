@@ -7,3 +7,5 @@ To play locally [node.js](https://nodejs.org/en/) needs to be installed on your 
 Start server by writing in the command line `node server.js`
 
 Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https://multiscreenapp.herokuapp.com/)
+
+![alt text](https://github.com/Nizii/pong/Pictures/1.PNG?raw=true)
