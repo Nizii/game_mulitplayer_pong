@@ -380,12 +380,12 @@ socket.once("gameOver", function(array) {
 		user.style('color', userColor);
 	}
 	socket.emit("gameOverTimer");
-	socket.once("gameOverTimer", function(remainTime) {
+	socket.on("gameOverTimer", function(remainTime) {
 		$(".t").remove();
 		let t = createElement('h5', "Back to Start in " + remainTime);
 		t.addClass("t");
 		if(remainTime < 1) {
-			//socket.emit("resetGameOverTimer");
+			socket.emit("resetGameOverTimer");
 			location.reload();
 		}
 	});
