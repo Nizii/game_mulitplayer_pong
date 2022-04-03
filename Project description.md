@@ -7,6 +7,11 @@ To play locally [node.js](https://nodejs.org/en/) needs to be installed on your 
 Start server by writing in the command line `node server.js`
 
 Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https://multiscreenapp.herokuapp.com/)
-
-![alt text](https://github.com/Nizii/pong/blob/main/imgs/4.PNG)
-![alt text](/pong/imgs/3.PNG)
+## The start
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/start.PNG)
+## Enter your name
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/enterName.PNG)
+## The game
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/game.PNG)
+## The Resultscreen
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/rank.PNG)
