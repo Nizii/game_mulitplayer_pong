@@ -145,7 +145,7 @@ function updateGameOverTimerDisplay() {
 function setMainGameTimer() {
   clearInterval(mainGameTimer);
   mainGameTimer = setInterval(function() {
-    remain = remain - 1;
+    remain -= 1;
     if (timerIsRunning) {
       updateTimerDisplay();
       addBallsToTheGame();
