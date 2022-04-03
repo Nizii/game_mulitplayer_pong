@@ -13,6 +13,7 @@ var ballArray = [];
 var playerArray = []
 var playerObject;
 var gameOver;
+var gameColorIndex = 0;
 
 // Gamestates
 var startScreen,gamesScreen,gameOverScreen,tutorialScreen1,tutorialScreen2,tutorialScreen3,tutorialScreen4,enterNameScreen;
@@ -112,11 +113,9 @@ function draw() {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen1 = false;
 				tutorialScreen2 = true;
-
 				tutText1.remove();
 				tutPaddle.remove();
 				tutBall.remove();
-
 				tutText2 = createP('Watch out for the colors !');
 				tutText2.addClass('tut-text');
 				tutBallText1 = createP('+10p');
@@ -146,7 +145,6 @@ function draw() {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen2 = false;
 				tutorialScreen3 = true;
-
 				tutText2.remove();
 				tutBallText1.remove();
 				tutBall1.remove();
@@ -156,10 +154,8 @@ function draw() {
 				tutBall3.remove();
 				tutBallText4.remove();
 				tutBall4.remove();
-				
 				tutText3 = createP('You have 120 seconds to collect points');
 				tutText3.addClass('tut-text');
-
 				tutCounter = 120;
 			}
 			keyDelay = 0;
@@ -172,9 +168,7 @@ function draw() {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen3 = false;
 				tutorialScreen4 = true;
-
 				tutText3.remove();
-
 				tutText4 = createP('The player with most points wins!');
 				tutText4.addClass('tut-text');
 				tutking = createDiv();
@@ -184,21 +178,16 @@ function draw() {
 		}
 		let time = int(millis() / 1200);
 		tutCountdown = tutCounter - time;
-
-		
 		textAlign(CENTER);
 		textSize(16);
 		textFont('Saira');
-
 		if (tutCountdown <= 0) {
 			counterText = text("What are you still doing here?", windowWidth/2,windowHeight/2+50);
-			tutCountdown = 0;
-			
+			tutCountdown = 0;	
 		} else {
 			textSize(48);
 			counterText = text(tutCountdown + "s", windowWidth/2,windowHeight/2+50);
 		}
-
 		keyDelay++;
 	}
 
@@ -231,7 +220,6 @@ function draw() {
 
 	if (enterNameScreen) {
 		keyDelay = 0;
-
 		startGameButton.mouseClicked(function() {
 			playerObject = new Player(nameInput.value(), userId, Math.floor(Math.random() * 12)*30, 0);
 			socket.emit("lobby", playerObject);
@@ -245,8 +233,6 @@ function draw() {
 			nameInput.remove();
 			startGameButton.remove();
 		});
-
-
 	}
 
 /*
@@ -258,7 +244,6 @@ function draw() {
 	if (gamesScreen) {
 		cursor('none');
 		paddleYPos = h - 100;
-
 		for (let ball of ballArray) {
 			ball.show();
 			ball.update();
@@ -349,9 +334,7 @@ socket.on("lobby", function(array) {
 			user.style('color', userColor);
 		}
 	} else {
-	//socket.on("deleteLobby", function(){
 		$(".users").remove();
-	//});
 	}
 });
 
@@ -381,15 +364,12 @@ socket.once("gameOver", function(array) {
 	cursor('default');
 	$(".users").remove();
 	$(".timer").remove();
-
 	array.sort((a, b) => {
     	return b.score - a.score;
 	});
 	let resultTitle = createElement('h5', "Ranking");
 	resultTitle.addClass("resultTitle");
 	$(".resultElement").remove();
-
-
 	for(let x = 0; x < array.length; x++) {
 		let playerPosition = x+1;
 		let user = createP("<span style='color:var(--lightgray); font-weight: 600'>" + playerPosition + ". " + Object.values(array[x])[0] + "</span>&nbsp;&nbsp;&nbsp;&nbsp;" + Object.values(array[x])[3]);
@@ -397,19 +377,6 @@ socket.once("gameOver", function(array) {
 		let userColor = color(Object.values(array[x])[2], 40, 100);
 		user.style('color', userColor);
 	}
-
-
-/* 	for(let x = 0; x = array.length; x++) {
-		let playerPosition = x+1;
-		let playerInfoName = Object.values(array[x])[0];
-		let playerInfoScore = Object.values(array[x])[3];
-		
-		let user = createP("<span style='color:#fff;'>" + playerPosition + ".&nbsp;" + playerInfoName + "</span>&nbsp;&nbsp;&nbsp;&nbsp;" + playerInfoScore);
-		user.addClass("resultElement");
-		let userColor = color(Object.values(array[x])[2], 40, 100);
-		user.style('color', userColor);
-	}*/
-
 	socket.emit("gameOverTimer");
 	socket.on("gameOverTimer", function(remainTime) {
 		$(".t").remove();
@@ -468,15 +435,14 @@ function getRandomInt(max) {
 	return Math.floor(Math.random() * max);
 }
 
-let i = 0;
 function getRandomColor(){
 	let randNumb = Math.floor(Math.random() * 3);
-	if (i < 1) {
-		i++;
+	if (gameColorIndex < 1) {
+		gameColorIndex++;
 		return "black";
 	}
-	if (i < 4 && i >= 1) {
-		i++;
+	if (gameColorIndex < 4 && gameColorIndex >= 1) {
+		gameColorIndex++;
 		return "white";
 		} else {
 			if (randNumb === 0) {
