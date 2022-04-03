@@ -10,10 +10,10 @@ Start server by writing in the command line `node server.js`
 Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https://multiscreenapp.herokuapp.com/)
 
 # We are
-* Lavanya Ratnam------Digital Ideation mit Fokus Design--------->
-* Tino Freiburghaus----Digital Ideation mit Fokus Design--------->
-* Max Werner-----------Digital Ideation mit Fokus Design--------->
-* Nizam Özdemir-------Digital Ideation mit Fokus Informatik----->
+* **Lavanya Ratnam**------Digital Ideation mit Fokus **Design**--------->
+* **Tino Freiburghaus**----Digital Ideation mit Fokus **Design**--------->
+* **Max Werner**-----------Digital Ideation mit Fokus **Design**--------->
+* **Nizam Özdemir**-------Digital Ideation mit Fokus **Informatik**----->
 
 # Technologies we used
 ### Serverside
@@ -27,12 +27,19 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 * CSS
 
 ### Collaboration
+* Git Desktop
 * GitHub
 * Slack
 * Miro
 
 ### Design
 * Figma
+
+### Editor 
+* Visual Studio Code
+
+# Architecture
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/architecture.PNG)
 
 # The Game
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/start.PNG)
@@ -63,4 +70,3 @@ We worked agile with a Kanban framework on our miroboard.
 # Ideation Part
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/mirobrainstorm.PNG)
 In the ideation part of our project, we wrote down all the ideas we got from the brainstorming on the miro board.
-# Architecture
