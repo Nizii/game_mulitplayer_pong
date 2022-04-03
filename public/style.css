@@ -1,7 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Wallpoet&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400;1,500&family=Wallpoet&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100;0,400;0,500;0,700;0,800;1,100;1,400;1,500;1,700;1,800&family=Wallpoet&display=swap');
 
 :root{
   --white: #fff;
@@ -22,7 +20,7 @@
 }
 
 body {
-  overflow-x: hidden;
+  overflow: hidden;
   background-color: var(--lightgray);
 }
 
@@ -33,7 +31,7 @@ main {
 }
 
 canvas {
-  box-shadow: 0 10px #212320bf, 0 20px #212320b3, 0 30px #21232096, 0 40px #21232070, 0 50px #2123203d, 0 60px #21232042;
+  display: block;
 }
 
 /*
@@ -47,7 +45,7 @@ canvas {
   font-style:italic;
   font-weight: bold;
   position: absolute;
-  top: 350px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 10rem;
@@ -124,7 +122,7 @@ canvas {
 
 .title {
   position: absolute;
-  top: 120px;
+  top: calc(50% - 230px);
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Wallpoet';
@@ -153,7 +151,7 @@ margin-top: 2px;
 
 .press-space {
   position: absolute;
-  top: 540px;
+  top: calc(50% + 190px);
   left: 50%;
   transform: translate(-50%, -50%);
   color: var(--lightgray);
@@ -170,7 +168,7 @@ margin-top: 2px;
 
 .enter-name-text {
   position: absolute;
-  top: 240px;
+  top: calc(50% - 110px);
   left: 50%;
   transform: translate(-50%, -50%);
   color: var(--lightgray);
@@ -180,7 +178,7 @@ margin-top: 2px;
 
 #name-input{
   position: absolute;
-  top: 280px;
+  top: calc(50% - 70px);
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #9b9c9b80;
@@ -203,7 +201,7 @@ margin-top: 2px;
   font-style: italic;
   font-weight: bold;
   position: absolute;
-  top: 420px;
+  top: calc(50% + 70px);
   left: 50%;
   transform: translate(-50%, -50%);
   width: 12rem;
@@ -251,7 +249,8 @@ margin-top: 2px;
 
 .tut-text {
   position: absolute;
-  top: 140px;
+  
+  top: calc(50% - 210px);
   left: 50%;
   transform: translate(-50%, -50%);
   width: 490px;
@@ -263,7 +262,7 @@ margin-top: 2px;
 
 .tut-container {
   position: absolute;
-  top: 380px;
+  top: calc(50% + 30px);
   left: 50%;
   transform: translate(-50%, -50%);
   height: 300px;
@@ -273,7 +272,7 @@ margin-top: 2px;
 }
 
 .tut-press-space {
-  top: 580px;
+  top: calc(50% + 230px);
 }
 
 .tut-paddle {
@@ -283,7 +282,7 @@ margin-top: 2px;
   background-color:var(--lightgray);
   position: absolute;
 
-  top: 500px;
+  top: calc(50% + 150px);
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -295,7 +294,7 @@ margin-top: 2px;
   border-radius: 50%;
   background-color: var(--lightgray);
 
-  top: 500px;
+  top: calc(50% + 150px);
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -320,7 +319,7 @@ margin-top: 2px;
 @keyframes tut-ball1 {
   0% {
     left:calc(50% - 100px); 
-    top:300px;
+    top: calc(50% - 50px);
     opacity: 0;
   }
 
@@ -330,8 +329,7 @@ margin-top: 2px;
  
   50% {
     left:50%; 
-    top:480px;
-  }
+    top: calc(50% + 130px);  }
 
   75% {
     opacity:1;
@@ -339,7 +337,7 @@ margin-top: 2px;
    
   100% {
     left:calc(50% + 100px ); 
-    top:300px;
+    top: calc(50% - 50px);
     opacity: 0;
   }
 }
@@ -365,16 +363,16 @@ margin-top: 2px;
   left: calc(50% - 50px);
 }
 .tut-ball-pos1 {
-  top: 305px;
+  top: calc(50% - 45px);
 }
 .tut-ball-pos2 {
-  top: 355px;
+  top: calc(50% + 5px);
 }
 .tut-ball-pos3 {
-top: 405px;
+  top: calc(50% + 55px);
 }
 .tut-ball-pos4 {
-  top: 455px;
+  top: calc(50% + 105px);
 }
 
 .score-text {
@@ -389,16 +387,16 @@ top: 405px;
   left: 50%;
 }
 .score-text-pos1 {
-  top: 305px;
+  top: calc(50% - 45px);
 }
 .score-text-pos2 {
-  top: 355px;
+  top: calc(50% + 5px);
 }
 .score-text-pos3 {
-  top: 405px;
+  top: calc(50% + 55px);
 }
 .score-text-pos4 {
-  top: 455px;
+  top: calc(50% + 105px);
 }
 
 /*
@@ -409,42 +407,63 @@ top: 405px;
 
 .users {
   position: relative;
-  left: 5%;
+  left: 2rem;
   color: var(--white);
-  opacity: 0.25;
-}
+  opacity: 0.5;
+  font-weight: 400;
+  width: fit-content;
+  padding-top: 0.5rem;
 
-.resultElement {
-  position: relative;
-  left: 20%;
-  color: var(--white);
-  opacity: 1;
-  font-size: xx-large;
 }
-
-.resultTitle {
-  position: relative;
-  left: 20%;
-  color: var(--white);
-  opacity: 1;
-  font-size: 70px;
-}
-
 .timer {
   position: absolute;
   font-family: 'Saira';
-  font-size: 3rem;
+  font-size: 2.5rem;
+  font-weight: 600;
   color: var(--white);
-  opacity: 0.25;
+  opacity: 0.5;
+  right: 2rem;
+  top: 0;
 }
 
 /*
   ################################################################################################################
   Game Over Screen
   ################################################################################################################
-*/
-/* Insert code here */
+  */
 
+.resultTitle {
+  position: relative;
+  padding-top: 3rem;
+  left: calc(50% - 150px);
+  color: var(--lightgray);
+  opacity: 1;
+  font-size: 70px;
+  width: fit-content;
+
+}
+
+.resultElement {
+  position: relative;
+  left: calc(50% - 150px);
+  color: var(--lightgray);
+  opacity: 1;
+  font-size: xx-large;
+  font-weight: 400;
+  width: fit-content;
+
+}
+
+
+.game-over-button {
+  top: auto !important;
+  bottom: 4rem;
+  transition: width 0.2s, height 0.2s, transform 0.2s !important;
+}
+
+.game-over-button:hover {
+  transform: translate(-50%, calc(-50% + 1rem)) !important;
+}
 
 /*
   ################################################################################################################
@@ -455,5 +474,14 @@ top: 405px;
 @media screen and (max-width: 600px) {
   .title {
     font-size: 2.5rem;
+  }
+}
+@media screen and (max-width: 400px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .tut-text {
+    width: 340px;
   }
 }
