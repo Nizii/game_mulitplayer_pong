@@ -200,7 +200,7 @@ margin-top: 2px;
 }
 
 #name-input:focus {
-  outline: solid 1px var(--green);
+  outline: solid 1px var(--darkpink);
   outline-offset: 2px;
 }
 
