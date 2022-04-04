@@ -54,9 +54,9 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 
 
 # Score Overview
-* Green +3
-* White +1
-* Red   -3
+* Green +30
+* White +10
+* Red   -30
 * Black clears your score to zero
 
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/rank.PNG)
