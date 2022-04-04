@@ -331,7 +331,7 @@ socket.on("lobby", function(array) {
 		$(".users").remove();
 		for(let x = 0; x < array.length; x++) {
 			userColor = color(Object.values(array[x])[2], 40, 100);
-			let user = createP("<span style='color:#fff; font-weight: 600'>" + Object.values(array[x])[0] + "</span>&nbsp;&nbsp;&nbsp;&nbsp;" + Object.values(array[x])[3]);
+			let user = createP("</span>&nbsp;&nbsp;&nbsp;&nbsp;" + Object.values(array[x])[3] +" <span style='color:#fff; font-weight: 600'>" + Object.values(array[x])[0]);
 			user.addClass("users");
 			user.style('color', userColor);
 		}
