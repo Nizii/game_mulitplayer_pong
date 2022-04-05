@@ -16,9 +16,7 @@ var gameOver;
 var gameColorIndex = 0;
 var upsideHit = new Audio("../audios/hit2.wav");
 upsideHit.loop = false;
-var downsideHit = new Audio("../audios/hit3.wav");
-downsideHit.loop = false;
-var resultaudio = new Audio("../audios/hit3.wav");
+var resultaudio = new Audio("../audios/result.wav");
 resultaudio.loop = false;
 var start = new Audio("../audios/start.wav");
 start.loop = false;
@@ -273,22 +271,22 @@ function draw() {
 					}
 					
 					if (ball.color === 'red') {
-						upsideHit.play();
+						//upsideHit.play();
 						playerObject.score -= 30;
 					} else if (ball.color === 'green') {
 						hitGreen.play();
 						playerObject.score += 30;
 					} else if (ball.color === "white") {
-						upsideHit.play();
+						//upsideHit.play();
 						playerObject.score += 10;
 					} else {
-						upsideHit.play();
+						//upsideHit.play();
 						playerObject.score = 0;
 					}
 					socket.emit("updateScore", playerObject);
 				} else {
 					if (ball.ySpeed >= -10) { // Max ySpeed
-						downsideHit.play();
+						//upsideHit.play();
 						ball.ySpeed -= 0.5;
 					}
 				}
