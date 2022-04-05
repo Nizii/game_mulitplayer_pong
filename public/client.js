@@ -18,6 +18,10 @@ var upsideHit = new Audio("../audios/hit2.wav");
 upsideHit.loop = false;
 var downsideHit = new Audio("../audios/hit3.wav");
 downsideHit.loop = false;
+var resultaudio = new Audio("../audios/hit3.wav");
+resultaudio.loop = false;
+var start = new Audio("../audios/start.wav");
+start.loop = false;
 
 // Gamestates
 var startScreen,gamesScreen,gameOverScreen,tutorialScreen1,tutorialScreen2,tutorialScreen3,tutorialScreen4,enterNameScreen;
@@ -57,6 +61,7 @@ function setup() {
 	pressSpace.addClass('press-space');
 
 	startButton.mouseClicked(function() {
+		start.play();
 		startScreen = false;
 		enterNameScreen = true;
 		
@@ -225,6 +230,7 @@ function draw() {
 	if (enterNameScreen) {
 		keyDelay = 0;
 		startGameButton.mouseClicked(function() {
+			start.play();
 			playerObject = new Player(nameInput.value(), userId, Math.floor(Math.random() * 12)*30, 0);
 			socket.emit("lobby", playerObject);
 			addBall(3, 1, getRandomColor());
