@@ -20,7 +20,6 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 * Socket.IO
 * Node.js
 * Heroku
-* Ngrok (used for Testing)
 
 ### Languages
 * JavaScript
