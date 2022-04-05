@@ -22,7 +22,10 @@ var start = new Audio("../audios/start.wav");
 start.loop = false;
 var hitGreen = new Audio("../audios/green.wav");
 hitGreen.loop = false;
-
+var hitBlack = new Audio("../audios/hitBlack.wav");
+hitBlack.loop = false;
+var hitRed = new Audio("../audios/hitRed.wav");
+hitRed.loop = false;
 // Gamestates
 var startScreen,gamesScreen,gameOverScreen,tutorialScreen1,tutorialScreen2,tutorialScreen3,tutorialScreen4,enterNameScreen;
 
@@ -271,16 +274,16 @@ function draw() {
 					}
 					
 					if (ball.color === 'red') {
-						//upsideHit.play();
+						hitRed.play();
 						playerObject.score -= 30;
 					} else if (ball.color === 'green') {
 						hitGreen.play();
 						playerObject.score += 30;
 					} else if (ball.color === "white") {
-						//upsideHit.play();
+						upsideHit.play();
 						playerObject.score += 10;
 					} else {
-						//upsideHit.play();
+						hitBlack.play();
 						playerObject.score = 0;
 					}
 					socket.emit("updateScore", playerObject);
