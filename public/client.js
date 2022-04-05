@@ -235,12 +235,10 @@ function draw() {
 			start.play();
 			playerObject = new Player(nameInput.value(), userId, Math.floor(Math.random() * 12)*30, 0);
 			socket.emit("lobby", playerObject);
-			addBall(3, 1, getRandomColor());
-			addBall(3, 1, getRandomColor());
 			socket.emit("timer");
+			socket.emit("newPlayerJoined");
 			enterNameScreen = false;
 			gamesScreen = true;
-
 			enterNameText.remove();
 			nameInput.remove();
 			startGameButton.remove();
@@ -347,6 +345,7 @@ socket.on("lobby", function(array) {
 		});
 		$(".users").remove();
 		for(let x = 0; x < array.length; x++) {
+			console.log(Object.values(array[x])[3]);
 			userColor = color(Object.values(array[x])[2], 40, 100);
 			let user = createP("</span>&nbsp;&nbsp;&nbsp;&nbsp;" + Object.values(array[x])[3] +" <span style='color:#fff; font-weight: 600'>" + Object.values(array[x])[0]);
 			user.addClass("users");
@@ -367,13 +366,10 @@ socket.on("timer", function(time) {
 // Jede x. Sekunde wird ein Ball gedropt
 socket.on("addBall", function(time) {
 	if (time % 10 === 0) {
+		console.log("Normal Ball");
 		addBall(3, 1, getRandomColor());
 	}
 });
-
-socket.on("resetBalls", function(){
-	ballArray = [];
-}) 
 
 // Und der Titel an die "Hässlichste Function/Socket geht an"...
 // Sie ist für das GameOver handling zuständig
@@ -415,6 +411,17 @@ socket.on("ballData", function(ball) {
 	ball.x = (window.innerWidth / 100) * ball.x
 	ballArray.push(new Ball(ball.x, 10 , ball.xSpeed, ball.ySpeed, 20, ball.ballId, ball.ballType, ball.color));
 });
+
+
+socket.on("resetBalls", function() {
+	ballArray = [];
+	gameColorIndex = 0;
+});
+
+socket.on("addStartBall", function() {
+	addBall(3, 1, getRandomColor());
+});
+
 	
 /*
   ################################################################################################################

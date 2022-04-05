@@ -28,6 +28,7 @@ server.listen(process.env.PORT||3000, () => {
 
 // Handled den Timer
 io.on('connection', (socket) => {
+  setUserIdForNewJoinedUser(socket);
   timerIsRunning = false;
   socket.once("timer", () => {
     timerIsRunning = true;
@@ -37,10 +38,12 @@ io.on('connection', (socket) => {
 
 // Neuer Spieler tritt ein
 io.on('connection', (socket) => {
-  setUserIdForNewJoinedUser(socket);
-  resetScore();
-  resetBalls();
-  remain = gameDuration;
+  socket.on("newPlayerJoined", () => {
+    resetScore();
+    resetBalls();
+    addStartBall();
+    remain = gameDuration;
+  })
 });
 
 io.on('connection', (socket) => {
@@ -115,6 +118,10 @@ function resetScore() {
 
 function resetBalls() {
   io.emit("resetBalls");
+}
+
+function addStartBall() {
+  io.emit("addStartBall");
 }
 
 function startGameOverScreen() {
