@@ -376,6 +376,7 @@ socket.on("resetBalls", function(){
 // Und der Titel an die "Hässlichste Function/Socket geht an"...
 // Sie ist für das GameOver handling zuständig
 socket.once("gameOver", function(array) {
+	resultaudio.play();
 	gameOver = true;
 	gamesScreen = false;
 	cursor('default');
