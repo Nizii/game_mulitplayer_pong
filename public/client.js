@@ -14,6 +14,10 @@ var playerArray = []
 var playerObject;
 var gameOver;
 var gameColorIndex = 0;
+var upsideHit = new Audio("../audios/hit2.wav");
+upsideHit.loop = false;
+var downsideHit = new Audio("../audios/hit3.wav");
+downsideHit.loop = false;
 
 // Gamestates
 var startScreen,gamesScreen,gameOverScreen,tutorialScreen1,tutorialScreen2,tutorialScreen3,tutorialScreen4,enterNameScreen;
@@ -255,23 +259,28 @@ function draw() {
 
 			// Paddle Ball Trigger
 			if ((ball.x > mouseX - paddleWidth/2-10 && ball.x < mouseX + paddleWidth/2+10) && (ball.y >= paddleYPos - 10 && ball.y <= paddleYPos + 30)) {
-				
 				if (ball.ySpeed > 0) {
 					if (ball.ySpeed <= 10) { // Max ySpeed
 						ball.ySpeed += 0.5;
 					}
+					
 					if (ball.color === 'red') {
+						upsideHit.play();
 						playerObject.score -= 30;
 					} else if (ball.color === 'green') {
+						upsideHit.play();
 						playerObject.score += 30;
 					} else if (ball.color === "white") {
+						upsideHit.play();
 						playerObject.score += 10;
 					} else {
+						upsideHit.play();
 						playerObject.score = 0;
 					}
 					socket.emit("updateScore", playerObject);
 				} else {
 					if (ball.ySpeed >= -10) { // Max ySpeed
+						downsideHit.play();
 						ball.ySpeed -= 0.5;
 					}
 				}
