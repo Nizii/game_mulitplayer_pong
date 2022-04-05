@@ -22,6 +22,8 @@ var resultaudio = new Audio("../audios/hit3.wav");
 resultaudio.loop = false;
 var start = new Audio("../audios/start.wav");
 start.loop = false;
+var hitGreen = new Audio("../audios/green.wav");
+hitGreen.loop = false;
 
 // Gamestates
 var startScreen,gamesScreen,gameOverScreen,tutorialScreen1,tutorialScreen2,tutorialScreen3,tutorialScreen4,enterNameScreen;
@@ -274,7 +276,7 @@ function draw() {
 						upsideHit.play();
 						playerObject.score -= 30;
 					} else if (ball.color === 'green') {
-						upsideHit.play();
+						hitGreen.play();
 						playerObject.score += 30;
 					} else if (ball.color === "white") {
 						upsideHit.play();
