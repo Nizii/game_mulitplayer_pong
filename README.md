@@ -48,7 +48,7 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 * The player with the highest score wins.
 * The duration of the game is 120 sec.
 * The goal is to hit the green or the white balls with the paddle to get points.
-* Avoid contact with the red or black balls. 
+* Avoid contact with the red or dangerous black balls. 
 * You can also hit the balls with the bottom of the paddle to speed up the balls. The balls will bounce off the ground.
 * But hitting the ball with the bottom of the paddle doesn't change your score.
 

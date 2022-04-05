@@ -14,13 +14,13 @@ var playerArray = []
 var playerObject;
 var gameOver;
 var gameColorIndex = 0;
-var upsideHit = new Audio("../audios/hit2.wav");
+var upsideHit = new Audio("../audios/hitWhite.wav");
 upsideHit.loop = false;
 var resultaudio = new Audio("../audios/result.wav");
 resultaudio.loop = false;
 var start = new Audio("../audios/start.wav");
 start.loop = false;
-var hitGreen = new Audio("../audios/green.wav");
+var hitGreen = new Audio("../audios/hitGreen.wav");
 hitGreen.loop = false;
 var hitBlack = new Audio("../audios/hitBlack.wav");
 hitBlack.loop = false;
@@ -64,7 +64,6 @@ function setup() {
 	pressSpace.addClass('press-space');
 
 	startButton.mouseClicked(function() {
-		start.play();
 		startScreen = false;
 		enterNameScreen = true;
 		
