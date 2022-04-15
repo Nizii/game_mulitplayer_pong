@@ -38,12 +38,17 @@ Current version online on Heroku: [https://multiscreenapp.herokuapp.com/](https:
 ### Editor 
 * Visual Studio Code
 
-# Architecture
+# Architecture Diagram
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/architecture.PNG)
+
+# Sequenz Diagram on("connection")
+![alt text](https://github.com/Nizii/pong/blob/main/imgs/Sequenzdiagram.PNG)
+
 
 # The Game
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/start.PNG)
 ![alt text](https://github.com/Nizii/pong/blob/main/imgs/game.PNG)
+
 # Rules
 * The player with the highest score wins.
 * The duration of the game is 120 sec.

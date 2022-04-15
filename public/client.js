@@ -207,11 +207,9 @@ function draw() {
 			if (keyCode === 32 && keyDelay > 20) {
 				tutorialScreen4 = false;
 				enterNameScreen = true;
-
 				tutContainer.remove();
 				tutText4.remove();
 				tutPressSpace.remove();
-
 				nameInput = createInput();
 				nameInput.id('name-input');
 				startGameButton = createButton("Start Game");
